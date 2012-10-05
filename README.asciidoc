@@ -13,7 +13,7 @@ library("HiveR")
 
 vignette("HiveR") # To see the user guide
 
-If you use branch = "devel" you can get the development branch if it is available.  devel versions would be ahead of what's on CRAN.  devel versions may be buggy in certain functions/actions.
+The github version will generally be ahead of CRAN.  Also, there might be multiple branches.
 
 From CRAN using R:
 ------------------
