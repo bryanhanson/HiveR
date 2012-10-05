@@ -13,7 +13,7 @@ library("HiveR")
 
 vignette("HiveR") # To see the user guide
 
-The github version will generally be ahead of CRAN.  Also, there might be multiple branches.
+The github version will generally be ahead of CRAN.  Also, there might be multiple branches, so if you see them check the commit dates.
 
 From CRAN using R:
 ------------------
