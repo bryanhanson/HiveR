@@ -1,0 +1,120 @@
+
+NEWS file for package HiveR
+
+HiveR is an R package for creating and plotting 2D and 3D hive plots. Hive plots are a unique method of displaying networks of all types in which node properties are mapped to axes rather than being arbitrarily positioned.  The hive plot concept was invented by Martin Krzywinski at the Genome Science Center (www.hiveplot.com).  See:
+
+Krzywinski M, Birol I, Jones S, Marra M (2011). Hive Plots - Rational
+Approach to Visualizing Networks. Briefings in Bioinformatics.
+bib.oxfordjournals.org/content/early/2011/12/09/bib.bbr069.abstract
+doi: 10.1093/bib/bbr069
+
+Bryan A. Hanson DePauw University, Greencastle Indiana USA
+
+###### Version: 0.2-7
+Date: 5 Oct 2012
+News:
+>> Cleaned up a few non-code issues to pass CRAN checks. 
+
+###### Version: 0.2-6
+Date: 3 Oct 2012
+News:
+>> Fixed a problem with edge sizes and weights not being handled correctly for some cases with plotHive (so 2D hives only). 
+
+###### Version: 0.2-5
+Date: 16 Sept 2012
+News:
+>> Fixed a problem in which 2D hive node sizes and colors were not being drawn correctly.  Reported by Augustin Arce along with a suggested fix.  Thanks Augustin!  The same problem was in the 3D version and was also corrected.  The edge colors and weights do not appear to have the problem; they are assembled from scratch.
+
+###### Version: 0.2-4
+Date: 25 June 2012
+News:
+>> Improved vignette, now built using knitr outside of the build/check process
+>> Added additional files for the E coli data set.  See inst/extdata/E_coli/README for details.
+>> Revised animateHive to permit different hives to be animated using different sets of arguments.  Gives maximum flexibility.  See the help page for a silly example.
+
+###### Version: 0.2-3
+Date: 11 June 2012
+News:
+>> Improved the Dot parsing in dot2HPD.  Among others, node.inst or edge.inst may be NULL (if both are NULL, you aren't doing much, this is untested).
+>> Added options to mineHPD.
+>> Possible problem with prune being ignored (still out there!).
+
+###### Version: 0.2-2
+Date: 7 June 2012
+News:
+>> Possible problem with prune being ignored.
+>> Added function animateHive to do rotation and scaling of type = "3D" hive plots (in sync if there is more than one hive given).
+>> Added method = prune to manipAxis which allows one to prune (remove) an axis from an HPD.
+>> Modified sumHPD to include a count of edges between each axis pair.
+>> Fixed a warning about "incomplete final line" which NodeInst.csv and EdgeInst.csv were giving.
+>> Fixed a few documentation errors.
+
+###### Version: 0.2-1
+Date: 12 December 2011
+News:
+>> This version is 0.1-6 renumbered to 0.2-1 to go to CRAN.
+
+###### Version: 0.1-6
+Date: 10 December 2011
+News:
+>> This version currently on Github devel branch.
+>> Turned on byte compiling.
+>> Removed argument center.hole from dot2HPD.
+>> Added a new function adj2HPD which will convert adjacency matrices to HPDs.
+>> Modified plotHive so that it is able to draw edges beginning and ending on the same axis (see below too).
+>> Moved a chunk of code in plotHive that was needlessly being repeated for each set of edge draws.  Greatly improved speed.
+>> Fixed a detail in plotHive which may have resulted in edge colors and weights not being correctly matched with the edge.
+>> Added axis labeling to plotHive and plot3dHive.
+>> Added the ability to draw an arrow "legend" to plotHive.
+>> Added the ability to label nodes in plotHive.  This probably needs some tweaking to work really well.
+>> Added options "ranknorm" and "invert" to manipAxis.
+>> Removed center.hole from the definition of an HPD as it is not intrinsically part of the hive. Instead, this information is now an argument to the plotting routines.  Updated all documentation and data structures.
+>> Added argument "allow.same" to ranHiveData.  This allows edges to begin and end on the same axis.  In previous versions such edges were automatically cleaned out, and that is still the default.  This only applies to type = 2D.
+>> Added argument "chk.same.pt" to sumHPD which checks to see if any of the edges start and end at the same point (which causes an error in plotHive).  This is necessary because with the addition of allowing edges to begin and end on the same axis, it was revealed that some data sets (like the E. coli regulatory network) may have edges that not only begin and end on the same axis but also have the same radius (if degree was used to set the radius), so one is attempting to draw an edge of length zero which is what gives the error.  This condition might arise because of errors in the data set or during processing the condition may arise.  Either way, one needs to be able to detect it for removal or alteration.
+>> Added argument "chk.ax.jump" to sumHPD which looks for edges which jump over an axis (e.g. axis 1 --> axis 3).  This is undesirable in type = 2D plots.
+>> Added argument "chk.orphan.node" to sumHPD which looks for orphaned nodes (nodes which don't have any edges).
+>> Added argument "chk.sm.axis" to sumHPD which looks to see which edges start and end on the same axis.
+>> Added argument "chk.all" to sumHPD which turns on all these checks at once.
+>> Added argument "orphan.list" so that a data frame of the orphans can be returned.
+>> Added option "remove orphans" to mineHPD which removes nodes which have not edges.
+>> Made improvements to vignette.
+
+###### Version: 0.1-5
+Date: 21 November 2011
+News:
+>> This version currently on Github only (note: never went to CRAN).
+>> Small change in rcsr which increased spline computation speed by over 20x by removing hidden redraws of the empty graphics window.  I should have seen that one a long time ago!
+>> Small change in drawHiveSpline which eliminated the empty graphic window which is no longer necessary.
+>> Discovered that using lines3d from rgl with line_antialias = TRUE was a huge bottleneck (duh!).  By turning this off, another 20x or more improvement was obtained in testing.  However, one can see the difference upon close inspection, at least for smaller hives.  Added an argument, LA = T/F to plot3dHive to control this feature.
+>> Added method "scale" to manipAxis so that individual axes can be scaled separately.
+>> Removed function centerHole() as it is easier to get consistent and predictable behavior by merely specifying a value for HPD$center.hole directly.  Changed the drawing functions appropriately.  Plan to move center.hole out of the HPD object definition in the next version.
+>> Removed internal adjustments which scaled node size.  Now node size is taken directly from the HPD.
+>> Enhanced sumHPD to include a listing of radii range for each axis.  Helpful in setting up and trouble-shooting plots.
+
+###### Version: 0.1-4
+Date: 17 November 2011
+News:
+>> Some small changes to pass CRAN checks
+
+###### Version: 0.1-3
+Date: 14 November 2011
+News:
+>> Added nx = 4-6 for plotHive (2D mode).  Also added checking for empty sets of edges to plot, which gives an error when grid.curve is called.
+>> Updated and expanded vignette.
+>> Added function dot2HPD which processes graphs in .dot format into HPD objects, using auxiliary files which contain processing information.  Only supports some aspects of the .dot standard, but additional features are relatively easy to add.
+>> Added function mineHPD which will read an HPD and extract further information from it.  The result is an updated HPD.  This function is intended to be easily extensible.
+>> Numerous small improvements to the underlying code and the plot appearance.
+>> Added the E. coli data set to the extdata folder.
+
+###### Version: 0.1-2
+Date: 9 November 2011
+News:
+>> This version is not going to CRAN.
+>> Internal changes primarily.
+>> Expanded vignette.
+>> Added argument "type" to ranHiveData so that plots with 4-6 axes can be randomly generated in a 2D mode.  This seems to work but is not fully tested.  Next step is to make plotHive handle 4-6 axes.
+>> In class HivePlotData, changed "dim" to axes, and added a descriptor "type" which indicates if the hive data is 2D or 3D.
+
+#### Version: 0.1-1
+Date: 20 October 2011
+News: First Release of the main functions.  Finally!

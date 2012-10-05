@@ -1,0 +1,18 @@
+
+# CITATION file
+
+citHeader("To cite package 'HiveR' in publications use:")
+
+desc <- packageDescription("HiveR")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+vers <- paste("R package version", desc$Version)
+web <- "academic.depauw.edu/~hanson/HiveR/HiveR.html"
+
+citEntry(entry = "Manual",
+	title = "HiveR: 2D and 3D Hive Plots for R",
+	author = personList(as.person("Bryan A. Hanson")),
+	year = year,
+	note = vers,
+	web = web,
+	textVersion = paste("Bryan A. Hanson (", year, ") HiveR: 2D and 3D Hive Plots for R. ",
+		vers, ", ", web, sep = ""))
