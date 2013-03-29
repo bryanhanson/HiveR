@@ -10,6 +10,11 @@ doi: 10.1093/bib/bbr069
 
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+###### Version: 0.2-9
+Date: 2013-02-29
+News:
+>> Removed dependency on RFOC due to licensing issue there.
+
 ###### Version: 0.2-8
 Date: 2013-02-29
 News:

@@ -8,7 +8,6 @@ import(
   rgl,
   xtable,
   bipartite,
-  RFOC,
   sna,
   tkrgl,
   plyr

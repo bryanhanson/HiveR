@@ -1,7 +1,4 @@
 
-
-
-
 rcsr <- function(p0, cp, p1) {
 	
 	# Bryan Hanson, DePauw Univ, April 2011
@@ -13,7 +10,39 @@ rcsr <- function(p0, cp, p1) {
 	# p0 and p1 are end points, cp is the control point
 	
 	# rcsr = rotate, compute spline, rotate back
-		
+	
+	# Local copies of functions borrowed from RFOC
+	
+	rotx3 <- function (deg) {
+	    rad1 = deg * 0.0174532925199
+	    r = diag(3)
+	    r[2, 2] = cos(rad1)
+	    r[2, 3] = sin(rad1)
+	    r[3, 3] = r[2, 2]
+	    r[3, 2] = -r[2, 3]
+	    return(r)
+		}
+
+	roty3 <- function (deg) {
+	    rad1 = deg * 0.0174532925199
+	    r = diag(3)
+	    r[1, 1] = cos(rad1)
+	    r[3, 1] = sin(rad1)
+	    r[3, 3] = r[1, 1]
+	    r[1, 3] = -r[3, 1]
+	    return(r)
+		}
+
+	rotz3 <- function (deg) {
+	    rad1 = deg * 0.0174532925199
+	    r = diag(3)
+	    r[1, 1] = cos(rad1)
+	    r[1, 2] = sin(rad1)
+	    r[2, 2] = r[1, 1]
+	    r[2, 1] = -r[1, 2]
+	    return(r)
+		}
+
 	m <- matrix(c(0, 0, 0, p0, cp, p1), nrow = 4, byrow = TRUE)
 
 # Align p0 with the +y axis by rotating around x and z axes
