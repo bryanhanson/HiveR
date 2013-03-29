@@ -10,6 +10,13 @@ doi: 10.1093/bib/bbr069
 
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+###### Version: 0.2-8
+Date: 2013-02-29
+News:
+>> Compatible with R 3.0.0
+>> Fixed some documentation problems and tuned up github site.
+>> NULL value for edge.inst in dot2HPD was not being caught (thanks to Gordon Robertson for pointing this out).
+
 ###### Version: 0.2-7
 Date: 5 Oct 2012
 News:

@@ -14,6 +14,9 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 	
 # No checking for whether the type (2D/3D) is actually true
 
+	if (is.null(node.inst)) message("No node instructions provided, proceeding without them")
+	if (is.null(edge.inst)) message("No edge instructions provided, proceeding without them")
+
     lines <- readLines(file, ...)
 
 # Clean off 1st and last lines which contain { and }
@@ -47,7 +50,6 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 # Process node attributes
 # Not sure how this will handle multiple tag=value sets
 	
-
 	if (!is.null(node.inst)) {
 
 	at <- sub("^.*\\[", "", no)
@@ -127,25 +129,28 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 	dot.tag <- gsub("[[:space:]]", "", dot.tag) # remove any whitespace
 	dot.val <- gsub("[[:space:]]", "", dot.val)
 
+	if (!is.null(edge.inst)) {
+
 	ei <- read.csv(edge.inst) # read in translation instructions
 
-	for (n in 1:length(ed)) { # match up instructions
-		for (i in 1:nrow(ei)) {
-			if ((dot.tag[n] == ei$dot.tag[i]) & (dot.val[n] == ei$dot.val[i])) {
-				# only certain hive.tag values are valid & will be processed
-				# other values are silently ignored
-				# more options readily added
-				
-				if (ei$hive.tag[i] == "weight") {
-					HPD$edges$weight[n] <- as.numeric(as.character(ei$hive.val[i]))
-					}
-				if (ei$hive.tag[i] == "color") {
-					HPD$edges$color[n] <- as.character(ei$hive.val[i])
+		for (n in 1:length(ed)) { # match up instructions
+			for (i in 1:nrow(ei)) {
+				if ((dot.tag[n] == ei$dot.tag[i]) & (dot.val[n] == ei$dot.val[i])) {
+					# only certain hive.tag values are valid & will be processed
+					# other values are silently ignored
+					# more options readily added
+					
+					if (ei$hive.tag[i] == "weight") {
+						HPD$edges$weight[n] <- as.numeric(as.character(ei$hive.val[i]))
+						}
+					if (ei$hive.tag[i] == "color") {
+						HPD$edges$color[n] <- as.character(ei$hive.val[i])
+						}
 					}
 				}
 			}
-		}
- 
+ 		}
+
 # Final clean-up
 	
 	HPD$nodes <- as.data.frame(HPD$nodes)
