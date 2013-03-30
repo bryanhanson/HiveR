@@ -10,5 +10,9 @@ import(
   bipartite,
   sna,
   tkrgl,
-  plyr
+  plyr,
+  tcltk
 )
+
+importFrom(tkrgl, spin3d)
+importFrom(plyr, empty)

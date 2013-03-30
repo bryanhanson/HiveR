@@ -10,6 +10,11 @@ doi: 10.1093/bib/bbr069
 
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+###### Version: 0.2-10
+Date: 2013-02-29
+News:
+>> Added tcltk to dependencies and some importFrom in NAMESPACE to pass CRAN.
+
 ###### Version: 0.2-9
 Date: 2013-02-29
 News:
