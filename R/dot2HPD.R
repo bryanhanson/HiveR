@@ -108,10 +108,14 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 	ed_prs <- gsub("[[:space:]]", "", ed_prs) # remove any whitespace
 
 	for (n in 1:(length(ed_prs))) {
+#		print(n)
 		pat1 <- sub("(--|->).*$", "", ed_prs[n])
 		pat2 <- sub("^.*(--|->)", "", ed_prs[n])
+		# print(pat1)
+		# print(pat2)
 		pat1 <- paste("\\b", pat1, "\\b", sep = "") # need word boundaries
 		pat2 <- paste("\\b", pat2, "\\b", sep = "") # to avoid finding fragments
+		print(n)
 		HPD$edges$id1[n] <- grep(pat1, HPD$nodes$lab)
 		HPD$edges$id2[n] <- grep(pat2, HPD$nodes$lab)
 		}
