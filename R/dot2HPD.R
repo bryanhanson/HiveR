@@ -6,11 +6,10 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 # Function to read dot files and convert to HPD
 # Bryan Hanson, DePauw Univ, July 2011
 
-# Gradually building in compliance with DOT stds...
-
-# Assumptions/Caveats:
+# Assumptions/Caveats/Features:
 	# No distinction between undirected and directed graphs
 	# Not sure how A -- B -- C would be handled
+	# Multiple tag=value entries OK
 	
 # No checking for whether the type (2D/3D) is actually true
 
@@ -30,12 +29,13 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 # The following will find edges and their attributes
 
     ed <- lines[grep("--|->", lines)]
+    ed <- unique(ed) # just in case
 
 # Find nodes and their attributes by inverting the edge pattern
 
     no <- lines[-grep("--|->", lines)]
-    no <- unique(no)
-
+    no <- unique(no) # just in case
+	
 # Initialize HPD$nodes
 
 	HPD <- list()
@@ -48,49 +48,54 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 	HPD$nodes$color <- rep("transparent", length(no))
 
 # Process node attributes
-# Not sure how this will handle multiple tag=value sets
+# Collect multiple tag=value sets with their node info
+
 	
 	if (!is.null(node.inst)) {
+		# get the node names (everything not an attribute)
+		nn <- sub("\\[.*\\]$", "", no)
+		nn <- gsub("[[:space:]]", "", nn)
+		# get the entire list of attributes
+		nats <- sub("^.*\\[", "", no) # clean off front
+		nats <- sub("\\]$", "", nats) # clean off back
+		nats <- strsplit(nats, ",", fixed = TRUE) # returns a list of attributes for each node
+		# it works even if there is no ',' i.e. only one attribute (very handy)
 
-	at <- sub("^.*\\[", "", no)
-	at <- sub("\\]$", "", at)
-	at <- unlist(strsplit(at, ",", fixed = TRUE))
-	at <- strsplit(at, "=", fixed = TRUE)
-	dot.tag <- dot.val <- c()
-	for (n in 1:length(at)) dot.tag[n] <- at[[n]][1]
-	for (n in 1:length(at)) dot.val[n] <- at[[n]][2]
-	dot.tag <- gsub("[[:space:]]", "", dot.tag) # remove any whitespace
-	dot.val <- gsub("[[:space:]]", "", dot.val)
+		# read in translation instructions
+		ni <- read.csv(node.inst, stringsAsFactors = FALSE)
 
-	ni <- read.csv(node.inst) # read in translation instructions
+		# loop over the list & match up instructions
 
-		for (n in 1:length(at)) { # match up instructions
-			for (i in 1:nrow(ni)) {
-				# print(dot.tag[n])
-				# print(dot.val[n])
-				# cat("Node no. = ", n, "Node inst no = ", i, "\n")
-				if ((dot.tag[n] == ni$dot.tag[i]) & (dot.val[n] == ni$dot.val[i])) {
-					# only certain hive.tag values are valid & will be processed
-					# other values are silently ignored
-					# more options readily added
-					
-					if (ni$hive.tag[i] == "axis") {
-						HPD$nodes$axis[n] <- as.numeric(as.character(ni$hive.val[i]))
-						}
-					if (ni$hive.tag[i] == "radius") {
-						HPD$nodes$radius[n] <- as.numeric(as.character(ni$hive.val[i]))
-						}
-					if (ni$hive.tag[i] == "size") {
-						HPD$nodes$size[n] <- as.numeric(as.character(ni$hive.val[i]))
-						}
-					if (ni$hive.tag[i] == "color") {
-						HPD$nodes$color[n] <- as.character(ni$hive.val[i])
+		for (i in 1:length(nats)) { # match up instructions
+			tagval <- unlist(nats[i])
+			tagval <- gsub("[[:space:]]", "", tagval)
+			for (j in 1:length(tagval)) {
+				tv <- unlist(strsplit(tagval[j], "=", fixed = TRUE))
+				for (k in 1:nrow(ni)) {
+					#cat("Node no. = ", i, "attribute no = ", j, "node inst = ", k, "\n")
+					if ((tv[1] == ni$dot.tag[k]) & (tv[2] == ni$dot.val[k])) {
+						# only certain hive.tag values are valid & will be processed
+						# other values are silently ignored
+						# more options readily added
+						
+						if (ni$hive.tag[k] == "axis") {
+							HPD$nodes$axis[i] <- as.numeric(ni$hive.val[k])
+							}
+						if (ni$hive.tag[k] == "radius") {
+							HPD$nodes$radius[i] <- as.numeric(ni$hive.val[k])
+							}
+						if (ni$hive.tag[k] == "size") {
+							HPD$nodes$size[i] <- as.numeric(ni$hive.val[k])
+							}
+						if (ni$hive.tag[k] == "color") {
+							HPD$nodes$color[i] <- ni$hive.val[k]
+							}
 						}
 					}
 				}
 			}
- 
-	}
+
+	} # end of !is.null(node.inst) & node processing
 
 # Set up HPD$edges
 	
@@ -112,48 +117,52 @@ dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
 		pat1 <- sub("(--|->).*$", "", ed_prs[n])
 		pat2 <- sub("^.*(--|->)", "", ed_prs[n])
 		# print(pat1)
-		# print(pat2)
+#		print(pat2)
 		pat1 <- paste("\\b", pat1, "\\b", sep = "") # need word boundaries
 		pat2 <- paste("\\b", pat2, "\\b", sep = "") # to avoid finding fragments
-		print(n)
 		HPD$edges$id1[n] <- grep(pat1, HPD$nodes$lab)
 		HPD$edges$id2[n] <- grep(pat2, HPD$nodes$lab)
 		}
 
 # # Process edge attributes
-# # Not sure how this will handle multiple tag=value sets
-
-	at <- sub("^.*\\[", "", ed) # cut off at the front
-	at <- sub("\\]$", "", at) # cut off at the back
-	at <- unlist(strsplit(at, ",", fixed = TRUE))
-	at <- strsplit(at, "=", fixed = TRUE)
-	dot.tag <- dot.val <- c()
-	for (n in 1:length(at)) dot.tag[n] <- at[[n]][1]
-	for (n in 1:length(at)) dot.val[n] <- at[[n]][2]
-	dot.tag <- gsub("[[:space:]]", "", dot.tag) # remove any whitespace
-	dot.val <- gsub("[[:space:]]", "", dot.val)
 
 	if (!is.null(edge.inst)) {
+		# get the entire list of attributes
+		eats <- sub("^.*\\[", "", ed) # clean off front
+		eats <- sub("\\]$", "", eats) # clean off back
+#		print(head(eats))
+		eats <- strsplit(eats, ",", fixed = TRUE) # returns a list of attributes for each edge
+		# it works even if there is no ',' i.e. only one attribute (very handy)
+#		print(head(eats))
+		# read in translation instructions
+		ei <- read.csv(edge.inst, stringsAsFactors = FALSE)
 
-	ei <- read.csv(edge.inst) # read in translation instructions
+		# loop over the list & match up instructions
 
-		for (n in 1:length(ed)) { # match up instructions
-			for (i in 1:nrow(ei)) {
-				if ((dot.tag[n] == ei$dot.tag[i]) & (dot.val[n] == ei$dot.val[i])) {
-					# only certain hive.tag values are valid & will be processed
-					# other values are silently ignored
-					# more options readily added
-					
-					if (ei$hive.tag[i] == "weight") {
-						HPD$edges$weight[n] <- as.numeric(as.character(ei$hive.val[i]))
+		for (i in 1:length(eats)) { # match up instructions
+			tagval <- unlist(eats[i])
+			tagval <- gsub("[[:space:]]", "", tagval)
+			for (j in 1:length(tagval)) {
+				tv <- unlist(strsplit(tagval[j], "=", fixed = TRUE))
+				for (k in 1:nrow(ei)) {
+					#cat("Edge no. = ", i, "attribute no = ", j, "edge inst = ", k, "\n")
+					if ((tv[1] == ei$dot.tag[k]) & (tv[2] == ei$dot.val[k])) {
+						# only certain hive.tag values are valid & will be processed
+						# other values are silently ignored
+						# more options readily added
+						
+					if (ei$hive.tag[k] == "weight") {
+						HPD$edges$weight[i] <- as.numeric(ei$hive.val[k])
 						}
-					if (ei$hive.tag[i] == "color") {
-						HPD$edges$color[n] <- as.character(ei$hive.val[i])
+					if (ei$hive.tag[k] == "color") {
+						HPD$edges$color[i] <- as.character(ei$hive.val[k])
 						}
 					}
 				}
 			}
- 		}
+		}
+
+	} # end of !is.null(edge.inst) & edge processing
 
 # Final clean-up
 	
