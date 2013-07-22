@@ -4,7 +4,7 @@
 Process an adjacency graph into a HivePlotData object
 }
 \description{
-This function will take an adjacency graph and convert it into a basic \code{\link{HivePlotData}} object.  Further manipulation will almost certainly be required before the data can be plotted.
+This function will take an adjacency graph and convert it into a basic \code{\link{HivePlotData}} object.  Further manipulation will almost certainly be required before the data can be plotted.  As of v 0.2-12 this function is no longer limited to bipartite networks.
 }
 \usage{
 adj2HPD(M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...)
@@ -36,7 +36,7 @@ A \code{
 \link{HivePlotData}} object which is capable of more sophisticated and flexible processing of a .dot file if the file contains tags.
 }
 \author{
-Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
+Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}  Vesna Memisevic contributed a fix that limited this function to bipartite networks (changed in v. 0.2-12).
 }
 \references{
 \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
@@ -48,7 +48,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 
 set.seed(31)
 require(bipartite)
-data(Safariland)
+data(Safariland) # This is a bipartite network
 
 # You may wish to do ?Safariland or ?Safari for background
 

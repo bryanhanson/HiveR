@@ -3,7 +3,9 @@ Type: Package
 Title: 2D and 3D Hive Plots for R
 Version: 0.2-11
 Date: 2013-07-06
-Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
+Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
+		person("Vena", "Memisevic", role = "ctb"),
+		person("Jonathan", "Chung", role = "ctb"))
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Description: HiveR is an R package for creating and plotting 2D and 3D hive plots. Hive plots are a unique method of displaying networks of many types in which node properties are mapped to axes using meaningful properties rather than being arbitrarily positioned.  The hive plot concept was invented by Martin Krzywinski at the Genome Science Center (www.hiveplot.net/).  Keywords: networks, food webs, linnet, systems biology, bioinformatics.
 License: GPL-3
