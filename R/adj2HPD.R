@@ -33,7 +33,8 @@ adj2HPD <- function (M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) 
 
 	HPD <- list()
 	HPD$nodes$id <- id
-	HPD$nodes$lab <- c(lab1, lab2)
+	labNames = unique(c(lab1, lab2)) # VM fix v. 0.2-12
+	HPD$nodes$lab <- labNames # VM fix v. 0.2-12
 	HPD$nodes$axis <- axis
 	HPD$nodes$radius <- radius
 	HPD$nodes$size <- size
@@ -45,8 +46,8 @@ adj2HPD <- function (M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) 
 	for (i in 1:d1) { 
 		for (j in 1:d2) {
 			if (!M[i,j] == 0) {
-				id1 <- c(id1, i)
-				id2 <- c(id2, j + d1)
+ 		       id1 <- c(id1, which(lab1[i] == labNames)) # VM fix v. 0.2-12
+		       id2 <- c(id2, which(lab2[j] == labNames)) # VM fix v. 0.2-12
 				v <- c(v, M[i,j])
 				}
 			}	
