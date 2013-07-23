@@ -13,9 +13,10 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 See below for various contributors and those that reported bugs.  Much appreciated!
 
 ###### Version: 0.2-12
-Date: 2013-07-??
+Date: 2013-07-22
 News:
 >> Vesna Memisevic discovered that adj2HPD assumed bipartite networks in how it processed the data.  Modified the code so that this assumption is not made and other types of adjacency matrices can be read.
+>> Added edge2HPD authored by Jonathan H. Chung. Thanks!
 >> Updated documentation and related files.
 
 ###### Version: 0.2-11
