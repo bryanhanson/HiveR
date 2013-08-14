@@ -65,7 +65,7 @@ Additional parameters to be passed downstream.
 }
 }
 \details{
-\code{plotHive} uses \code{grid} graphics to produce a 2D hive plot in a style similar to the original concept.  For a 2D plot, axis number 1 is vertical except in the case of 2 axes.  \code{plot3dHive} produces a 3D hive plot using \code{\link{rgl}} graphics.
+\code{plotHive} uses \code{grid} graphics to produce a 2D hive plot in a style similar to the original concept.  For a 2D plot, axis number 1 is vertical except in the case of 2 axes.  \code{plot3dHive} produces a 3D hive plot using \code{rgl} graphics.
 \cr
 \cr
 For most work with \code{plot3dHive}, use \code{LA = FALSE} for speed of drawing.  \code{LA = TRUE} is over 20 times slower, and is more appropriate for high quality hive plots.  These are probably better made with \code{R CMD BATCH script.R} rather than interactive use.

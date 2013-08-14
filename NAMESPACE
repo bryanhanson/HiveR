@@ -1,18 +1,12 @@
 # Export all names
 exportPattern(".")
 
-# Import all packages listed as Imports or Depends
+# Import most packages listed as Imports or Depends
 import(
   grid,
   RColorBrewer,
-  rgl,
-  xtable,
-  bipartite,
-  sna,
-  tkrgl,
-  plyr,
   tcltk
 )
 
-importFrom(tkrgl, spin3d)
-importFrom(plyr, empty)
+importFrom(tkrgl, spin3d, spinControl)
+importFrom(plyr, empty, count)

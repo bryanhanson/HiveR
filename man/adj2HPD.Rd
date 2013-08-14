@@ -29,7 +29,7 @@ Other parameters to be passed downstream.
 \details{
 This function produces a "bare bones" \code{HivePlotData} object.  The names of the dimensions of \code{M} are used as the node names.  All nodes are given size 1, an id number (\code{1:number of nodes}), are colored black and are assigned to axis 1.  The edges are all gray, and the weight is M[i,j].  The user will likely have to manually make some changes to the resulting \code{HivePlotData} object before plotting.  Alternatively, \code{\link{mineHPD}} may be able to extract some information buried in the data, but even then, the user will probably need to make some adjustments.  See the examples. 
 }
-\seealso{ \code{\link{dot2HPD}} and \code{link{edge2HPD}}
+\seealso{ \code{\link{dot2HPD}} and \code{\link{adj2HPD}}
 }
 \value{
 A \code{

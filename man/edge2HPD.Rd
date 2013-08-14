@@ -29,7 +29,7 @@ Other parameters to be passed downstream.
 \details{
 This function produces a "bare bones" \code{HivePlotData} object.  The user will likely have to make some changes manually to the resulting \code{HivePlotData} object before plotting.  Alternatively, \code{\link{mineHPD}} may be able to extract some information buried in the data, but even then, the user might need to make some adjustments.  See the examples. 
 }
-\seealso{ \code{\link{dot2HPD}} and \code{link{adj2HPD}}
+\seealso{ \code{\link{dot2HPD}} and \code{\link{adj2HPD}}
 }
 \value{
 A \code{\link{HivePlotData}} object.
@@ -42,14 +42,14 @@ Jonathan H. Chung, with minor changes for consistency by Bryan A. Hanson.
 }
 \examples{
 # Create a simple edge list & process it
-set.seed(31)
-ne <- 20 # no. of edges
-el <- data.frame(node1 = sample(c(letters, LETTERS), ne, replace = FALSE),
-  node2 = sample(c(letters, LETTERS), ne, replace = TRUE),
-  stringsAsFactors = FALSE)
-el <- unique(el)
-el$weight = sample(1:5, nrow(el), replace = TRUE)
-hive1 <- edge2HPD(el)
-sumHPD(hive1)
+edges <- data.frame(lab1 = LETTERS[c(1:8, 7)],
+					lab2 = LETTERS[c(2:4, 1:3, 4, 2, 2)],
+					weight = c(1, 1, 2, 2, 3, 1, 2, 3, 1))
+					
+td <- edge2HPD(edge_df = edges, desc = "Test of edge2HPD")
+td.out <- sumHPD(td, plot.list = TRUE)
+# compare:
+edges
+td.out[,c(3,7,8)]
 }
 \keyword{ utilities }

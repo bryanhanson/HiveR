@@ -12,6 +12,13 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-13
+Date: 2013-08-14
+News:
+>> Moved vignette to vignettes directory for CRAN. Various small fixes to vignette.
+>> Fixed an importFrom issue.
+>> Fixed a problem with edge2HPD found by V. Memisevic.  Added a better example to the documentation.
+
 ###### Version: 0.2-12
 Date: 2013-07-22
 News:

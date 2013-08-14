@@ -1,15 +1,17 @@
 edge2HPD <- function(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) {
 	
 	# Authored and contributed to HiveR by Jonathan H. Chung, June 2013.
-	# Thanks Jon.  Small changes for consistency by Bryan A. Hanson
+	# Thanks Jon.  Some changes for consistency by Bryan A. Hanson
+	# A few boo-boos caught by Vesna Memisevic
 	
   if (is.null(edge_df)){
     stop("No edge data provided")
-  }
+  	}
   if (!is.data.frame(edge_df)){
     stop("edge_df is not a data frame")
-  }
+  	}
   
+  ### Process nodes
   # Get node labels
   lab1 <- unlist(edge_df[, 1])
   lab1 <- as.character(lab1)
@@ -19,52 +21,54 @@ edge2HPD <- function(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL,
   # Get number of unique nodes
   nn <- length(unique(c(lab1, lab2)))
 
-  
   # Set default node size to 1
   size <- rep(1, nn)
   # Create a vector for node ID
   id <- 1:nn
-  node_attributes <- cbind("id"    = id, 
-                           "label" = unique(c(lab1, lab2)))
-  node_attributes <- as.data.frame(node_attributes)
   
-  # Define default axis
+  # Assign default axis
   axis <- rep(1, nn)
-  # Define node color
+  # Assign node color
   color <- as.character(rep("black", nn))
-  # Define radius
+  # Assign radius
   radius <- rep(1, nn)
-  # Create HPD object
+
+  # Create empty HPD object
   HPD <- list()
   
-  # Define node attributes
-  HPD$nodes$id <- node_attributes$id
-  HPD$nodes$lab <- node_attributes$label
+  # Assemble node attributes
+  HPD$nodes$id <- id
+  HPD$nodes$lab <- unique(c(lab1, lab2))
   HPD$nodes$axis <- axis
   HPD$nodes$radius <- radius
   HPD$nodes$size <- size
   HPD$nodes$color <- color
   
-  # Get number of edges
+  ### Process edges - a bit tricky to coordinate!
   ne <- nrow(edge_df)
-  # Set up edge list
-  edge1 <- merge(edge_df[, 1], node_attributes, by.x = 1, by.y = "label")
-  edge2 <- merge(edge_df[, 2], node_attributes, by.x = 1, by.y = "label")
+  edge_df[,1] <- as.character(edge_df[,1]) # for use as id
+  edge_df[,2] <- as.character(edge_df[,2]) # may read in as integers
+  HPD$edges$id1 <- rep(NA, ne)
+  HPD$edges$id2 <- rep(NA, ne)
+
+  for (n in 1:ne) { # same logic as over in dot2HPD
+	pat1 <- paste("\\b", edge_df[n,1], "\\b", sep = "") # need word boundaries
+	print(pat1)
+	pat2 <- paste("\\b", edge_df[n,2], "\\b", sep = "") # to avoid finding fragments
+	HPD$edges$id1[n] <- grep(pat1, HPD$nodes$lab)
+	HPD$edges$id2[n] <- grep(pat2, HPD$nodes$lab)
+	}
   
-  HPD$edges$id1 <- edge1$id
-  HPD$edges$id2 <- edge2$id
-  # check if edge data has attributes
+  # check if edge data has weights in col 3
   if (ncol(edge_df) > 2) {
     if (is.numeric(edge_df[, 3]) | is.integer(edge_df[, 3])){
       edge_weight <- edge_df[, 3]
-    } else{
-      stop("Edge weight column is not numeric or integer.")
-    }
-  } else {
-    warning("No edge weight column detected. Setting default edge weight to 1")
-    edge_weight <- rep(1, ne)
-  }
-  print(str(HPD))
+      } else {
+        warning("No edge weight column detected. Setting default edge weight to 1")
+        edge_weight <- rep(1, ne)
+        }
+     }
+     
   HPD$edges$weight <- edge_weight
   HPD$edges$color <- rep("gray", ne)
   HPD$nodes <- as.data.frame(HPD$nodes)
@@ -73,14 +77,13 @@ edge2HPD <- function(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL,
   # Add description
   if (is.null(desc)) {
     desc <- "No description provided"
-  }
+    }
   HPD$desc <- desc
   
   # Define axis columns
   if (is.null(axis.cols)){
-    axis.cols <- brewer.pal(length(unique(HPD$nodes$axis)),
-                            "Set1")
-  }
+    axis.cols <- brewer.pal(length(unique(HPD$nodes$axis)), "Set1")
+    }
   HPD$axis.cols <- axis.cols
   
   # Clean up HPD object
