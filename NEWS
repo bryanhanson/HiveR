@@ -10,6 +10,33 @@ doi: 10.1093/bib/bbr069
 
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+See below for various contributors and those that reported bugs.  Much appreciated!
+
+###### Version: 0.2-14
+Date: 2013-08-16
+News:
+>> Added depends R >= 3.0 to pass all checks at CRAN.
+
+###### Version: 0.2-13
+Date: 2013-08-14
+News:
+>> Moved vignette to vignettes directory for CRAN. Various small fixes to vignette.
+>> Fixed an importFrom issue.
+>> Fixed a problem with edge2HPD found by V. Memisevic.  Added a better example to the documentation.
+
+###### Version: 0.2-12
+Date: 2013-07-22
+News:
+>> Vesna Memisevic discovered that adj2HPD assumed bipartite networks in how it processed the data.  Modified the code so that this assumption is not made and other types of adjacency matrices can be read.
+>> Added edge2HPD authored by Jonathan H. Chung. Thanks!
+>> Updated documentation and related files.
+
+###### Version: 0.2-11
+Date: 2013-07-06
+News:
+>> Modified dot2HPD to handle multiple tag=value entries.
+>> Small clarifications to documentation.
+
 ###### Version: 0.2-10
 Date: 2013-02-29
 News:

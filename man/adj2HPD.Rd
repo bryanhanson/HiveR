@@ -4,7 +4,7 @@
 Process an adjacency graph into a HivePlotData object
 }
 \description{
-This function will take an adjacency graph and convert it into a basic \code{\link{HivePlotData}} object.  Further manipulation will almost certainly be required before the data can be plotted.
+This function will take an adjacency graph and convert it into a basic \code{\link{HivePlotData}} object.  Further manipulation by \code{\link{mineHPD}} will almost certainly be required before the data can be plotted.  As of v 0.2-12 this function is no longer limited to bipartite networks.
 }
 \usage{
 adj2HPD(M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...)
@@ -29,26 +29,26 @@ Other parameters to be passed downstream.
 \details{
 This function produces a "bare bones" \code{HivePlotData} object.  The names of the dimensions of \code{M} are used as the node names.  All nodes are given size 1, an id number (\code{1:number of nodes}), are colored black and are assigned to axis 1.  The edges are all gray, and the weight is M[i,j].  The user will likely have to manually make some changes to the resulting \code{HivePlotData} object before plotting.  Alternatively, \code{\link{mineHPD}} may be able to extract some information buried in the data, but even then, the user will probably need to make some adjustments.  See the examples. 
 }
-\seealso{\code{\link{dot2HPD}}
+\seealso{ \code{\link{dot2HPD}} and \code{\link{adj2HPD}}
 }
 \value{
 A \code{
-\link{HivePlotData}} object which is capable of more sophisticated and flexible processing of a .dot file if the file contains tags.
+\link{HivePlotData}} object.
 }
 \author{
-Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
+Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}  Vesna Memisevic contributed a fix that limited this function to bipartite networks (changed in v. 0.2-12).
 }
 \references{
 \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \examples{
-### Note: this example has questionable scientific value!
+### Example 1: a bipartite network
+### Note: this first example has questionable scientific value!
 ### The purpose is to show how to troubleshoot and
 ### manipulate a HivePlotData object.
 
-set.seed(31)
 require(bipartite)
-data(Safariland)
+data(Safariland) # This is a bipartite network
 
 # You may wish to do ?Safariland or ?Safari for background
 
@@ -90,5 +90,15 @@ for (n in seq(1, length(hive3$edges$id1), by = 2)) {
 	}
 
 plotHive(hive3)
+
+### Example 2, a simple random adjacency matrix
+set.seed(31)
+nr <- 20
+nc <- 15
+M <- matrix(floor(runif(nc*nr, 0, 10)), ncol = nc)
+colnames(M) <- sample(c(letters, LETTERS), nc, replace = FALSE)
+rownames(M) <- sample(c(letters, LETTERS), nr, replace = FALSE)
+hive4 <- adj2HPD(M)
+sumHPD(hive4)
 }
 \keyword{ utilities }

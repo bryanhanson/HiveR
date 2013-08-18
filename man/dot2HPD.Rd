@@ -34,10 +34,7 @@ Other parameters to be passed downstream.
 }
 }
 \details{
-This function is currently agnostic with respect to whether or not the .dot graph is directed or not.  Either type will be processed, but if the graph is directed, this will only be indirectly stored in the \code{HivePlotData} object (in that the first node of an edge in the .dot file will be in \code{HPD$nodes$id1} and the second node of an edge will be in \code{HPD$nodes$id2}.  This fact can be used; see the vignette and \code{\link{mineHPD}}.
-}
-\section{warning}{
-This function currently handles only an extremely limited portion of the .dot standard.  Don't expect any particular .dot file to be processed correctly. This will be improved in future versions.
+This function is currently agnostic with respect to whether or not the .dot graph is directed or not.  Either type will be processed, but if the graph is directed, this will only be indirectly stored in the \code{HivePlotData} object (in that the first node of an edge in the .dot file will be in \code{HPD$nodes$id1} and the second node of an edge will be in \code{HPD$nodes$id2}.  This fact can be used; see the vignette and \code{\link{mineHPD}}.  Keep in mind the .dot standard is fairly loose.  This function has been tested to work with several .dot files, include those with multiple tag=value attributes.  If you have trouble, please file a issue at Github so I can track it down.
 }
 \value{
 A \code{\link{HivePlotData}} object.

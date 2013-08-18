@@ -16,8 +16,8 @@ HiveR is an R package for creating and plotting 2D and 3D hive plots. Hive plots
 \tabular{ll}{
 Package: \tab HiveR\cr
 Type: \tab Package\cr
-Version: \tab 0.2-10\cr
-Date: \tab 2013-03-29\cr
+Version: \tab 0.2-14\cr
+Date: \tab 2013-08-16\cr
 License: \tab GPL-3\cr
 }
 }

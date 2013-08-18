@@ -1,0 +1,717 @@
+%\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
+%\VignetteDepends{RColorBrewer, grid, rgl, RFOC, bipartite, sna, xtable, mvbutils, FuncMap, lattice, reshape, ggplot2}
+%\VignettePackage{HiveR}
+
+%%%%%     LaTeX Configuration Follows  %%%%%
+
+\documentclass{tufte-handout}
+
+\graphicspath{{./graphics/}} % knitr also uses it's own hook, see later
+\usepackage{graphicx}
+
+\usepackage[version = 3]{mhchem}
+\usepackage{xtab}
+\usepackage[buttonsize=1em]{animate}
+
+%%%%% This next section from SO to abbreviate 2nd occurence of a citation
+
+\usepackage{etoolbox}% provides some support for comma-separated lists
+
+\makeatletter
+% We'll keep track of the old/seen bibkeys here.
+\def\@tufte@old@bibkeys{}
+
+% This macro prints the full citation if it's the first time it's been used
+% and a shorter citation if it's been used before.
+\newcommand{\@tufte@print@margin@citation}[1]{%
+  % print full citation if bibkey is not in the old bibkeys list
+  \ifinlist{#1}{\@tufte@old@bibkeys}{%
+    \citealp{#1}% print short entry
+  }{%
+    \bibentry{#1}% print full entry
+  }%
+  % add bibkey to the old bibkeys list
+  \listgadd{\@tufte@old@bibkeys}{#1}%
+}
+
+% We've modified this Tufte-LaTeX macro to call \@tufte@print@margin@citation
+% instead of \bibentry.
+\renewcommand{\@tufte@normal@cite}[2][0pt]{%
+  % Snag the last bibentry in the list for later comparison
+  \let\@temp@last@bibkey\@empty%
+  \@for\@temp@bibkey:=#2\do{\let\@temp@last@bibkey\@temp@bibkey}%
+  \sidenote[][#1]{%
+    % Loop through all the bibentries, separating them with semicolons and spaces
+    \normalsize\normalfont\@tufte@citation@font%
+    \setcounter{@tufte@num@bibkeys}{0}%
+    \@for\@temp@bibkeyx:=#2\do{%
+      \ifthenelse{\equal{\@temp@last@bibkey}{\@temp@bibkeyx}}{%
+        \ifthenelse{\equal{\value{@tufte@num@bibkeys}}{0}}{}{and\ }%
+        \@tufte@trim@spaces\@temp@bibkeyx% trim spaces around bibkey
+        \@tufte@print@margin@citation{\@temp@bibkeyx}%
+      }{%
+        \@tufte@trim@spaces\@temp@bibkeyx% trim spaces around bibkey
+        \@tufte@print@margin@citation{\@temp@bibkeyx};\space
+      }%
+      \stepcounter{@tufte@num@bibkeys}%
+    }%
+  }%
+}
+
+
+% Calling this macro will reset the list of remembered citations. This is
+% useful if you want to revert to full citations at the beginning of each
+% chapter.
+\newcommand{\resetcitations}{%
+  \gdef\@tufte@old@bibkeys{}%
+}
+\makeatother
+
+%%%%%     End of LaTeX Configuration     %%%%%
+
+%%%%%     Set up R and knitr     %%%%%
+
+<< getVersion, echo = FALSE >>=
+desc <- packageDescription("HiveR")
+vers <- paste("version", desc$Version)
+@
+
+<< SetUp, echo = FALSE, results = "hide" >>=
+set.seed(123)
+suppressMessages(library(grid))
+suppressMessages(library(FuncMap))
+suppressMessages(library(HiveR))
+suppressMessages(library(sna))
+suppressMessages(library(xtable))
+suppressMessages(library(bipartite))
+suppressMessages(library(reshape))
+suppressMessages(library(lattice))
+suppressMessages(library(ggplot2))
+suppressMessages(library(mvbutils))
+suppressMessages(library(rgl))
+#suppressMessages(library(animation))
+suppressMessages(library(knitr))
+
+if (!file.exists("graphics")) dir.create("graphics")
+
+# Stuff specifically for knitr:
+
+opts_chunk$set(out.width = "0.9\\textwidth", fig.align = "center", fig.width = 7, fig.height = 7, cache = FALSE, echo = FALSE, crop = TRUE)
+knit_hooks$set(rgl.static = hook_rgl) # use to capture a single rgl graphic
+knit_hooks$set(rgl.mov = hook_plot_custom) # use to capture a movie
+knit_hooks$set(crop = hook_pdfcrop)
+
+# Note: defaults are eval = TRUE, echo = TRUE
+
+@
+
+\title{The HiveR Package}
+\author{Bryan A. Hanson}
+\date{\today}
+
+%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+This document describes some features of the \texttt{HiveR} package.\footnote{\texttt{HiveR} \Sexpr{vers}}  The current release contains a core set of functions for creating and drawing hive plots.\footnote{\url{http://github.com/bryanhanson/HiveR} or \href{http://CRAN.R-project.org/package=HiveR}{CRAN.R-project.org/package=HiveR}}  Additional features are contemplated.  There may well be bugs and features that can be improved -- your comments are always welcome.\footnote{Contact info and issues tracking can be found at the web sites above}
+
+As with any \textit{R} package, details on functions discussed below can be found by typing \texttt{?function\_name} in the \textit{R} console after installing \texttt{HiveR}.  A complete list of functions available can be seen by typing \texttt{?HiveR} and then at the bottom of the page that opens, click on the index link.
+
+\section{Background, Inspiration and Motivation} %%%%%
+
+\texttt{HiveR} was inspired by the concept of hive plots as developed by Martin Krzywinski at the Genome Sciences Center (\href{http://www.hiveplot.com/}{www.hiveplot.com}).  Hive plots are a reaction to "hairball" style networks in which the layout of the network is arbitrary and hypersensitive to even small changes in the underlying network.  Hive plots are particularly well-suited for comparing networks, as well as for the discovery of emergent properties of networks.
+
+The key innovation in a hive plot, compared to other means of graphically displaying network structure, is how node information is handled.  In a hive plot, there is a node coordinate system consisting to two parts.  First, nodes are assigned to axes based upon qualitative or quantitative characteristics of the the node, for instance membership in a certain category.  As will be discussed later, this assignment process is key to constructing a hive plot.  Second, the position of the node along the axis, the radius, is based upon some quantitative characteristic of the node.  Edges are handled in a fairly standard way, but may be colored or have a width or weight which encodes an interesting value.
+
+In creating a hive plot, one maps network parameters to the plot, and thus the process can be readily tuned to meet one's needs.  The mappable parameters are listed in Table~\ref{Mapping}, and the mapping is limited only by one's creativity and the particular knowledge domain.  Thus ecologists have their own measures of food webs, social network analysts have various measures describing interconnectedness etc.  An essential point is that mapping network parameters in this way results in a reproducible plot.
+
+Krzywinski has an excellent paper detailing the features and virtues of hive plots and is a must-read.\cite{Krzywinski2011}  He notes the following virtues of hive plots:
+
+\begin{itemize}
+  \item Hive plots are rational in that only the structural properties of the network determine the layout.
+  \item Hive plots are flexible and can be tuned to show interesting features.
+  \item Hive plots are predictable since they arise from rules that map network features to plot features.
+  \item Hive plots are robust to changes in the underlying network.
+  \item Hive plots of different networks can be compared.
+  \item Hive plots are transparent and practical.
+  \item Plots of networks are generally complex and require some investment to understand.  Complexity plots well in a hive plot and details can be inspected.
+\end{itemize}
+
+\vspace{0.5 cm}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+mappable hive plot parameters\\
+\hline
+\hline
+Axis to which a node is assigned\\
+Radius of a node\\
+Color of a node\\
+Size of a node\\
+\hline
+Color of an edge\\
+Width or weight of an edge\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Hive plot features that can be mapped to network parameters\label{Mapping}}
+\end{table}
+
+\vspace{0.5 cm}
+
+Inspired by the examples given by Kryzwinski in his materials on the web, I created the \textit{R} package  \texttt{FuncMap} in December 2010.\cite{Hanson2011}  This single function package maps the function calls made by an \textit{R} package into 3 types: sources, which are functions that make only outgoing calls, sinks, which take only incoming calls, and managers, which do both.  Figure~\ref{fig:FuncMapEx} shows an example of a plot made by \texttt{FuncMap}; this is a true hive plot.  In this plot, functions in a package are assigned to an axis by their role, and the radius is determined by the number of calls made or received by a function (which is the degree of the node).  This is also the basis for the width of the edges.  In this plot, calls (edges) originating on the source axis are shown in green, while those originating on the manager axis are in blue.  By defintion, the sink axis only receives calls.
+
+\texttt{HiveR} takes things quite a bit further.  \texttt{HiveR} is a fresh implementation of hive plots in \textit{R}, not a port of the original \textit{Perl} version \emph{per se}.  As such, it does some things differently, and not all features are implemented (and they may or may not be in the future).  \texttt{HiveR} will draw 2D hive plots with 2-6 axes in a style close to the original.  However, \texttt{HiveR} adds value by making 3D, interactive plots possible when there are 4-6 axes.  These 3D plots were inspired by the ideas of VSEPR theory in chemistry:  the axes of these 3D plots are  arranged with tetrahedral, trigonal bipyramidal or octahedral geometries for 4-6 axes respectively (see Figure~\ref{VSEPR} and \href{https://secure.wikimedia.org/wikipedia/en/wiki/Vsepr}{wikipedia/VSEPR}).  The specifics of 3D hive plots will be discussed in a later section.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = 0.9\textwidth]{VSEPR.pdf}
+\end{center}
+\caption{Idealized geometries according to VSEPR theory\label{VSEPR}}
+\end{figure}
+
+
+<< FuncMapEx, fig.cap = "FuncMap for package lattice", out.width = "0.5\\textwidth" >>=
+fw <- foodweb(where = "package:lattice", plotting = FALSE)
+ans <- FuncMap(fwb = fw, pkg = "lattice", method = "abs", sm.title = TRUE)
+@
+
+\section{\texttt{HiveR} Features} %%%%%
+
+\subsection{Internal Storage}
+
+\texttt{HiveR} stores the information needed to create a hive plot in a \texttt{HivePlotData} object which is an S3 class.  As an S3 class, this structure can be easily extended by the user to store additional information (though using that information as part of a hive plot would require more work).  Utilities are provided to summarize, troubleshoot and check the integrity of these objects (functions \texttt{sumHPD} and \texttt{chkHPD} respectively).  The structure and content of a \texttt{HivePlotData} object is shown in Table~\ref{Struc}.
+
+
+\begin{small}
+\begin{table}
+\begin{center}
+\begin{xtabular}{| p{0.15\textwidth} p{0.2\textwidth} | p{0.15\textwidth} | p{0.35\textwidth} |}
+
+\hline
+\$nodes & &  & \\
+& \$id & int & identifier \\
+& \$lab & chr & label \\
+& \$axis & int & axis  \\
+& \$radius & num & radius \\
+& \$size & num & size \\
+& \$color & chr & color \\
+\hline
+\$edges & &  &  \\
+& \$id1 & int & 1st node id \\
+& \$id2 & int & 2nd node id \\
+& \$weight & num & width \\
+& \$color & chr & color \\
+\hline
+\$type & & chr & 2D or 3D plot \\
+\hline
+\$desc & & chr & description \\
+\hline
+\$axis.cols & & chr & axis colors \\
+\hline
+- attr & & chr & "HivePlotData" \\
+\hline
+
+\end{xtabular}
+\end{center}
+\caption{The structure of a HivePlotData object\label{Struc}}
+\end{table}
+\end{small}
+
+
+\subsection{Generation of Random Network Data Sets}
+
+\texttt{HiveR} has the ability to generate random network data sets using function \texttt{ranHiveData}.  These are primarily useful for testing and demonstrations.  A data set has a type, either 2D or 3D.  Type 2D may have 2-6 axes and is plotted in a 2D window using \texttt{grid} graphics which are extremely fast.  Type 3D applies to 4-6 axes only and these hive plots are drawn in 3D using \texttt{rgl} and are interactive.  When using \texttt{ranHiveData} you can specify which type you desire.
+
+\subsection{Built-in Data Sets}
+
+\texttt{HiveR} contains two related 2D type data sets, \texttt{Safari} and \texttt{Arroyo}.  These are plant-pollinator data sets which give the number of visits for each plant-pollinator pair.  Data for the \emph{E. coli} gene regulatory network is also included; it is derived from the RegulonDB.\cite{Gama2010} Each of these data sets are used in the examples below.
+
+\subsection{Importing Real Data Sets}
+
+The function \texttt{dot2HPD} will import files in .dot format and convert them to \texttt{HivePlotData} objects (see \href{https://secure.wikimedia.org/wikipedia/en/wiki/DOT\_language}{wikipedia/DOT\_language}).  This is done with the aid of two external files.  One contains information about how to map node labels to \texttt{HivePlotData} properties.  The other contains information about mapping edge properties.  This approach gives one a lot of flexibility to process the same graph into various hive plots.  This process is demonstrated later for the \emph{E. coli} data set.  Currently, only a very small set of the .dot standard is implemented and one should not expect any particular .dot file to process correctly.  It is also possible to import an adjacency matrix using \texttt{adj2HPD}.
+
+\subsection{Modifying \texttt{HivePlotData} Sets}
+
+Function \texttt{mineHPD} has several options for extracting information from within an existing \texttt{HivePlotData} object and converting it to a modifed \texttt{HivePlotData} object.  Additional options are readily incorporated.  For the current selection, check the help page (\texttt{?mineHPD}). This function will be used extensively in the examples that follow.  In addition, function \texttt{manipAxis} can also be used to modify a \texttt{HivePlotData} object by scaling or inverting axes.  This can be done on the fly (as the plot is created) or the \texttt{HivePlotData} object can be permanently modified.
+
+\subsection{Making Hive Plots}
+
+In a hive plot, because the position of the node along an axis (the radius) is quantitative, the nodes can be plotted at their absolute value (native units), normalized to run between 0\ldots1, plotted by rank or by a combination of ranking and norming.  Some aspects of the plot that depend upon these options are shown in Table~\ref{Method}.  These different ways of plotting the same data often look dramatically different, and for a particular data set, some methods of plotting may provide more insight.  Functions \texttt{plotHive} and \texttt{plot3dHive} have an argument \texttt{method} which controls node plotting on the fly; function \texttt{manipAxis} is used in the background and can also be called independently if desired.
+
+
+\begin{small}
+\begin{table}
+\begin{center}
+\begin{flushleft}
+\begin{xtabular}{| p{0.15\linewidth} | p{0.22\linewidth} | p{0.22\linewidth} | p{0.28\linewidth} |}
+\hline
+\emph{method} & \emph{axis length} & \emph{center hole}  & \emph{node behavior} \\
+\hline
+\hline
+native & $f(units)$ & asymmetric & nodes may overlap\\
+\hline
+ranked & $\propto rank(nodes)$ & circular & nodes evenly spaced \& don't overlap  \\
+\hline
+normed  & all equal & circular & nodes may overlap\\
+\hline
+ranked \& normed & all equal & circular & nodes evenly spaced  \& don't overlap \\
+\hline
+\end{xtabular}
+\end{flushleft}
+\end{center}
+\caption{Comparison of methods for plotting nodes\label{Method}}
+\end{table}
+\end{small}
+
+\section{A Simple Example Using a Plant-Pollinator Network} %%%%%
+
+\texttt{HiveR} currently contains the built-in data sets, \texttt{Safari} and \texttt{Arroyo} which provide a useful demonstration of \texttt{HiveR}.\footnote{Be warned: I am  not an ecologist and these data sets and plots are merely a demonstration of \texttt{HiveR}}  These are plant-pollinator data sets which were derived from Vasquez and Simberloff.\cite{Vazquez2003}  These describe two-trophic level systems that consist of almost exactly the same suite of plants and pollinators.  \texttt{Safari} is based upon observations of an undisturbed area, while \texttt{Arroyo} is from a nearby location grazed by cattle.  The original data is composed of plant-pollinator pairs and a count of visits during a fixed observation period for each pair.
+
+Figures~\ref{fig:PPNA} and \ref{fig:PPN4} show two means of plotting \texttt{Safari} using package \texttt{bipartite}.\footnote{Truthfully we are using the data set \texttt{Safariland} from package \texttt{bipartite}; \texttt{Safari} was derived from \texttt{Safariland}.}  Figure~\ref{fig:PPNA} is a simple diagram giving plant-pollinator visits as a gray-plot heat map (plants are on the vertical axis).  There are two parameters encoded here: the pairings and the number of visits (arguably, the dimensions of the matrix give the number of species involved as well).  Figure~\ref{fig:PPN4} displays plants across the bottom and pollinators across the top.  The width of the connecting bands in the middle encodes the number of visits for a given plant-pollinator pair.  The width of the top or bottom panel for a species is the total number of visits in which that species participates.  Thus there are three parameters shown in this figure: the pairings, the total visits for a single species, and visits between a given pair.  This second plot makes it pretty clear that four plant-pollinator pairs have by far the most number of visits (these are the large gray-filled bands in the middle of the diagram).
+
+<< PPNdata >>=
+data(Safariland)
+@
+
+<< PPNA, fig.cap = "Safariland data set using visweb", fig.keep = "last" >>=
+visweb(Safariland)
+@
+
+
+<< PPN4, fig.cap = "Safariland data set using plotweb"  >>=
+plotweb(Safariland)
+@
+
+Another approach to presenting this network graphically would be to use function \texttt{gplot} in the social network analysis package \texttt{sna}.  \texttt{gplot} is flexible and has many options.  Figure~\ref{fig:PPN5} shows one possible display of \texttt{Safari}, plotted with \texttt{mode = circle}.  In this plot, plant nodes are colored green and insect nodes red.  The width of the edges is proportional to the number of visits between a pair of species.  Figure~\ref{fig:PPN6} shows the same data using the Fruchterman-Reingold algorithm, one which shows that there are actually two networks present (and which is not apparent from the the other plots).  Edge width here is the same as before, but because the high traffic node pairs are close to each other, the connecting, wide edge looks a bit odd and is easy to miss (clearly, one could experiment to improve this detail).
+
+
+<< PPN5, fig.cap = "Safariland data set using gplot (mode = circle)", warning = FALSE >>=
+gplot(Safariland, gmode = "graph", edge.lwd = 0.05,
+	vertex.col = c(rep("green", 9), rep("red", 27)),
+	mode = "circle")
+@
+
+<< PPN6, fig.cap = "Safariland data set using gplot (mode = Fruchterman-Reingold)", warning = FALSE >>=
+gplot(Safariland, gmode = "graph", edge.lwd = 0.05,
+	vertex.col = c(rep("green", 9), rep("red", 27)))
+@
+
+For a network of this size and complexity, any or some combination of these plots would probably be sufficient to answer many questions.  However, we proceed to plot the data as a hive plot to demonstration some of the features of hive plots.  Figure~\ref{fig:PPN2} shows \texttt{Safari} and \texttt{Arroyo} displayed together in a hive panel, which facilitates direct comparison of the two networks.  In these plots, plants are on one axis, and pollinators are on the other.  Each organism was assigned a radius on its axis based by calculating $\mid d' \mid $ using function \texttt{dfun} in package \texttt{bipartite}.  $\mid d' \mid $ is an index of specialization; higher values mean the plant or pollinator is more specialized.  Edge weights were assigned proportional to the square root of the normalized number of visits of a pollinator to a plant.  Thus the width of the edge drawn is an indication of the visitation rate.  The transformed number of visits was divided manually into 4 groups and used to assign edge colors ranging from white to red.  The redder colors represent greater numbers of visits, and the color-coding is comparable for each figure.  Thus both the edge color and the edge weight encode the same information.  It would of course be possible to encode an additional variables by changing either edge color or weight, or node size.  These plots show a rich amount of information not available from the more standard plots and show that the networks are fundamentally different:
+
+\begin{itemize}
+  \item The degree of specialization with each network is different.  This can be seen in the different radii for the nodes in each plot, as well as in the \texttt{Arroyo} panel where the plant axis begins at a lower value.
+  \item A greater number of visits (wider, redder edges) occur between more specialized species (nodes at larger radii) in \texttt{Safari} than \texttt{Arroyo}.
+  \item The huge number of visits encoded in red in \texttt{Safari} (the ungrazed site) is missing in \texttt{Arroyo}.
+\end{itemize}
+
+<< PPN2, fig.cap = "Hive Panel comparing Safari with Arroyo" >>=
+data(Safari)
+Safari$nodes$size <- 0.5
+data(Arroyo)
+Arroyo$nodes$size <- 0.5
+
+vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+#
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 1)))
+#
+pushViewport(vplayout(1, 1)) # upper plot
+plotHive(Safari, ch = 0.1, axLabs = c("plants", "pollinators"), axLab.pos = c(0.15, 0.15), rot = c(-90, 90), np = FALSE, axLab.gpar = gpar(fontsize = 16, col = "white"))
+grid.text("Safari (undisturbed)", x = 0.5, y = 0.95, default.units = "npc", gp = gpar(fontsize = 20, col = "white"))
+popViewport(2)
+#
+pushViewport(vplayout(2, 1)) # lower plot
+plotHive(Arroyo, ch = 0.1, axLabs = c("plants", "pollinators"), axLab.pos = c(0.15, 0.15), rot = c(-90, 90), np = FALSE, axLab.gpar = gpar(fontsize = 16, col = "white"))
+grid.text("Arroyo (disturbed)", x = 0.5, y = 0.95, default.units = "npc", gp = gpar(fontsize = 20, col = "white"))
+
+@
+
+\section{Some Things to Keep in Mind} %%%%%
+
+Now that we have seen a simple hive plot, it's a good time to review some aspects to keep in mind as you wrap your head around the concept and we move to more complicated plots.
+
+Hive Plots are radially-arranged parallel coordinate plots, and as with any parallel coordinate plot, the order of the axes is critical.\cite{Wegman1990}  In creating a hive plot, assigning the nodes to axes is the hardest task, as no jumping or crossing of axes is allowed (due to bad aesthetics).  As a result, you can't make this assignment without thinking about the edges at the same time.  This initial mapping process often forces one to reconceputalize one's data, which in turns leads to new insights.  By the way, there is no guarantee that any data set can be made into a hive plot, but there are certainly a number of data sets that will give a very useful hive plot after some thought.
+
+For 2D hive plots with 2 or 3 axes, there is no possibility of edges crossing an axis.  However, for 4-6 axes, you must guard against this: Edges should go 1 $\rightarrow$ 2, 2 $\rightarrow$ 3, \ldots 5 $\rightarrow$ 6, but not 1 $\rightarrow$ 5 for example.  For 3D hive plots, no edges can start and end on the same axis (there is no way to place these properly in 3D space).  For 4 axes, all axes are adjacent and hence jumping is not an issue.  But for 5 or 6 axes, you must guard against this manually.  Note that the different axis systems in 3D have different numbers of adjacent axes:
+
+		\begin{itemize}
+			\item Tetrahedron: 6 adjacent axis pairs, \emph{crossings are impossible}
+			\item Trigonal bipyramid: 9 adjacent axis pairs\footnote{And the pairs are not equivalent: see Figure~\ref{VSEPR}.}
+			\item Octahedron: 12 adjacent axis pairs
+		\end{itemize}
+
+The mapping of nodes to axes is limited only by your creativity and the knowledge domain you work in.  For some ideas about how to assign the radius, see table 1 in Krzywinski.\cite{Krzywinski2011}
+
+Hive plots are almost agnostic with respect to directed graphs.  Most functions don't use any information related to the direction of an edge.  However, some of the options in \texttt{mineHPD} can take into account directionality by using the first node id as a starting point and the second node id as an ending point (\texttt{HPD\$edges\$id1, id2}).
+
+With 2D hive plots, which are drawn using \texttt{grid} graphics, the nodes "on top" and showing are the last drawn nodes.  You may wish to sort the nodes before drawing to get a certain effect -- the same is true for edges.\footnote{While the last thing drawn is on top, they are not strictly drawn in the order given.  See the code for \texttt{plotHive} for details.  This is an open issue related to how \texttt{grid.curve} handles its \texttt{curvature} argument.}
+
+\section{The \emph{E. coli} Gene Regulatory Network}
+
+%\texttt{HiveR} includes an example of the \emph{E. coli} gene regulatory network based upon the RegulonDB\cite{Gama2010}.  It is contained in a file called \texttt{ecoli.dot} in the \texttt{extdata/E\_coli} directory.  It can be read in with \texttt{dot2HPD} and further processed with \texttt{mineHPD}.  \texttt{dot2HPD} relies on two external .csv files which tell the function how to map node and edge information in the .dot file to the \texttt{HivePlotData} object.  Tables~\ref{NI} and \ref{EI} show the contents of the files used in this case.  If you choose to draw the nodes, persistent nodes will be red and non-persistent nodes grey.  The type of edge (1\dots4) is also encoded by color. Gene pairs (edges) that are closer physically and genetically are colored gray $\rightarrow$ yellow $\rightarrow$ orange $\rightarrow$ red with red being the most related pairs.
+
+The \emph{E. coli} gene regulatory network, based upon the RegulonDB,\cite{Gama2010} is an excellent example for showing how one can import and process a .dot file to create a hive plot.  In this case we will read in a .dot file describing nodes and edges.  A portion of this file is shown in Table~\ref{DOT}.  The .dot file will be processed using an external file to map the edge annotations to hive plot features.  Node annotations in the .dot file can be similarly processed, but this particular example contains no node annotations so there's nothing to process.  Table~\ref{EI} shows the contents of the edge instruction file.
+
+<< E_coli_1aa, results = "asis" >>=
+tmp <- readLines("network_tf_gene.parsed.dot")[1595:1605]
+DOT <- xtable(as.data.frame(tmp))
+caption(DOT) <- "Partial contents of .dot file"
+label(DOT) <- "DOT"
+print(DOT, include.rownames = FALSE, include.colnames = FALSE, hline.after = c(0, nrow(DOT)))
+@
+
+<< EI, results = "asis" >>=
+tab <- read.csv(file = "EdgeInst.csv")
+EI <- xtable(tab)
+caption(EI) <- "Contents of EdgeInst.csv"
+label(EI) <- "EI"
+print(EI, include.rownames = FALSE)
+@
+
+Here we go.  First, read in the node and edge information and process it using the edge instruction file (this assumes your working directory is set to the folder with the relevant files).
+
+<< E_coli_1a, echo = TRUE, tidy = FALSE >>=
+EC1 <- dot2HPD(file = "network_tf_gene.parsed.dot",
+	node.inst = NULL,
+	edge.inst = "EdgeInst.csv",
+	desc = "E coli gene regulatory network (RegulonDB)",
+	axis.cols = rep("grey", 3))
+@
+
+Before going on, we'll summarize what we've created.  Next, we'll assign the node radius based upon the edge degree, then assign the nodes to axes based upon their role as source, manager or sink.  Finally, there are some edges which start and end at the same radius on the same axis. These have zero length and cannot be drawn so they must be removed (these are be transcription factors that regulate themselves in most cases).
+
+<< E_coli_1b, echo = TRUE, size = "footnotesize" >>=
+sumHPD(EC1)
+@
+
+<< E_coli_1c, echo = TRUE, size = "footnotesize" >>=
+EC2 <- mineHPD(EC1, option = "rad <- tot.edge.count")
+sumHPD(EC2)
+@
+
+<< E_coli_1d, echo = TRUE, size = "footnotesize" >>=
+EC3 <- mineHPD(EC2, option = "axis <- source.man.sink")
+sumHPD(EC3)
+@
+
+<< E_coli_1e, echo = TRUE, size = "footnotesize" >>=
+EC4 <- mineHPD(EC3, option = "remove zero edge")
+sumHPD(EC4)
+@
+
+Notice how the number of axes, radii and edges change through this process.
+
+Finally, we'll need to organize the edge list so that the edges which are repressors are drawn last (you could do this other ways, of course, but we need to know this in order to be able to interpret the plots).
+
+<< E_coli_1f, echo = TRUE >>=
+edges <- EC4$edges
+edgesR <- subset(edges, color == 'red')
+edgesG <- subset(edges, color == 'green')
+edgesO <- subset(edges, color == 'orange')
+
+edges <- rbind(edgesO, edgesG, edgesR)
+EC4$edges <- edges
+
+EC4$edges$weight = 0.5
+
+@
+
+Now we're ready to plot!  Figure~\ref{fig:E_coli_2} is a hive panel showing this network with different scales for the nodes.  Each plot takes about 10 seconds to draw.
+
+<< E_coli_2, fig.cap = "Hive panel of E. coli gene regulatory network", out.width = "0.7\\textwidth", fig.width = 2, fig.height = 6 >>=
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(3, 1)))
+#
+pushViewport(vplayout(1, 1)) # upper plot
+
+plotHive(EC4, dr.nodes = FALSE, ch = 20,
+axLabs = c("source", "sink", "manager"),
+axLab.pos = c(40, 75, 35),
+axLab.gpar = gpar(fontsize = 6, col = "white", lwd = 2),
+arrow = c("degree", 150, 100, 180, 70), np = FALSE)
+grid.text("native units", x = 0.5, y = 0.05, default.units = "npc", gp = gpar(fontsize = 8, col = "white"))
+
+popViewport(2)
+#
+pushViewport(vplayout(2, 1)) # middle plot
+
+plotHive(EC4, dr.nodes = FALSE, method = "rank", ch = 100,
+#axLabs = c("source", "sink", "manager"),
+#axLab.pos = c(100, 125, 180),
+#axLab.gpar = gpar(fontsize = 10, col = "white"),
+np = FALSE)
+grid.text("ranked units", x = 0.5, y = 0.05, default.units = "npc", gp = gpar(fontsize = 8, col = "white"))
+
+popViewport(2)
+#
+pushViewport(vplayout(3, 1)) # lower plot
+
+plotHive(EC4, dr.nodes = FALSE, method = "norm", ch = 0.1, axLabs = c("source", "sink", "manager"),
+axLab.pos = c(0.1, 0.2, 0.2), axLab.gpar = gpar(fontsize = 6, col = "white"), np = FALSE)
+grid.text("normed units", x = 0.5, y = 0.05, default.units = "npc", gp = gpar(fontsize = 8, col = "white"))
+@
+
+
+%%%%%% Hold this material which does the 5 axis plots
+%
+%
+%\section{Further Explorations of the \emph{E. coli} Network}
+%
+%In this section we'll demonstrate some slightly more advanced manipulations of the \emph{E. coli} network data, including how one can make \emph{hive panels} which are useful in comparing multiple hive plots.  In some of the manipulations below, data types are coerced away from the definition found in a \texttt{HivePlotData} object and must be restored.  It might be helpful to study the description of the required structure at \texttt{?HPD}.
+%
+%First, we are going to re-code some of the information in the network.  In the original publication, nodes were classified as either persistent or non-persistent.  This classification was based upon comparison of the \emph{E. coli} genome to roughly 200 other bacterial genomes.  A gene was considered persistent if it was present in these other genomes, otherwise it is non-persistent and unique to \emph{E. coli}.  In our processing above, genes (nodes) that are persistent are red, while non-persistent nodes are black.  We can use the existing axis assignments, based upon role as source, manager or sink, along with the persistence information, to display the network taking this information into account.  In principle, there are six possible combinations: (persistent, non-persistent) x (source, manager, sink).  However, it turns out that one of these combinations doesn't exist (persistent sources), so we'll re-code this information into a five axis hive plot.\footnote{Not only am I not an ecologist, I am not a molecular biologist.  I have no idea if this analysis is actually worthwhile, I just thought it would be interesting to see these relationships.  Plus, it also permits further manipulations to be demonstrated.}  Here's the first step, starting from where we left off above:
+%
+%<< E_coli_5zz >>=
+%EC5 <- EC4
+%nodes2 <- nodes <- EC5$nodes
+%nn <- length(nodes$axis)
+%#
+%for (n in 1:nn) { 
+%	if ((nodes$axis[n] == 1) & (nodes$color[n] == "black")) nodes2$axis[n] <- 1
+%	if ((nodes$axis[n] == 2) & (nodes$color[n] == "black")) nodes2$axis[n] <- 2
+%	if ((nodes$axis[n] == 3) & (nodes$color[n] == "black")) nodes2$axis[n] <- 3
+%	if ((nodes$axis[n] == 2) & (nodes$color[n] == "red")) nodes2$axis[n] <- 4
+%	if ((nodes$axis[n] == 3) & (nodes$color[n] == "red")) nodes2$axis[n] <- 5
+%	}
+%#		
+%# Final assembly & checking...
+%#
+%nodes2$axis <- as.integer(nodes2$axis)
+%EC5$nodes <- nodes2
+%EC5$axis.cols <- rep("gray", 5) # we added 2 more axes!
+%#
+%sumHPD(EC5)
+%# sumHPD(EC5, chk.all = TRUE) # not run, the output is long
+%@
+%
+%With \texttt{sumHPD}, one can use \texttt{chk.all = TRUE} which runs some additional checks on the data (see \texttt{?sumHPD} for full details).  Had we done so in this case, we would find that some edges start and stop on the manager axis; perhaps you noticed this earlier.  These are managers that call other managers.  Also, somewhat miraculously, there are no edges crossing axes in this particular partitioning of nodes (\texttt{chk.all} also looks for this condition).  In the basic summary that we did run, axis five has only one node on it.  This will plot fine except for the case where one uses \texttt{method = "norm"} which will fail because to normalize the node radii, there has to be more than one radius value.  To fix this, we'll add in a phantom, invisible node to anchor axis five as follows:
+%
+%<< E_coli_6>>=
+%EC6 <- EC5
+%tmp <- data.frame(id = 1379, lab = "axis_5_anchor",
+%	axis = 5, radius = 1, size = 1, color = "grey")
+%EC6$nodes <- rbind(EC6$nodes, tmp)
+%#
+%# Clean up, re-size nodes, sort nodes so
+%# persistent (red) ones are drawn last & check:
+%#
+%EC6$nodes$axis <- as.integer(EC6$nodes$axis)
+%EC6$nodes$id <- as.integer(EC6$nodes$id)
+%EC6$nodes$size <- EC6$nodes$size * 0.1
+%#
+%nodes <- EC6$nodes
+%nodes <- sort_df(nodes, vars = "color")
+%EC6$nodes <- nodes
+%#
+%sumHPD(EC6)
+%@
+%
+%Next, we are going to copy the current version of the network (EC6) and plot the axes of the copy, because the summary above shows that the axis lengths are quite different and the shorter axes will be nearly invisible if we don't plot them up at least a bit.
+%
+%<< E_coli_7 >>=
+%EC7 <- manipAxis(EC6, method = "plot", action = c(1, 10, 1, 10, 10))
+%sumHPD(EC6)
+%@
+%
+%Now we'll make a hive panel showing this same network displayed using different methods.  The code follows; it uses the \texttt{grid} graphics systems and associated viewport concepts to create a 2 x 2 hive panel.  The resulting hive panel is Figure~\ref{'}.
+%
+%<< E_coli_8, echo = TRUE, fig.cap = "\\label{E_coli_8}Hive panel showing \\emph{E. coli} regulatory network with different display options" >>=
+%vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+%#
+%grid.newpage()
+%pushViewport(viewport(layout = grid.layout(2, 2)))
+%#
+%pushViewport(vplayout(1, 1)) # upper left plot
+%plotHive(EC6, ch = 20, np = FALSE)
+%popViewport(2)
+%#
+%pushViewport(vplayout(1, 2)) # upper right plot
+%plotHive(EC7, ch = 0.1, method = "norm", np = FALSE,
+%	axLabs = c("non-persistent\nsource", "non-persistent\nsink",
+%	"non-persistent\nmanager", "persistent\nmanager", "persistent \nsink"),
+%	axLab.pos = rep(0.2, 5), axLab.gpar = gpar(fontsize = 10, col = "white"),
+%	rot = c(0, 72, 0, 0, -72), anNode.gpar = gpar(fontsize = 10, col = "pink", lwd = 0.5),
+%	anNodes = system.file("extdata", "E_coli", "NodeLabels.csv", package = "HiveR"))
+%popViewport(2)
+%#
+%pushViewport(vplayout(2,1)) # lower left plot
+%plotHive(EC7, ch = 100, method = "rank", np = FALSE)
+%popViewport(2)
+%#
+%pushViewport(vplayout(2,2)) # lower right plot
+%plotHive(EC7, ch = 20, np = FALSE)
+%@
+%
+%
+%Finally, the lower right hive plot in Figure~\ref{E_coli_8} can serve as a starting point for teasing out even more information.  Instead of drawing all the edges in one hive plot, we'll make a hive panel showing each edge category in a different panel.  The steps are given below; the resulting panel is Figure~\ref{E_coli_9} (the steps to produce the panel are not shown here, but are the same as before).
+%
+%<< E_coli_9,fig.cap = "\\label{E_coli_9}Hive panel showing \\emph{E. coli} regulatory network with edges encoded by genetic distance (Red edges are the closest; each set of edges plotted separately)"  >>=
+%EC11 <- EC10 <- EC9 <- EC8 <- EC7
+%
+%edges <- EC7$edges
+%gray_edges <- subset(edges, color == "gray")
+%yel_edges <- subset(edges, color == "yellow")
+%or_edges <- subset(edges, color == "orange")
+%red_edges <- subset(edges, color == "red")
+%
+%EC8$edges <- gray_edges
+%EC9$edges <- yel_edges
+%EC10$edges <- or_edges
+%EC11$edges <- red_edges
+%@
+%
+%<< E_coli_10 >>=
+%grid.newpage()
+%pushViewport(viewport(layout = grid.layout(2, 2)))
+%#
+%pushViewport(vplayout(1, 1))
+%plotHive(EC8, ch = 20, np = FALSE)
+%popViewport(2)
+%#
+%pushViewport(vplayout(1, 2))
+%plotHive(EC9, ch = 20, np = FALSE)
+%popViewport(2)
+%#
+%pushViewport(vplayout(2,1))
+%plotHive(EC10, ch = 20, np = FALSE)
+%popViewport(2)
+%#
+%pushViewport(vplayout(2,2))
+%plotHive(EC11, ch = 20, np = FALSE)
+%@
+%
+%
+%%%%%% End of 5 axis demo
+
+\section{3D Hive Plots}
+
+\texttt{HiveR} extends the original hive plot concept to 3 dimensions using the interactive graphics package \texttt{rgl}.  One advantage to this is that 3D hive plots have more pairs of adjacent axes compared to the corresponding 2D hive plot, which cuts down on the possibility of edges crossing axes and makes assigning nodes to axes easier.  The interactivity doesn't hurt either!
+
+We will demonstrate the process using a recent example of protein-protein interactions.\cite{Jager2012}  This data set contains interaction data for HIV-human proteins, as well as some related human-human protein interactions.  The strength of these interactions are quantified in terms of a MiST score which is derived from mass spectral data after some processing.  Data for the interaction of two human cell lines with HIV are available (we'll just use one, but you could make the same plot with the interactions for the other cell line to compare the two).\footnote{The plots here were created using data provided as supplementary material.  A full script of the processing is available from the author.}
+
+Figure~\ref{Jager1} is Figure 3 from the paper.  We're going to focus on the portion of this network shown in Figure~\ref{Jager2} to demonstrate the conceptual process of mapping data to a hive plot.\footnote{Remember, this is just one way you might map the raw data}  Figure~\ref{Map1} shows a small, idealized portion of this network for discussion.  In this figure, a black dot represents a human protein that interacts with an HIV protein.  Human protein \texttt{D}, for example, interacts with two different HIV proteins, \texttt{PR} and \texttt{IN}.  However, human protein \texttt{E} interacts with only one HIV protein (\texttt{PR}), but interacts with another human protein \texttt{F}, which in turn interacts with HIV protein \texttt{Pol}.  The blue edge between \texttt{E} and \texttt{F} indicates indirect communication between HIV proteins \texttt{PR} and \texttt{Pol} via the two human proteins.
+
+Figure~\ref{Map2} shows the process of mapping the connections and quantitative information into the hive plot.  Each HIV protein node in the original diagram will become an axis in the hive plot.\footnote{The replacement of nodes with axes is one way hive plots help us think about the data differently}  Because there are four of these, we will be making a tetrahedral hive plot with four axes.  The human proteins which interact with two HIV proteins will become red edges in the hive plot (and they are red in these figures).  Protein \texttt{D} for example will be plotted on the \texttt{PR} axis at a radius of 9 because that is the MiST score for this human protein interacting with this HIV protein.  Protein \texttt{D} will also appear on axis \texttt{IN}, but at a radius of 6, because it interacts a bit more weakly with this HIV protein.  This process is repeated for all the interactions.  Human protein \texttt{E}, on the other hand, only interacts with one HIV protein.  As a result, it appears only on the \texttt{PR} axis at a radius of 6.  Don't forget that \texttt{E} interacts with \texttt{F}: \texttt{F} is plotted on axis \texttt{Pol} at a radius of 7 and then \texttt{E} and \texttt{F} are connected by a blue edge signalling the indirect interaction between HIV proteins \texttt{PR} and \texttt{Pol}.  Other human proteins which interact with only one HIV protein are plotted on the appropriate axis with a radius corresponding to their MiST score.  Finally, any human protein with 2 or more edges is plotted as a larger yellow node, while those with only one edge are plotted in green.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.3]{nature10719-f32.jpg}
+\end{center}
+\caption{Protein-protein interactions from J\"{a}ger \emph{et. al.}\label{Jager1}}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.5]{nature10719-f32_inset.jpg}
+\end{center}
+\caption{Subnet used to demonstrate the hive plot creation process\label{Jager2}}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.5]{Mapping_1a.pdf}
+\end{center}
+\caption{A portion of the network\label{Map1}}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.5]{Mapping_1ab.pdf}
+\end{center}
+\caption{How the network is mapped onto a tetrahedral hive plot\label{Map2}}
+\end{figure}
+
+Figure~\ref{static} shows the resulting hive plot, using the original data for HIV interacting with HEK cells, drawn using native units.  Red edges represent a human protein.\footnote{Unlike the more standard network graphs where a protein would be a node rather than an edge}  Red edges with more or less constant radius are human proteins that interact fairly equally with the HIV proteins on each axis.  There is one red edge which shows a strong interaction with one HIV protein (\texttt{PR}) and a weak interaction with the other (\texttt{Pol}) and hence does not have a near-constant radius.  The complete lack of human proteins between axes \texttt{IN} and \texttt{RT}, \texttt{IN} and \texttt{PR} and \texttt{PR} and \texttt{RT} (i.e., no red edges) tells us that these three HIV proteins are relatively isolated.  HIV protein \texttt{Pol} on the other hand is very central to this system as it participates in virtually all the edges, which is to say that it interacts with many human proteins.
+
+%Figure~\ref{fig:HIV2_} shows the same data set as an animation (open in Adobe Acrobat to view).
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.25]{HIVhuH3.png}
+\end{center}
+\caption{HIV-human protein-protein interaction\label{static}}
+\end{figure}
+
+%<< HIV2_, rgl.mov = TRUE, fig.ext = 'png', out.width = '3 in', fig.show = 'animate', fig.num = 180, interval = 0.25, aniopts = 'controls, autoplay, loop', results = 'hide', fig.cap = "Animation of HIV-human protein-protein interactions", crop = FALSE >>=
+%
+%load("HIVhuH3.RData")
+%
+%open3d(windowRect = c(0, 0, 1000, 1000))
+%
+%plot3dHive(HIVhuH3, ch = 10, axLabs = c("Pol", "PR", "RT", "IN"), LA = TRUE)
+%
+%par3d(zoom = 1.1) # avoids clipping axis labels
+%M <- par3d("userMatrix")
+%inc <- pi/90 # 2 degree rotation between frames (in radians)
+%
+%for (i in 1:180) {
+%	M2 <- rotate3d(M, i*inc, 1, 1, 0)
+%	par3d(userMatrix = M2)
+%	Sys.sleep(0.5)
+%	rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+%	}
+%	
+%@
+
+\section{Acknowledgements} %%%%%
+
+Naturally, I thank Martin Krzywinski for numerous helpful communications.  I also appreciate helpful discussions on gene ontology concepts with my colleague Professor Chet Fornari.
+
+\section{Appendices}
+
+\subsection{Performance}
+
+\texttt{HiveR} draws hive plots very quickly when using either \texttt{plotHive} or \texttt{plot3dHive}.  Figure~\ref{perf2D} shows the performance of \texttt{plotHive} on a MacBook Pro running OSX 10.7.4 using 8 Mb RAM and an Intel  i7 chip at 2 GHz.  Figure~\ref{perf3D} shows the performance for \texttt{plot3dHive}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = 0.8\textwidth]{plotHive_performance.pdf}
+\end{center}
+\caption{Performance of plotHive\label{perf2D}}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = 0.8\textwidth]{plot3dHive_performance.pdf}
+\end{center}
+\caption{Performance of plot3dHive\label{perf3D}}
+\end{figure}
+
+\subsection{Drawing 3D Spline Curves}
+
+One of the challenges in developing \texttt{HiveR} was that there were no algorithms for drawing 3D spline curves available.  Consequently, I wrote a set of functions that take 2 end points in 3D space, rotates them into a 2D space, computes a spline curve, and then rotates the curve back into the original 3D space.  The process is thoroughly vetted and robust.  A 3D spline is shown in Figure~\ref{spline3D}.  The main workhorse is the function \texttt{rcsr}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = 0.8\textwidth]{Spline3D.png}
+\end{center}
+\caption{A 3D spline\label{spline3D}}
+\end{figure}
+
+\subsection{\texttt{HiveR} vs. \textit{Perl} Prototype} %%%%%
+
+The original hive plot drawing program written by Krzywinski was written in \textit{Perl}.  There are now versions in \textit{Java} and \textit{D3}; see www.hiveplot.com  Listed below are some differences between \texttt{HiveR} and the \textit{Perl} prototype.
+
+\begin{itemize}
+  \item In the prototype one can clone an axis to show connections that would start and end on the same axis.  In \texttt{HiveR}, one can simply add a new axis based upon some property of the system.  Alternatively, for 2D hive plots, \texttt{HiveR} is able to show edges that start \& end on the same axis.
+  \item No segmentation of an axis is currently possible with \texttt{HiveR}
+  \item The prototype uses bezier curves to create the edges; \texttt{HiveR} uses splines with a single slightly off-center control point.
+\end{itemize}
+
+\subsection{Features Under Consideration} %%%%%
+
+\begin{enumerate}
+  \item Add the ability to subtract 2 hive plots and display the result.
+  \item Set up a mechanism to automatically permute the axes in 3D mode when the number of axes = 5 or 6 so that the best option can be selected.  Might also be worth doing in 2D mode for 4-6 axes, except in this case it's not a question of how you display but how you import the data. Wegman\cite{Wegman1990} has a formula describing all possible combinations that would be needed.
+  \item More ways to import various formats are needed.
+  \item Move to an entirely different graphics system for 2D hive plots so that tool tips and various types of edge highlight/labeling is possible by mouse action.  Package \texttt{cranvas} appears to be the ticket, but it is still in development.
+\end{enumerate}
+
+\bibliographystyle{plainnat}
+\bibliography{HiveR}
+
+\end{document}
