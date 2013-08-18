@@ -12,6 +12,11 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-14
+Date: 2013-08-16
+News:
+>> Added depends R >= 3.0 to pass all checks at CRAN.
+
 ###### Version: 0.2-13
 Date: 2013-08-14
 News:
