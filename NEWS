@@ -12,6 +12,12 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-15
+Date: 2013-09-11
+News:
+>> At CRAN's request, added .Rbuildignore
+>> At CRAN's request, added vignette builder engine.
+
 
 ###### Version: 0.2-14
 Date: 2013-08-16
