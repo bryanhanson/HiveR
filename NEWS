@@ -12,6 +12,18 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-17
+Date: 2013-09-20
+News:
+>> Fix another vignette issue to pass CRAN.
+>> Really removed dependencies on RFOC as previously claimed, from several places!
+>> Removed ppiData from imports.
+
+###### Version: 0.2-16
+Date: 2013-09-12
+News:
+>> Fix a vignette issue to pass CRAN.
+
 ###### Version: 0.2-15
 Date: 2013-09-11
 News:

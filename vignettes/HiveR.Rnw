@@ -1,6 +1,8 @@
 %\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
-%\VignetteDepends{RColorBrewer, grid, rgl, RFOC, bipartite, sna, xtable, mvbutils, FuncMap, lattice, reshape, ggplot2}
+%\VignetteDepends{RColorBrewer, grid, rgl, bipartite, sna, xtable, mvbutils, FuncMap, lattice, reshape, ggplot2}
 %\VignettePackage{HiveR}
+%\VignetteKeywords{multivariate, networks}
+%\VignetteEngine{knitr::knitr}
 
 %%%%%     LaTeX Configuration Follows  %%%%%
 
