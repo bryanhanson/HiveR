@@ -3,7 +3,7 @@
 plotHive <- function(HPD, ch = 1, method = "abs",
 	dr.nodes = TRUE, bkgnd = "black",
 	axLabs = NULL, axLab.pos = NULL, axLab.gpar = NULL,
-	anNodes = NULL, anNode.gpar = NULL,
+	anNodes = NULL, anNode.gpar = NULL, grInfo = NULL,
 	arrow = NULL, np = TRUE, ...) {
 	
 	# Function to plot hive plots using grid graphics
@@ -89,7 +89,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			}
 			
 		ann <- read.csv(anNodes, header = TRUE)
-		# Columns should be: node.lab, node.text, angle, radius, offset
+		print(ann)
+		# Columns should be: node.lab, node.text, angle, radius, offset, hjust, vjust
 		# Locate the node on an axis at a particular radius
 		
 		id <- c()	
@@ -98,13 +99,13 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			id <- c(id, grep(pat, nodes$lab))
 			}
 		
-			N <- matrix(data = c(
-			0, 180, NA, NA, NA, NA,
-			90, 210, 330, NA, NA, NA,
-			90, 180, 270, 0, NA, NA,
-			90, 162, 234, 306, 18, NA,
-			90, 150, 210, 270, 330, 390),
-			byrow = TRUE, nrow = 5)
+		N <- matrix(data = c(
+		0, 180, NA, NA, NA, NA,
+		90, 210, 330, NA, NA, NA,
+		90, 180, 270, 0, NA, NA,
+		90, 162, 234, 306, 18, NA,
+		90, 150, 210, 270, 330, 390),
+		byrow = TRUE, nrow = 5)
 			
 		ax <- nodes$axis[id] # axis number
 		for (n in 1:length(ax)) {
@@ -124,6 +125,47 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			default.units = "native", gp = anNode.gpar)
 		grid.text(ann$node.text, x.lab, y.lab, hjust = ann$hjust, vjust = ann$vjust,
 			default.units = "native", gp = anNode.gpar)
+		}
+
+	addGraphic <- function(grInfo, nodes, nx) {
+
+		# grInfo should be a csv containing:
+		# node.lab, angle, radius, offset, path
+		
+		gr <- read.csv(grInfo, header = TRUE)
+		
+		id <- c()	
+		for (n in 1:nrow(gr)) {			
+			pat <- paste("\\b", gr$node.lab[n], "\\b", sep = "") 
+			id <- c(id, grep(pat, nodes$lab))
+			}
+		
+		N <- matrix(data = c(
+		0, 180, NA, NA, NA, NA,
+		90, 210, 330, NA, NA, NA,
+		90, 180, 270, 0, NA, NA,
+		90, 162, 234, 306, 18, NA,
+		90, 150, 210, 270, 330, 390),
+		byrow = TRUE, nrow = 5)
+			
+		ax <- nodes$axis[id] # axis number
+		for (n in 1:length(ax)) {
+			ax[n] <- N[nx-1,ax[n]]			
+			}
+
+		x.st <- p2cX(nodes$radius[id], ax)
+		y.st <- p2cY(nodes$radius[id], ax)
+		
+		x.end <- p2cX(gr$radius, gr$angle)
+		y.end <- p2cY(gr$radius, gr$angle)
+					
+		x.gr <- p2cX(gr$radius + gr$offset, gr$angle) # figure label position
+		y.gr <- p2cY(gr$radius + gr$offset, gr$angle)
+		
+		grid.segments(x0 = x.st, x1 = x.end, y0 = y.st, y1 = y.end,
+			default.units = "native", gp = anNode.gpar)
+		grid.raster(readJPEG(as.character(gr$path)),
+			x.gr, y.gr)
 		}
 
 ###############
@@ -544,6 +586,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
 		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
+#		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx)
 
 		} # end of 3D
 	

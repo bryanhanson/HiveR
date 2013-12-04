@@ -10,7 +10,7 @@ These functions plot a \code{HivePlotData} object in either 2D or 3D, depending 
 \usage{
 plotHive(HPD, ch = 1, method = "abs", dr.nodes = TRUE, bkgnd = "black",
 	axLabs = NULL, axLab.pos = NULL, axLab.gpar = NULL,
-	anNodes = NULL, anNode.gpar = NULL,
+	anNodes = NULL, anNode.gpar = NULL, grInfo = NULL,
 	arrow = NULL, np = TRUE, ...)
 
 
@@ -47,6 +47,9 @@ Numeric; An offset from the end of the axis for label placement.  Either a singl
 }
 \item{anNode.gpar}{
 (Applies to \code{plotHive} only) A list of name - value pairs acceptable to \code{\link{gpar}} for use with \code{plotHive} only.  These control both the text used to annotate the nodes and the line segments connecting that text to the node.  See the examples.  Note that if you use this argument the default color for text and arrows becomes black, so if \code{bkgnd = "black"} be sure to specify \code{col = "white"} (or some other non-black color) or you won't be able to see your labels.
+}
+\item{grInfo}{
+(Applies to \code{plotHive} only) The path to a csv file containing information for adding graphic decorations to the plot.  If present, a line segment will be drawn from the node to the specified location and the graphic is positioned near the end of a radial vector.  The columns in the csv file must be named as follows (description and use in parentheses): node.lab (node label from HPD$nodes$lab), angle (polar coordinates: angle at which to position the graphic), radius (polar coordinates: radius at which to position the graphic), offset (additional distance along radius vector to offset the graphic), path (a valid path to the graphics in jpg format).
 }
 
 \item{np}{
@@ -92,15 +95,15 @@ plotHive(test3)
 #
 # Add axis labels & options to nx = 3 example.  Note that rot is not part of gpar
 require("grid")
-plotHive(test3, ch = 5, labs = c("axis 1", "axis 2", "axis 3"),
-lab.pos = c(10, 15, 15), lab.gpar = gpar(col = "orange", fontsize = 14),
+plotHive(test3, ch = 5, axLabs = c("axis 1", "axis 2", "axis 3"),
+axLab.pos = c(10, 15, 15), axLab.gpar = gpar(col = "orange", fontsize = 14),
 rot = c(0, 30, -30))
 #
 # Now the nx = 2 case.
 # Note that gpar contains parameters that apply to both the
 # axis labels and arrow. A 6th value in arrow offsets the arrow vertically:
-plotHive(test2, ch = 5, labs = c("axis 1", "axis 2"), rot = c(-90, 90),
-lab.pos = c(20, 20), lab.gpar = gpar(col = "pink", fontsize = 14, lwd = 2),
+plotHive(test2, ch = 5, axLabs = c("axis 1", "axis 2"), rot = c(-90, 90),
+axLab.pos = c(20, 20), axLab.gpar = gpar(col = "pink", fontsize = 14, lwd = 2),
 arrow = c("radius units", 0, 20, 60, 25, 40))
 
 # The following must be run interactively:
