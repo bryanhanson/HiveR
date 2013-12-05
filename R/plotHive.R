@@ -104,8 +104,12 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 				
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
 			default.units = "native", gp = anNode.gpar)
-		grid.raster(readJPEG(as.character(gr$path)),
-			x = cds$x.lab, y = cds$y.lab, default.units = "native", width = gr$width)
+			
+		# readJPEG is not vectorized, grab each graphic in turn
+		for (n in 1:nrow(gr)) {
+			grid.raster(readJPEG(as.character(gr$path[n])),
+				x = cds$x.lab[n], y = cds$y.lab[n], default.units = "native", width = gr$width[n])			
+			}
 		}
 
 	getCoords <- function(file, anCoord, nodes) {
