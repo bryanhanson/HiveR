@@ -4,7 +4,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	dr.nodes = TRUE, bkgnd = "black",
 	axLabs = NULL, axLab.pos = NULL, axLab.gpar = NULL,
 	anNodes = NULL, anNode.gpar = NULL, grInfo = NULL,
-	arrow = NULL, np = TRUE, ...) {
+	arrow = NULL, np = TRUE, anCoord = "local", ...) {
 	
 	# Function to plot hive plots using grid graphics
 	# Inspired by the work of Martin Kryzwinski
@@ -81,7 +81,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		grid.text(arrow[1], x.lab, y.lab, default.units = "native", gp = axLab.gpar)
 		}
 
-	annotateNodes <- function(anNodes, nodes, nx) {
+	annotateNodes <- function(anNodes, nodes, nx, anCoord) {
 
 		if (is.null(anNode.gpar)) {
 			if (bkgnd == "black") anNode.gpar <- gpar(fontsize = 10, col = "white", lwd = 0.5)
@@ -89,55 +89,36 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			}
 			
 		ann <- read.csv(anNodes, header = TRUE)
-		print(ann)
-		# Columns should be: node.lab, node.text, angle, radius, offset, hjust, vjust
-		# Locate the node on an axis at a particular radius
+		cds <- getCoords(anNodes, anCoord, nodes)
 		
-		id <- c()	
-		for (n in 1:nrow(ann)) {			
-			pat <- paste("\\b", ann$node.lab[n], "\\b", sep = "") 
-			id <- c(id, grep(pat, nodes$lab))
-			}
-		
-		N <- matrix(data = c(
-		0, 180, NA, NA, NA, NA,
-		90, 210, 330, NA, NA, NA,
-		90, 180, 270, 0, NA, NA,
-		90, 162, 234, 306, 18, NA,
-		90, 150, 210, 270, 330, 390),
-		byrow = TRUE, nrow = 5)
-			
-		ax <- nodes$axis[id] # axis number
-		for (n in 1:length(ax)) {
-			ax[n] <- N[nx-1,ax[n]]			
-			}
-
-		x.st <- p2cX(nodes$radius[id], ax)
-		y.st <- p2cY(nodes$radius[id], ax)
-		
-		x.end <- p2cX(ann$radius, ann$angle)
-		y.end <- p2cY(ann$radius, ann$angle)
-					
-		x.lab <- p2cX(ann$radius + ann$offset, ann$angle) # figure label position
-		y.lab <- p2cY(ann$radius + ann$offset, ann$angle)
-		
-		grid.segments(x0 = x.st, x1 = x.end, y0 = y.st, y1 = y.end,
+		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
 			default.units = "native", gp = anNode.gpar)
-		grid.text(ann$node.text, x.lab, y.lab, hjust = ann$hjust, vjust = ann$vjust,
+		grid.text(ann$node.text, cds$x.lab, cds$y.lab, hjust = ann$hjust, vjust = ann$vjust,
 			default.units = "native", gp = anNode.gpar)
 		}
 
-	addGraphic <- function(grInfo, nodes, nx) {
+	addGraphic <- function(grInfo, nodes, nx, anCoord) {
 
-		# grInfo should be a csv containing:
-		# node.lab, angle, radius, offset, path
-		
 		gr <- read.csv(grInfo, header = TRUE)
+		cds <- getCoords(grInfo, anCoord, nodes)
+				
+		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
+			default.units = "native", gp = anNode.gpar)
+		grid.raster(readJPEG(as.character(gr$path)),
+			x = cds$x.lab, y = cds$y.lab, default.units = "native", width = gr$width)
+		}
+
+	getCoords <- function(file, anCoord, nodes) {
 		
-		id <- c()	
-		for (n in 1:nrow(gr)) {			
-			pat <- paste("\\b", gr$node.lab[n], "\\b", sep = "") 
-			id <- c(id, grep(pat, nodes$lab))
+		# Figure out the coordinates of the line segments and labels/graphics
+		# anNodes and grInfo both contains certain columns which are used here
+		
+		df <- read.csv(file, header = TRUE)
+		
+		id <- rep(NA, nrow(df))	
+		for (n in 1:nrow(df)) {			
+			pat <- paste("\\b", df$node.lab[n], "\\b", sep = "") 
+			id[n] <- grep(pat, nodes$lab)
 			}
 		
 		N <- matrix(data = c(
@@ -153,19 +134,29 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			ax[n] <- N[nx-1,ax[n]]			
 			}
 
+		# Figure coords in requested reference frame
+
 		x.st <- p2cX(nodes$radius[id], ax)
 		y.st <- p2cY(nodes$radius[id], ax)
 		
-		x.end <- p2cX(gr$radius, gr$angle)
-		y.end <- p2cY(gr$radius, gr$angle)
-					
-		x.gr <- p2cX(gr$radius + gr$offset, gr$angle) # figure label position
-		y.gr <- p2cY(gr$radius + gr$offset, gr$angle)
+		if (anCoord == "local") {
+			x.end <- x.st + p2cX(df$radius, df$angle)
+			y.end <- y.st + p2cY(df$radius, df$angle)
+						
+			x.lab <- x.st + p2cX(df$radius + df$offset, df$angle)
+			y.lab <- y.st + p2cY(df$radius + df$offset, df$angle)		
+			}
+
+		if (anCoord == "global") {					
+			x.end <- p2cX(df$radius, df$angle)
+			y.end <- p2cY(df$radius, df$angle)
+						
+			x.lab <- p2cX(df$radius + df$offset, df$angle)
+			y.lab <- p2cY(df$radius + df$offset, df$angle)		
+			}
 		
-		grid.segments(x0 = x.st, x1 = x.end, y0 = y.st, y1 = y.end,
-			default.units = "native", gp = anNode.gpar)
-		grid.raster(readJPEG(as.character(gr$path)),
-			x.gr, y.gr)
+		retval <- data.frame(x.st, y.st, x.end, y.end, x.lab, y.lab)
+		retval
 		}
 
 ###############
@@ -294,7 +285,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	# Add a legend arrow & any annotations
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
-		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
+		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx, anCoord)
+		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx, anCoord)
 
 		} # end of 2D
 	
@@ -585,8 +577,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	# Add a legend arrow & any annotations
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
-		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
-#		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx)
+		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx, anCoord)
+		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx, anCoord)
 
 		} # end of 3D
 	
@@ -939,7 +931,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	# Add a legend arrow & any annotations
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
-		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
+		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx, anCoord)
+		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx, anCoord)
 
 		} # end of 4D
 	
@@ -1359,7 +1352,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	# Add a legend arrow & any annotations
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
-		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
+		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx, anCoord)
+		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx, anCoord)
 
 		} # end of 5D
 
@@ -1839,7 +1833,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	# Add a legend arrow & any annotations
 		
 		if (!is.null(arrow)) addArrow(arrow, nx)
-		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx)
+		if (!is.null(anNodes)) annotateNodes(anNodes, nodes, nx, anCoord)
+		if (!is.null(grInfo)) addGraphic(grInfo, nodes, nx, anCoord)
 
 		} # end of 6D
 

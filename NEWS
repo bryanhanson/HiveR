@@ -13,10 +13,12 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 See below for various contributors and those that reported bugs.  Much appreciated!
 
 ###### Version: 0.2-18
-Date: 2013-12-03
+Date: 2013-12-04
 News:
->> 
->> Clarified some documentation pages.
+>> Added the ability to place graphics as annotations on 2D plots.  Requested by Suma Jayakrishna.
+>> For 2D plots, one can now specify the location of the annotation (or graphic) using either a global specification or a specification local to a specific node.  See ?plotHive.
+>> In plotHive, added helper function getCoord.
+>> Updated plotHive documentation.
 
 ###### Version: 0.2-17
 Date: 2013-09-20
