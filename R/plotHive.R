@@ -99,7 +99,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 
 	addGraphic <- function(grInfo, nodes, nx, anCoord) {
 
-		gr <- read.csv(grInfo, header = TRUE)
+		gr <- read.csv(grInfo, header = TRUE, stringsAsFactors = FALSE)
 		cds <- getCoords(grInfo, anCoord, nodes)
 				
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
@@ -107,7 +107,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			
 		# readJPEG is not vectorized, grab each graphic in turn
 		for (n in 1:nrow(gr)) {
-			grid.raster(readJPEG(as.character(gr$path[n])),
+			grid.raster(readJPEG(gr$path[n]),
 				x = cds$x.lab[n], y = cds$y.lab[n], default.units = "native", width = gr$width[n])			
 			}
 		}

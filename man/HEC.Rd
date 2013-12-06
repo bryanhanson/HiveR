@@ -2,35 +2,20 @@
 \alias{HEC}
 \docType{data}
 \title{
-A Hive Plot of the Hair Eye Color Data Set
+A HivePlotData Object of the Hair Eye Color Data Set
 }
 \description{
-This is an \code{\link{HPD}} (\code{HivePlotData} object) derived from the built-in hair eye color data set (see \code{?HairEyeColor}).  It serves as a test 2D data set, and the example below shows how it was built.  While every data set is different and will require a different approach, the example illustrates the general approach to building a hive plot from scratch, manually.
+This is an \code{\link{HPD}} (\code{HivePlotData} object) derived from the built-in hair eye color data set (see \code{?HairEyeColor}).  It serves as a test 2D data set, and the example below shows how it was built.  While every data set is different and will require a different approach, the example illustrates the general approach to building a hive plot from scratch, step-by-step.
 }
 \usage{data(HEC)}
 \format{
-  The format is:
-List of 5
- $ nodes    :'data.frame':	64 obs. of  6 variables:
-  ..$ id    : int [1:64] 1 2 3 4 5 6 7 8 9 10 ...
-  ..$ lab   : chr [1:64] "hair_1" "hair_2" "hair_3" "hair_4" ...
-  ..$ axis  : int [1:64] 1 1 1 1 1 1 1 1 1 1 ...
-  ..$ radius: num [1:64] 2 4 1 3 2 4 1 3 2 4 ...
-  ..$ size  : num [1:64] 1.52 4.03 1 1.79 1.52 ...
-  ..$ color : chr [1:64] "black" "black" "black" "black" ...
- $ edges    :'data.frame':	32 obs. of  4 variables:
-  ..$ id1   : int [1:32] 1 2 3 4 5 6 7 8 9 10 ...
-  ..$ id2   : int [1:32] 33 34 35 36 37 38 39 40 41 42 ...
-  ..$ weight: num [1:32] 4.097 5.563 1.633 0.309 1.789 ...
-  ..$ color : chr [1:32] "lightblue" "lightblue" "lightblue" "lightblue" ...
- $ type     : chr "2D"
- $ desc     : chr "HairEyeColor data set"
- $ axis.cols: chr [1:2] "grey" "grey"
- - attr(*, "class")= chr "HivePlotData"
+The format is described in detail at \code{\link{HPD}}.
 }
 \examples{
 # An example of building an HPD from scratch
-# Get the data
+
+### Step 0.  Get to know your data.
+
 data(HairEyeColor) # see ?HairEyeColor for background
 df <- data.frame(HairEyeColor) # str(df) is useful
 
@@ -40,7 +25,8 @@ hairF <- aggregate(Freq ~ Hair, data = df, FUN = 'sum')
 es <- eyeF$Freq/eyeF$Freq[4] # node sizes for eye
 hs <- hairF$Freq/hairF$Freq[3] # node sizes for hair
 
-### Step 1. Assemble a data frame of the nodes
+### Step 1. Assemble a data frame of the nodes.
+
 # There are 32 rows in the data frame, but we are going to
 # separate the hair color from the eye color and thus
 # double the number of rows in the node data frame
@@ -79,7 +65,7 @@ nodes$color <- rep("black", 64)
 nodes$lab <- as.character(nodes$lab) # clean up some data types
 nodes$radius <- as.numeric(nodes$radius)	
 
-### Step 2. Assemble a data frame of the edges
+### Step 2. Assemble a data frame of the edges.
 
 edges <- data.frame( # There will be 32 edges, corresponding to the original 32 rows
 	id1 = c(1:16,49:64), # This will set up edges between each eye/hair pair
@@ -89,10 +75,10 @@ edges <- data.frame( # There will be 32 edges, corresponding to the original 32 
 	
 edges$color <- as.character(edges$color)
 
-# Scale the edge weight (trial & error to emphasize differences)
+# Scale the edge weight (det'd by trial & error to emphasize differences)
 edges$weight <- 0.25*log(edges$weight)^2.25
 
-### Step 3. Now assemble the Hive Plot Data (HPD) object
+### Step 3. Now assemble the HivePlotData (HPD) object.
 
 HEC <- list()
 HEC$nodes <- nodes
@@ -107,9 +93,10 @@ class(HEC) <- "HivePlotData"
 chkHPD(HEC) # answer of FALSE means there are no problems
 sumHPD(HEC)
 
-### Step 5.  Some plots.
+### Step 5.  Plot it.
+
 # A minimal plot
 plotHive(HEC, ch = 0.1, bkgnd = "white")
-
+# See ?plotHive for fancier options
 }
 \keyword{datasets}
