@@ -12,6 +12,11 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-20
+Date: 2013-12-05
+News:
+>> Added a built-in data set based up the hair eye color data set supplied with R.  See ?HEC.
+
 ###### Version: 0.2-19
 Date: 2013-12-05
 News:

@@ -128,6 +128,17 @@ plotHive(test2, ch = 5, axLabs = c("axis 1", "axis 2"), rot = c(-90, 90),
 axLab.pos = c(20, 20), axLab.gpar = gpar(col = "pink", fontsize = 14, lwd = 2),
 arrow = c("radius units", 0, 20, 60, 25, 40))
 
+# Call up a built-in data set to illustrate some plotting tricks
+data(HEC)
+plotHive(HEC, ch = 0.1, bkgnd = "white",
+	axLabs = c("hair\ncolor", "eye\ncolor"),
+	axLab.pos = c(1, 1),
+	axLab.gpar = gpar(fontsize = 14))
+grid.text("males", x = 0, y = 2.3, default.units = "native")
+grid.text("females", x = 0, y = -2.3, default.units = "native")
+grid.text("Pairing of Eye Color with Hair Color", x = 0, y = 4,
+	default.units = "native", gp = gpar(fontsize = 18))
+
 # The following must be run interactively:
 \dontrun{
 plot3dHive(test4)
