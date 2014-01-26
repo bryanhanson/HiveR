@@ -59,7 +59,7 @@ Numeric; An offset from the end of the axis for label placement.  Either a singl
 }
 
 \item{grInfo}{
-(Applies to \code{plotHive} only) The path to a csv file containing information for adding graphic decorations to the plot.  If present, a line segment will be drawn from the node to the specified location and the graphic is positioned near the end the line segment.  The columns in the csv file must be named as follows (description and use in parentheses): node.lab (node label from HPD$nodes$lab), angle (polar coordinates: angle at which to position the graphic), radius (polar coordinates: radius at which to position the graphic), offset (additional distance along radius vector to offset the graphic), width (the width of the graphic), path (a valid path to the graphics in jpg format).
+(Applies to \code{plotHive} only) The path to a csv file containing information for adding graphic decorations to the plot.  If present, a line segment will be drawn from the node to the specified location and the graphic is positioned near the end the line segment.  The columns in the csv file must be named as follows (description and use in parentheses): node.lab (node label from HPD$nodes$lab), angle (polar coordinates: angle at which to position the graphic), radius (polar coordinates: radius at which to position the graphic), offset (additional distance along radius vector to offset the graphic), width (the width of the graphic), path (a valid path to the graphics in jpg or png format).  The path should include the extension is it is autodetected.  Valid extensions are jpg, JPG, jpeg, JPEG, png, or PNG.  All image files must be of the same type (all jpg, or all png).
 }
 
 \item{arrow}{

@@ -105,11 +105,29 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
 			default.units = "native", gp = anNode.gpar)
 			
-		# readJPEG is not vectorized, grab each graphic in turn
-		for (n in 1:nrow(gr)) {
-			grid.raster(readJPEG(gr$path[n]),
-				x = cds$x.lab[n], y = cds$y.lab[n], default.units = "native", width = gr$width[n])			
+		# readJPEG and readPNG are not vectorized, grab each graphic in turn
+		# Figure out if we are using jpg or png files
+		
+		ext <- substr(gr$path[1], nchar(gr$path[1])-2, nchar(gr$path[1]))
+		if ((ext == "png") | (ext == "PNG")) ext <- "png"
+		if ((ext == "jpg") | (ext == "JPG") | (ext == "peg") | (ext =="PEG")) ext <- "jpg"
+
+		# Now draw the images
+		
+		if (ext == "jpg") {
+			for (n in 1:nrow(gr)) {
+				grid.raster(readJPEG(gr$path[n]),
+					x = cds$x.lab[n], y = cds$y.lab[n], default.units = "native", width = gr$width[n])			
+				}
 			}
+
+		if (ext == "png") {
+			for (n in 1:nrow(gr)) {
+				grid.raster(readPNG(gr$path[n]),
+					x = cds$x.lab[n], y = cds$y.lab[n], default.units = "native", width = gr$width[n])			
+				}
+			}
+
 		}
 
 	getCoords <- function(file, anCoord, nodes) {
