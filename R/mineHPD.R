@@ -12,6 +12,14 @@ mineHPD <- function(HPD, option = "rad <- tot.edge.count") {
 
 # Bryan Hanson, DePauw Univ, July 2011 onward
 
+# Check for valid option
+
+if (!option %in% c("rad <- tot.edge.count",
+	"axis <- source.man.sink",
+	"remove orphans",
+	"remove self edge",
+	"remove zero edge")) stop("Unrecognized option")
+
 	edges <- HPD$edges
 	nodes <- HPD$nodes
 	nn <- length(nodes$id)
