@@ -12,6 +12,16 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-24
+Date: 2014-03-11
+News:
+>> Added checking for a valid option in manipAxis.
+>> Added methods "offset" and "stretch" in manipAxis.
+>> Added a check in chkHPD to make sure all radii > 0.  This is just in case some of the new options in manipAxis backfire.
+>> Revised examples for manipAxis.
+>> Removed some unneeded print statements from manipAxis.
+
+
 ###### Version: 0.2-23
 Date: 2014-02-22
 News:

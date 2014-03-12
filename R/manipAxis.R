@@ -6,6 +6,11 @@ manipAxis <- function(HPD, method, action = NULL, ...) {
 	# Part of Hive3dR
 	# Bryan Hanson, DePauw Univ, July 2011 onward
 
+# Check for valid option
+
+if (!method %in% c("rank", "norm", "invert", "scale", "prune", "ranknorm",
+	"offset", "stretch")) stop("Unrecognized method")
+
 	chkHPD(HPD)
 	nodes <- HPD[[1]]
 	nx <- length(unique(nodes$axis))
@@ -219,10 +224,7 @@ manipAxis <- function(HPD, method, action = NULL, ...) {
 			
 			if (action[n] == -1) {
 				xx <- which(nodes$axis == n)
-				print(xx)
-				print(nodes$radius[xx])
 				nodes$radius[xx] <- nodes$radius[xx]*-1 + min(nodes$radius[xx])*2 + diff(range(nodes$radius[xx]))
-				print(nodes$radius[xx])
 				}
 			}	
 		} # end of method == "invert"
@@ -266,8 +268,103 @@ manipAxis <- function(HPD, method, action = NULL, ...) {
 	
 		HPD <- manipAxis(HPD, method = "rank")
 		HPD <- manipAxis(HPD, method = "norm")
+		nodes <- HPD$nodes
 		
 		} # end of method == "ranknorm"
+
+	if (method == "offset") {
+	
+		if (is.null(action)) stop("You must supply action")	
+		if (!length(action) == length(unique(nodes$axis))) stop("length(action) did not match no. axes")
+		
+		if (nx == 2) {
+			nodes$radius[n1] <- nodes$radius[n1]+action[1]
+			nodes$radius[n2] <- nodes$radius[n2]+action[2]
+			}
+
+		if (nx == 3) {
+			nodes$radius[n1] <- nodes$radius[n1]+action[1]
+			nodes$radius[n2] <- nodes$radius[n2]+action[2]
+			nodes$radius[n3] <- nodes$radius[n3]+action[3]
+			}
+
+		if (nx == 4) {
+			nodes$radius[n1] <- nodes$radius[n1]+action[1]
+			nodes$radius[n2] <- nodes$radius[n2]+action[2]
+			nodes$radius[n3] <- nodes$radius[n3]+action[3]
+			nodes$radius[n4] <- nodes$radius[n4]+action[4]
+			}
+
+		if (nx == 5) {
+			nodes$radius[n1] <- nodes$radius[n1]+action[1]
+			nodes$radius[n2] <- nodes$radius[n2]+action[2]
+			nodes$radius[n3] <- nodes$radius[n3]+action[3]
+			nodes$radius[n4] <- nodes$radius[n4]+action[4]
+			nodes$radius[n5] <- nodes$radius[n5]+action[5]
+			}
+
+		if (nx == 6) {
+			nodes$radius[n1] <- nodes$radius[n1]+action[1]
+			nodes$radius[n2] <- nodes$radius[n2]+action[2]
+			nodes$radius[n3] <- nodes$radius[n3]+action[3]
+			nodes$radius[n4] <- nodes$radius[n4]+action[4]
+			nodes$radius[n5] <- nodes$radius[n5]+action[5]
+			nodes$radius[n6] <- nodes$radius[n6]+action[6]
+			}
+
+		} # end of method == "offset"
+
+	if (method == "stretch") {
+	
+		if (is.null(action)) stop("You must supply action")	
+		if (!length(action) == length(unique(nodes$axis))) stop("length(action) did not match no. axes")
+		
+		# Get min of each axis & subtract
+		if (nx == 2) {
+			min1 <- min(nodes$radius[n1])
+			min2 <- min(nodes$radius[n2])
+			off <- c(min1, min2)*-1
+			}
+
+		if (nx == 3) {
+			min1 <- min(nodes$radius[n1])
+			min2 <- min(nodes$radius[n2])
+			min3 <- min(nodes$radius[n3])
+			off <- c(min1, min2, min3)*-1
+			}
+
+		if (nx == 4) {
+			min1 <- min(nodes$radius[n1])
+			min2 <- min(nodes$radius[n2])
+			min3 <- min(nodes$radius[n3])
+			min4 <- min(nodes$radius[n4])
+			off <- c(min1, min2, min3, min4)*-1
+			}
+
+		if (nx == 5) {
+			min1 <- min(nodes$radius[n1])
+			min2 <- min(nodes$radius[n2])
+			min3 <- min(nodes$radius[n3])
+			min4 <- min(nodes$radius[n4])
+			min5 <- min(nodes$radius[n5])
+			off <- c(min1, min2, min3, min4, min5)*-1
+			}
+
+		if (nx == 6) {
+			min1 <- min(nodes$radius[n1])
+			min2 <- min(nodes$radius[n2])
+			min3 <- min(nodes$radius[n3])
+			min4 <- min(nodes$radius[n4])
+			min5 <- min(nodes$radius[n5])
+			min6 <- min(nodes$radius[n6])
+			off <- c(min1, min2, min3, min4, min5, min6)*-1
+			}
+		
+		HPD <- manipAxis(HPD, method = 'offset', action = off)
+		HPD <- manipAxis(HPD, method = 'scale', action = action)
+		nodes <- HPD$nodes
+		
+		} # end of method == "stretch"
 
 	HPD[[1]] <- nodes
 	chkHPD(HPD)

@@ -31,6 +31,8 @@ function(HPD, confirm = FALSE) {
 
 	if (!((HPD$type == "2D") | (HPD$type == "3D"))) { warning("Type must be 2D or 3D"); w <- TRUE }
 
+	if (any(HPD$nodes$radius < 0)) warning("Some node radii < 0; the behavior of these is unknown")
+	
 	if ((!w) && (confirm)) cat("You must be awesome: This hive plot data looks dandy!")
 	if (w) {
 		cat("*** There seem to be one or more problems with this hive plot data!\n")
