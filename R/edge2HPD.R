@@ -53,7 +53,7 @@ edge2HPD <- function(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL,
 
   for (n in 1:ne) { # same logic as over in dot2HPD
 	pat1 <- paste("\\b", edge_df[n,1], "\\b", sep = "") # need word boundaries
-	print(pat1)
+#	print(pat1)
 	pat2 <- paste("\\b", edge_df[n,2], "\\b", sep = "") # to avoid finding fragments
 	HPD$edges$id1[n] <- grep(pat1, HPD$nodes$lab)
 	HPD$edges$id2[n] <- grep(pat2, HPD$nodes$lab)
