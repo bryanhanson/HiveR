@@ -51,7 +51,7 @@ Numeric; An offset from the end of the axis for label placement.  Either a singl
 
 
 \item{anNodes}{
-(Applies to \code{plotHive} only) The path to a csv file containing information for labeling nodes.  If present, a line segment will be drawn from the node to the specified text.  The text is positioned near the end of the line segment.  The columns in the csv file must be named as follows (description and use in parentheses): node.lab (node label from HPD$nodes$lab), node.text (the text to be drawn on the plot), angle (polar coordinates: angle at which to draw the segment), radius (polar coordinates: radius at which to draw the text), offset (additional distance along the radius vector to offset text), hjust, vjust (horizontal and vertical justification; nominally in [0\ldots1] but fractional and negative values also work).
+(Applies to \code{plotHive} only) The path to a csv file containing information for labeling nodes.  If present, a line segment will be drawn from the node to the specified text.  The text is positioned near the end of the line segment.  The columns in the csv file must be named as follows (description and use in parentheses): node.lab (node label from HPD$nodes$lab), node.text (the text to be drawn on the plot), angle (polar coordinates: angle at which to draw the segment), radius (polar coordinates: radius at which to draw the text), offset (additional distance along the radius vector to offset text), hjust, vjust (horizontal and vertical justification; nominally in [0\ldots1] but fractional and negative values also work).  The first two values will be treated as type \code{character}, the others as \code{numeric}.
 }
 
 \item{anNode.gpar}{
@@ -163,9 +163,33 @@ plotHive(HEC, ch = 0.1, bkgnd = "white",
 
 grid.text("males", x = 0, y = 2.3, default.units = "native")
 grid.text("females", x = 0, y = -2.3, default.units = "native")
-grid.text("Pairing of Eye Color with Hair Color", x = 0, y = 3.75, default.units = "native", gp = gpar(fontsize = 18))
-grid.text("A test of plotHive annotation options", x = 0, y = 3.25, default.units = "native", gp = gpar(fontsize = 12))
-grid.text("Images from Wikipedia Commons", x = 0, y = -3.5, default.units = "native", gp = gpar(fontsize = 9))
+grid.text("Pairing of Eye Color with Hair Color", x = 0, y = 3.75,
+	default.units = "native", gp = gpar(fontsize = 18))
+grid.text("A test of plotHive annotation options", x = 0, y = 3.25,
+	default.units = "native", gp = gpar(fontsize = 12))
+grid.text("Images from Wikipedia Commons", x = 0, y = -3.5,
+	default.units = "native", gp = gpar(fontsize = 9))
+setwd(currDir)
+
+# Use the node label concept to create tick marks
+
+currDir <- getwd()
+setwd(system.file("extdata", "Misc", package = "HiveR"))
+plotHive(HEC, ch = 0.1, bkgnd = "white",
+	axLabs = c("hair\ncolor", "eye\ncolor"),
+	axLab.pos = c(1, 1),
+	axLab.gpar = gpar(fontsize = 14),
+	anNodes = "HECticks.txt",
+	anNode.gpar = gpar(col = "black"),
+	arrow = c("more\ncommon", 0.0, 2, 4, 1, -2),
+	dr.nodes = FALSE)
+
+grid.text("males", x = 0, y = 2.3, default.units = "native")
+grid.text("females", x = 0, y = -2.3, default.units = "native")
+grid.text("Pairing of Eye Color with Hair Color", x = 0, y = 3.75,
+	default.units = "native", gp = gpar(fontsize = 18))
+grid.text("Adding tick marks to the nodes", x = 0, y = 3.25,
+	default.units = "native", gp = gpar(fontsize = 12))
 setwd(currDir)
 
 

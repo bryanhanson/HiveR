@@ -11,7 +11,6 @@
 \graphicspath{{./graphics/}} % knitr also uses it's own hook, see later
 \usepackage{graphicx}
 
-\usepackage[version = 3]{mhchem}
 \usepackage{xtab}
 \usepackage[buttonsize=1em]{animate}
 
@@ -101,7 +100,8 @@ if (!file.exists("graphics")) dir.create("graphics")
 opts_chunk$set(out.width = "0.9\\textwidth", fig.align = "center", fig.width = 7, fig.height = 7, cache = FALSE, echo = FALSE, crop = TRUE)
 knit_hooks$set(rgl.static = hook_rgl) # use to capture a single rgl graphic
 knit_hooks$set(rgl.mov = hook_plot_custom) # use to capture a movie
-knit_hooks$set(crop = hook_pdfcrop)
+if (Sys.which("pdfcrop") != "") knit_hooks$set(crop = hook_pdfcrop) # use pdfcrop if it exists
+
 
 # Note: defaults are eval = TRUE, echo = TRUE
 
@@ -164,7 +164,9 @@ Width or weight of an edge\\
 
 \vspace{0.5 cm}
 
-Inspired by the examples given by Kryzwinski in his materials on the web, I created the \textit{R} package  \texttt{FuncMap} in December 2010.\cite{Hanson2011}  This single function package maps the function calls made by an \textit{R} package into 3 types: sources, which are functions that make only outgoing calls, sinks, which take only incoming calls, and managers, which do both.  Figure~\ref{fig:FuncMapEx} shows an example of a plot made by \texttt{FuncMap}; this is a true hive plot.  In this plot, functions in a package are assigned to an axis by their role, and the radius is determined by the number of calls made or received by a function (which is the degree of the node).  This is also the basis for the width of the edges.  In this plot, calls (edges) originating on the source axis are shown in green, while those originating on the manager axis are in blue.  By defintion, the sink axis only receives calls.
+Inspired by the examples given by Kryzwinski in his materials on the web, I created the \textit{R} package  \texttt{FuncMap} in December 2010.\cite{Hanson2011}  This single function package maps the function calls made by an \textit{R} package into 3 types: sources, which are functions that make only outgoing calls, sinks, which take only incoming calls, and managers, which do both.
+
+%Figure~\ref{fig:FuncMapEx} shows an example of a plot made by \texttt{FuncMap}; this is a true hive plot.  In this plot, functions in a package are assigned to an axis by their role, and the radius is determined by the number of calls made or received by a function (which is the degree of the node).  This is also the basis for the width of the edges.  In this plot, calls (edges) originating on the source axis are shown in green, while those originating on the manager axis are in blue.  By defintion, the sink axis only receives calls.
 
 \texttt{HiveR} takes things quite a bit further.  \texttt{HiveR} is a fresh implementation of hive plots in \textit{R}, not a port of the original \textit{Perl} version \emph{per se}.  As such, it does some things differently, and not all features are implemented (and they may or may not be in the future).  \texttt{HiveR} will draw 2D hive plots with 2-6 axes in a style close to the original.  However, \texttt{HiveR} adds value by making 3D, interactive plots possible when there are 4-6 axes.  These 3D plots were inspired by the ideas of VSEPR theory in chemistry:  the axes of these 3D plots are  arranged with tetrahedral, trigonal bipyramidal or octahedral geometries for 4-6 axes respectively (see Figure~\ref{VSEPR} and \href{https://secure.wikimedia.org/wikipedia/en/wiki/Vsepr}{wikipedia/VSEPR}).  The specifics of 3D hive plots will be discussed in a later section.
 
@@ -176,10 +178,10 @@ Inspired by the examples given by Kryzwinski in his materials on the web, I crea
 \end{figure}
 
 
-<< FuncMapEx, fig.cap = "FuncMap for package lattice", out.width = "0.5\\textwidth" >>=
-fw <- foodweb(where = "package:lattice", plotting = FALSE)
-ans <- FuncMap(fwb = fw, pkg = "lattice", method = "abs", sm.title = TRUE)
-@
+%<< FuncMapEx, fig.cap = "FuncMap for package lattice", out.width = "0.5\\textwidth" >>=
+%fw <- foodweb(where = "package:lattice", plotting = FALSE)
+%ans <- FuncMap(fwb = fw, pkg = "lattice", method = "abs", sm.title = TRUE)
+%@
 
 \section{\texttt{HiveR} Features} %%%%%
 

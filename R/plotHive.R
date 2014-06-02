@@ -88,7 +88,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			if (!bkgnd == "black") anNode.gpar <- gpar(fontsize = 10, col = "black", lwd = 0.5)
 			}
 			
-		ann <- read.csv(anNodes, header = TRUE)
+		ann <- read.csv(anNodes, header = TRUE, colClasses = c(rep("character", 2), rep("numeric", 5)))
 		cds <- getCoords(anNodes, anCoord, nodes)
 		
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,

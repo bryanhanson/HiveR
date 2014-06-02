@@ -12,6 +12,13 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-26
+Date: 2014-06-02
+News:
+>> Added a check for a symmetric input matrix in adj2HPD.  If this is the case, a message is given and the lower triangle is used.  Thanks to James Kitson for the example that revealed this problem.
+>> Improvements to documentation, small changes to vignette for CRAN.
+>> Added an example of drawing tick marks to plotHive (and HECticks.txt added to inst/extdata/Misc)
+
 ###### Version: 0.2-25
 Date: 2014-04-15
 News:

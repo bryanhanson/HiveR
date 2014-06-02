@@ -14,7 +14,11 @@ adj2HPD <- function (M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) 
 	
 	if (is.null(M)) stop("No adjacency matrix provided")
 	if (is.null(dimnames(M))) stop("Adjacency matrix must have named dimensions")
-	
+	if (isSymmetric(M)) {
+		message("Matrix is symmetric, using only the lower triangle")
+		M <- M[upper.tri(M)] <- 0
+		}
+		
 	lab1 <- unlist(dimnames(M)[1])
 	lab1 <- as.character(lab1)
 	lab2 <- unlist(dimnames(M)[2])

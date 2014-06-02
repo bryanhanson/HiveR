@@ -11,7 +11,7 @@ adj2HPD(M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...)
 }
 \arguments{
   \item{M}{
-A matrix with named dimensions.  The names should be the node names.
+A matrix with named dimensions.  The names should be the node names.  Should not be symmetric.  If it is, only the lower triangle is used and a message is given.
 }
   \item{axis.cols}{
 A character vector giving the colors desired for the axes.

@@ -1,9 +1,9 @@
 Package: HiveR
 Type: Package
 Title: 2D and 3D Hive Plots for R
-Version: 0.2-25
-Date: 2014-04-15
-Authors@R:	c(person("Bryan", "A.", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
+Version: 0.2-26
+Date: 2014-06-02
+Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
 		person("Vesna", "Memisevic", role = "ctb"),
 		person("Jonathan", "Chung", role = "ctb"))
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
