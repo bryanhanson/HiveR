@@ -281,7 +281,7 @@ Figures~\ref{fig:PPNA} and \ref{fig:PPN4} show two means of plotting \texttt{Saf
 data(Safariland)
 @
 
-<< PPNA, fig.cap = "Safariland data set using visweb", fig.keep = "last" >>=
+<< PPNA, fig.cap = "Safariland data set using visweb" >>=
 visweb(Safariland)
 @
 
@@ -312,7 +312,7 @@ For a network of this size and complexity, any or some combination of these plot
   \item The huge number of visits encoded in red in \texttt{Safari} (the ungrazed site) is missing in \texttt{Arroyo}.
 \end{itemize}
 
-<< PPN2, fig.cap = "Hive Panel comparing Safari with Arroyo" >>=
+<< PPN2, fig.cap = "Hive Panel comparing Safari with Arroyo", eval = FALSE >>=
 data(Safari)
 Safari$nodes$size <- 0.5
 data(Arroyo)
@@ -427,6 +427,7 @@ EC4$edges$weight = 0.5
 Now we're ready to plot!  Figure~\ref{fig:E_coli_2} is a hive panel showing this network with different scales for the nodes.  Each plot takes about 10 seconds to draw.
 
 << E_coli_2, fig.cap = "Hive panel of E. coli gene regulatory network", out.width = "0.7\\textwidth", fig.width = 2, fig.height = 6 >>=
+vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(3, 1)))
 #

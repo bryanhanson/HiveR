@@ -3,9 +3,8 @@
 
 citHeader("To cite package 'HiveR' in publications use:")
 
-desc <- packageDescription("HiveR")
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-vers <- paste("R package version", desc$Version)
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+vers <- paste("R package version", meta$Version)
 web <- "academic.depauw.edu/~hanson/HiveR/HiveR.html"
 
 citEntry(entry = "Manual",

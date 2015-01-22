@@ -5,10 +5,12 @@ exportPattern(".")
 import(
   grid,
   RColorBrewer,
-  tcltk
+  tcltk,
+  rgl,
+  xtable
 )
 
-importFrom(tkrgl, spin3d, spinControl)
+importFrom(tkrgl, spinControl)
 importFrom(plyr, empty, count)
 importFrom(jpeg, readJPEG)
 importFrom(png, readPNG)

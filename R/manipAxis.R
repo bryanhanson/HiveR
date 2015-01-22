@@ -370,4 +370,3 @@ if (!method %in% c("rank", "norm", "invert", "scale", "prune", "ranknorm",
 	chkHPD(HPD)
 	HPD
 	}
-	

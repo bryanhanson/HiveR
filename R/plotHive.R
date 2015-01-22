@@ -39,8 +39,8 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 ##### all of the radius checking etc is here and if moved elsewhere,
 ##### these calculations would have to be redone or results passed.
 
-	p2cX <- function(r, theta) x <- r*cos(theta*2*pi/360)
-	p2cY <- function(r, theta) y <- r*sin(theta*2*pi/360)
+	p2cX <- function(r, theta) { x <- r*cos(theta*2*pi/360) }
+	p2cY <- function(r, theta) { y <- r*sin(theta*2*pi/360) }
 
 	addArrow <- function(arrow, nx) {
 		if (!length(arrow) >= 5) stop("Too few arrow components")

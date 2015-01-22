@@ -1,6 +1,5 @@
 
-chkHPD <-
-function(HPD, confirm = FALSE) {
+chkHPD <- function(HPD, confirm = FALSE) {
 
 # Function to Check the Integrity of HPD Objects
 # Bryan Hanson, DePauw University, Oct 2011

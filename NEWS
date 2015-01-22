@@ -12,6 +12,19 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+###### Version: 0.2-28
+Date: 2015-01-20
+News:
+>> Update CITATION file for CRAN.
+>> Removed obsolete cart2sph function (actually, it was never used).
+>> Builds and checks with R 3.2/devel
+>> animateHive looks a little wonky currently.  Either crashes, or works partially, declaring it can't find a function that doesn't seem to exist.
+
+###### Version: 0.2-27
+Date: 2014-06-02
+News:
+>> Tidy things up for CRAN. 
+
 ###### Version: 0.2-26
 Date: 2014-06-02
 News:

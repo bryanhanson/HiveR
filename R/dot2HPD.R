@@ -1,6 +1,6 @@
 
 
-dot2HPD <- function (file = NULL, node.inst = NULL, edge.inst = NULL,
+dot2HPD <- function(file = NULL, node.inst = NULL, edge.inst = NULL,
 	axis.cols = NULL, type = "2D", desc = NULL, ...) {
 	
 # Function to read dot files and convert to HPD

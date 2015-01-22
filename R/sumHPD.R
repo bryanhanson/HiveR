@@ -1,5 +1,4 @@
-sumHPD <-
-function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
+sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 	chk.sm.ax = FALSE, chk.orphan.node = FALSE,
 	plot.list = FALSE, tex = FALSE, orphan.list = FALSE){
 	

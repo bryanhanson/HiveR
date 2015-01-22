@@ -195,6 +195,7 @@ setwd(currDir)
 
 ### 3D Hive Plots. The following must be run interactively.
 \dontrun{
+require("rgl")
 test4 <- ranHiveData(nx = 4, type = "3D")
 plot3dHive(test4)
 }

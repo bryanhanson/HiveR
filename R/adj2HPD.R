@@ -1,6 +1,6 @@
 
 
-adj2HPD <- function (M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) {
+adj2HPD <- function(M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) {
 	
 # Function to read adjacency matrices and convert to HPD
 # Bryan Hanson, DePauw Univ, December 2011
@@ -94,5 +94,3 @@ adj2HPD <- function (M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...) 
 	
     HPD
 	} # The very end!
-	
-	
