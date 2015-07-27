@@ -88,7 +88,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 			if (!bkgnd == "black") anNode.gpar <- gpar(fontsize = 10, col = "black", lwd = 0.5)
 			}
 			
-		ann <- read.csv(anNodes, header = TRUE, colClasses = c(rep("character", 2), rep("numeric", 5)))
+		ann <- utils::read.csv(anNodes, header = TRUE, colClasses = c(rep("character", 2), rep("numeric", 5)))
 		cds <- getCoords(anNodes, anCoord, nodes)
 		
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
@@ -99,7 +99,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 
 	addGraphic <- function(grInfo, nodes, nx, anCoord) {
 
-		gr <- read.csv(grInfo, header = TRUE, stringsAsFactors = FALSE)
+		gr <- utils::read.csv(grInfo, header = TRUE, stringsAsFactors = FALSE)
 		cds <- getCoords(grInfo, anCoord, nodes)
 				
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
@@ -135,7 +135,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		# Figure out the coordinates of the line segments and labels/graphics
 		# anNodes and grInfo both contains certain columns which are used here
 		
-		df <- read.csv(file, header = TRUE)
+		df <- utils::read.csv(file, header = TRUE)
 		
 		id <- rep(NA, nrow(df))	
 		for (n in 1:nrow(df)) {			
@@ -204,8 +204,12 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 	if (nx == 2) {
 		
-		n1 <- subset(nodes, axis == 1)
-		n2 <- subset(nodes, axis == 2)
+		# n1 <- subset(nodes, axis == 1)
+		# n2 <- subset(nodes, axis == 2)
+
+		n1 <- nodes[nodes[,"axis"] == 1,]
+		n2 <- nodes[nodes[,"axis"] == 2,]
+
 		max1 <- max(n1$radius)
 		max2 <- max(n2$radius)
 		min1 <- min(n1$radius)
@@ -318,9 +322,14 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 	if (nx == 3) {
 		
-		n1 <- subset(nodes, axis == 1)
-		n2 <- subset(nodes, axis == 2)
-		n3 <- subset(nodes, axis == 3)
+		# n1 <- subset(nodes, axis == 1)
+		# n2 <- subset(nodes, axis == 2)
+		# n3 <- subset(nodes, axis == 3)
+
+		n1 <- nodes[nodes[,"axis"] == 1,]
+		n2 <- nodes[nodes[,"axis"] == 2,]
+		n3 <- nodes[nodes[,"axis"] == 3,]
+
 		max1 <- max(n1$radius)
 		max2 <- max(n2$radius)
 		max3 <- max(n3$radius)
@@ -611,10 +620,16 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 	if (nx == 4) {
 		
-		n1 <- subset(nodes, axis == 1)
-		n2 <- subset(nodes, axis == 2)
-		n3 <- subset(nodes, axis == 3)
-		n4 <- subset(nodes, axis == 4)
+		# n1 <- subset(nodes, axis == 1)
+		# n2 <- subset(nodes, axis == 2)
+		# n3 <- subset(nodes, axis == 3)
+		# n4 <- subset(nodes, axis == 4)
+
+		n1 <- nodes[nodes[,"axis"] == 1,]
+		n2 <- nodes[nodes[,"axis"] == 2,]
+		n3 <- nodes[nodes[,"axis"] == 3,]
+		n4 <- nodes[nodes[,"axis"] == 4,]
+		
 		max1 <- max(n1$radius)
 		max2 <- max(n2$radius)
 		max3 <- max(n3$radius)
@@ -964,11 +979,18 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 	if (nx == 5) {
 		
-		n1 <- subset(nodes, axis == 1)
-		n2 <- subset(nodes, axis == 2)
-		n3 <- subset(nodes, axis == 3)
-		n4 <- subset(nodes, axis == 4)
-		n5 <- subset(nodes, axis == 5)
+		# n1 <- subset(nodes, axis == 1)
+		# n2 <- subset(nodes, axis == 2)
+		# n3 <- subset(nodes, axis == 3)
+		# n4 <- subset(nodes, axis == 4)
+		# n5 <- subset(nodes, axis == 5)
+
+		n1 <- nodes[nodes[,"axis"] == 1,]
+		n2 <- nodes[nodes[,"axis"] == 2,]
+		n3 <- nodes[nodes[,"axis"] == 3,]
+		n4 <- nodes[nodes[,"axis"] == 4,]
+		n5 <- nodes[nodes[,"axis"] == 5,]
+
 		max1 <- max(n1$radius)
 		max2 <- max(n2$radius)
 		max3 <- max(n3$radius)
@@ -1385,12 +1407,20 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 	if (nx == 6) {
 		
-		n1 <- subset(nodes, axis == 1)
-		n2 <- subset(nodes, axis == 2)
-		n3 <- subset(nodes, axis == 3)
-		n4 <- subset(nodes, axis == 4)
-		n5 <- subset(nodes, axis == 5)
-		n6 <- subset(nodes, axis == 6)
+		# n1 <- subset(nodes, axis == 1)
+		# n2 <- subset(nodes, axis == 2)
+		# n3 <- subset(nodes, axis == 3)
+		# n4 <- subset(nodes, axis == 4)
+		# n5 <- subset(nodes, axis == 5)
+		# n6 <- subset(nodes, axis == 6)
+		
+		n1 <- nodes[nodes[,"axis"] == 1,]
+		n2 <- nodes[nodes[,"axis"] == 2,]
+		n3 <- nodes[nodes[,"axis"] == 3,]
+		n4 <- nodes[nodes[,"axis"] == 4,]
+		n5 <- nodes[nodes[,"axis"] == 5,]
+		n6 <- nodes[nodes[,"axis"] == 6,]
+		
 		max1 <- max(n1$radius)
 		max2 <- max(n2$radius)
 		max3 <- max(n3$radius)

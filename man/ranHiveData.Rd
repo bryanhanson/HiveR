@@ -63,7 +63,7 @@ For \code{type = "3D"}, after the function creates an initial set of random node
 \cr
 For the arguments \code{rad, ns, ew, nc} and \code{ec}, the values given are sampled randomly (with replacement) and assigned to particular nodes or edges.
 }
-\section{warning}{
+\section{Warning}{
 If you create a very small data set with few nodes, there may be no nodes assigned to some axes which will give an error when you try to plot the data.  It's up to the user to check for this possibility (you can use \code{sumHPD}).
 }
 \value{

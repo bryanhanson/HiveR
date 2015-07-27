@@ -82,7 +82,7 @@ rcsr <- function(p0, cp, p1) {
 
 # Compute spline curve
 	n3 <- n3[-1,] # remove origin point
-	sp <- spline(n3[,1], n3[,2], n = 25)
+	sp <- stats::spline(n3[,1], n3[,2], n = 25)
 	sp <- matrix(c(sp$x, sp$y, rep(0, length(sp$x))), ncol = 3) # add back the z coord (all 0's)
 
 # Now reverse the transformations back to the original 3d space

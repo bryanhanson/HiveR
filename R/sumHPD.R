@@ -24,7 +24,8 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 	nodes <- HPD$nodes
 	
 	for (n in sort(unique(nodes$axis))) {
-		g <- subset(nodes, axis == n)
+		g <- nodes[nodes[,"axis"] == n,]
+#		g <- subset(nodes, axis == n)
 		cat("\t\tAxis", n, "has", length(g$id), "nodes spanning radii from",
 		min(g$radius), "to", max(g$radius), "\n", sep = " ")		
 		}	
@@ -131,8 +132,11 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 		}
 		
 	if ((tex) & (plot.list)) {
-		fd <- xtable(fd, hline.after = c(1), include.rownames = FALSE)
-		align(fd) <- "|r|rrlr|rrlr|rl|"
+		if (!requireNamespace("xtable", quietly = TRUE)) {
+			stop("To use option tex you need to install package xtable")
+			}
+		fd <- xtable::xtable(fd, hline.after = c(1), include.rownames = FALSE)
+		xtable::align(fd) <- "|r|rrlr|rrlr|rl|"
 		}	
 
 	if (plot.list) return(fd) # user must not ask for both at the same time!

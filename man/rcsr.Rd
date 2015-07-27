@@ -21,7 +21,7 @@ A triple representing the other end of the final curve (x, y, z).
 }
 }
 \details{
-See the code for exactly how the function works.  Based upon the process described at \url{http://www.fundza.com/mel/axis_to_vector/align_axis_to_vector.html}  Timing tests show this function is fast and scales linearly (i.e. 10x more splines to draw takes 10x more time).  Roughly 3 seconds were required to draw 1,000 spline curves in my testing.
+See the code for exactly how the function works.  Based upon the process described at \url{http://www.fundza.com/mel/axis_to_vector/index.html}  Timing tests show this function is fast and scales linearly (i.e. 10x more splines to draw takes 10x more time).  Roughly 3 seconds were required to draw 1,000 spline curves in my testing.
 }
 \value{
 A 3 column matrix with the x, y and z coordinates to be plotted to create a hive plot edge.

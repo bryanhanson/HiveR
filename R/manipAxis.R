@@ -235,8 +235,11 @@ if (!method %in% c("rank", "norm", "invert", "scale", "prune", "ranknorm",
 		if (!length(action) == 1) stop("Action must give only one axis to prune")
 		if ((action > max(nodes$axis)) | (action < 1)) stop("Axis to prune is < 1 or  > no. of axes")
 	
-		rem <- subset(nodes, axis == action)
-		nodes <- subset(nodes, !axis == action)
+		# rem <- subset(nodes, axis == action)
+		# nodes <- subset(nodes, !axis == action)
+		rem <- nodes[nodes[,"axis"] == action, ]
+		nodes <- nodes[nodes[,"axis"] != action, ]
+		
 		if (action == 1) nodes$axis <- nodes$axis - 1L
 		if (action == 2) {
 			ch <- which(nodes$axis >= 3)

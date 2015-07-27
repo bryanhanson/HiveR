@@ -12,243 +12,184 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
-###### Version: 0.2-28
-Date: 2015-01-20
-News:
->> Update CITATION file for CRAN.
->> Removed obsolete cart2sph function (actually, it was never used).
->> Builds and checks with R 3.2/devel
->> animateHive looks a little wonky currently.  Either crashes, or works partially, declaring it can't find a function that doesn't seem to exist.
+Changes in version 0.2.44 2015-07-26
+     + NEWS file reformatted.
+     + Updated to work with R 3.3 devel (changes in namespace policies).  In the process several packages were moved from Imports to Suggests, giving a leaner install.
+     + Versions are now numbered x.y.z going forward.
+     + Updated the ignore file infrastructure.
+     + Updated the DESCRIPTION language for new CRAN style.
+     + Added an example of constructing a dummy / phantom axis or node, as well as an example illustrating how to put two plots on one page.  Both are in ?HidingAnAxis which is aliased to ?TwoPlotsOnePage.
+     + Fixed a problem with adj2HPD when processing symmetric matrices.
 
-###### Version: 0.2-27
-Date: 2014-06-02
-News:
->> Tidy things up for CRAN. 
+Changes in version 0.2-28 2015-01-20
+     + UpCITATION file for CRAN.
+     + Removed obsolete cart2sph function (actually, it was never used).
+     + Builds and checks with R 3.2/devel
+     + animateHive looks a little wonky currently.  Either crashes, or works partially, declaring it can't find a function that doesn't seem to exist.
 
-###### Version: 0.2-26
-Date: 2014-06-02
-News:
->> Added a check for a symmetric input matrix in adj2HPD.  If this is the case, a message is given and the lower triangle is used.  Thanks to James Kitson for the example that revealed this problem.
->> Improvements to documentation, small changes to vignette for CRAN.
->> Added an example of drawing tick marks to plotHive (and HECticks.txt added to inst/extdata/Misc)
+Changes in version 0.2-27 2014-06-02
+     + Tidy things up for CRAN. 
 
-###### Version: 0.2-25
-Date: 2014-04-15
-News:
->> Removed a leftover print statement from edge2HPD. Darn it!
+Changes in version 0.2-26 2014-06-02
+     + Added a check for a symmetric input matrix in adj2HPD.  If this is the case, a message is given and the lower triangle is used.  Thanks to James Kitson for the example that revealed this problem.
+     + Improvements to documentation, small changes to vignette for CRAN.
+     + Added an example of drawing tick marks to plotHive (and HECticks.txt added to inst/extdata/Misc)
 
-###### Version: 0.2-24
-Date: 2014-03-11
-News:
->> Added checking for a valid option in manipAxis.
->> Added methods "offset" and "stretch" in manipAxis.
->> Added a check in chkHPD to make sure all radii > 0.  This is just in case some of the new options in manipAxis backfire.
->> Revised examples for manipAxis.
->> Removed some unneeded print statements from manipAxis.
+Changes in version 0.2-25 2014-04-15
+     + Removed a leftover print statement from edge2HPD. Darn it!
 
+Changes in version 0.2-24 2014-03-11
+     + Added checking for a valid option in manipAxis.
+     + Added methods "offset" and "stretch" in manipAxis.
+     + Added a check in chkHPD to make sure all radii > 0.  This is just in case some of the new options in manipAxis backfire.
+     + Revised examples for manipAxis.
+     + Removed some unneeded print statements from manipAxis.
 
-###### Version: 0.2-23
-Date: 2014-02-22
-News:
->> Added checking for a valid option in mineHPD.
+Changes in version 0.2-23 2014-02-22
+     + Added checking for a valid option in mineHPD.
 
-###### Version: 0.2-22
-Date: 2014-01-26
-News:
->> Freshened up README.md
->> Added R.buildignore
->> In plotHive, graphic annotations can now be either jpg or png, and is autodetected.
+Changes in version 0.2-22 2014-01-26
+     + Freshened up README.md
+     + Added R.buildignore
+     + In plotHive, graphic annotations can now be either jpg or png, and is autodetected.
 
-###### Version: 0.2-21
-Date: 2013-12-06
-News:
->> Improved HEC and plotHive documentation.
->> Added files to extdata/Misc to use with plotHive examples.
+Changes in version 0.2-21 2013-12-06
+     + Improved HEC and plotHive documentation.
+     + Added files to extdata/Misc to use with plotHive examples.
 
-###### Version: 0.2-20
-Date: 2013-12-05
-News:
->> Added a built-in data set based up the hair eye color data set supplied with R.  See ?HEC.
+Changes in version 0.2-20 2013-12-05
+     + Added a built-in data set based up the hair eye color data set supplied with R.  See ?HEC.
 
-###### Version: 0.2-19
-Date: 2013-12-05
-News:
->> Vectorized the reading of graphics in plotHive (only the first one was being read).
+Changes in version 0.2-19 2013-12-05
+     + Vectorized the reading of graphics in plotHive (only the first one was being read).
 
-###### Version: 0.2-18
-Date: 2013-12-04
-News:
->> Added the ability to place graphics as annotations on 2D plots.  Requested by Suma Jayakrishna.
->> For 2D plots, one can now specify the location of the annotation (or graphic) using either a global specification or a specification local to a specific node.  See ?plotHive.
->> In plotHive, added helper function getCoord.
->> Updated plotHive documentation.
+Changes in version 0.2-18 2013-12-04
+     + Added the ability to place graphics as annotations on 2D plots.  Requested by Suma Jayakrishna.
+     + For 2D plots, one can now specify the location of the annotation (or graphic) using either a global specification or a specification local to a specific node.  See ?plotHive.
+     + In plotHive, added helper function getCoord.
+     + Updated plotHive documentation.
 
-###### Version: 0.2-17
-Date: 2013-09-20
-News:
->> Fix another vignette issue to pass CRAN.
->> Really removed dependencies on RFOC as previously claimed, from several places!
->> Removed ppiData from imports.
+Changes in version 0.2-17 2013-09-20
+     + Fix another vignette issue to pass CRAN.
+     + Really removed dependencies on RFOC as previously claimed, from several places!
+     + Removed ppiData from imports.
 
-###### Version: 0.2-16
-Date: 2013-09-12
-News:
->> Fix a vignette issue to pass CRAN.
+Changes in version 0.2-16 2013-09-12
+     + Fix a vignette issue to pass CRAN.
 
-###### Version: 0.2-15
-Date: 2013-09-11
-News:
->> At CRAN's request, added .Rbuildignore
->> At CRAN's request, added vignette builder engine.
+Changes in version 0.2-15 2013-09-11
+     + At CRAN's request, added .Rbuildignore
+     + At CRAN's request, added vignette builder engine.
 
 
-###### Version: 0.2-14
-Date: 2013-08-16
-News:
->> Added depends R >= 3.0 to pass all checks at CRAN.
+Changes in version 0.2-14 2013-08-16
+     + Added depends R >= 3.0 to pass all checks at CRAN.
 
-###### Version: 0.2-13
-Date: 2013-08-14
-News:
->> Moved vignette to vignettes directory for CRAN. Various small fixes to vignette.
->> Fixed an importFrom issue.
->> Fixed a problem with edge2HPD found by V. Memisevic.  Added a better example to the documentation.
+Changes in version 0.2-13 2013-08-14
+     + Moved vignette to vignettes directory for CRAN. Various small fixes to vignette.
+     + Fixed an importFrom issue.
+     + Fixed a problem with edge2HPD found by V. Memisevic.  Added a better example to the documentation.
 
-###### Version: 0.2-12
-Date: 2013-07-22
-News:
->> Vesna Memisevic discovered that adj2HPD assumed bipartite networks in how it processed the data.  Modified the code so that this assumption is not made and other types of adjacency matrices can be read.
->> Added edge2HPD authored by Jonathan H. Chung. Thanks!
->> Updated documentation and related files.
+Changes in version 0.2-12 2013-07-22
+     + Vesna Memisevic discovered that adj2HPD assumed bipartite networks in how it processed the data.  Modified the code so that this assumption is not made and other types of adjacency matrices can be read.
+     + Added edge2HPD authored by Jonathan H. Chung. Thanks!
+     + Updated documentation and related files.
 
-###### Version: 0.2-11
-Date: 2013-07-06
-News:
->> Modified dot2HPD to handle multiple tag=value entries.
->> Small clarifications to documentation.
+Changes in version 0.2-11 2013-07-06
+     + Modified dot2HPD to handle multiple tag=value entries.
+     + Small clarifications to documentation.
 
-###### Version: 0.2-10
-Date: 2013-02-29
-News:
->> Added tcltk to dependencies and some importFrom in NAMESPACE to pass CRAN.
+Changes in version 0.2-10 2013-02-29
+     + Added tcltk to dependencies and some importFrom in NAMESPACE to pass CRAN.
 
-###### Version: 0.2-9
-Date: 2013-02-29
-News:
->> Removed dependency on RFOC due to licensing issue there.
+Changes in version 0.2-9 2013-02-29
+     + Removed dependency on RFOC due to licensing issue there.
 
-###### Version: 0.2-8
-Date: 2013-02-29
-News:
->> Compatible with R 3.0.0
->> Fixed some documentation problems and tuned up github site.
->> NULL value for edge.inst in dot2HPD was not being caught (thanks to Gordon Robertson for pointing this out).
+Changes in version 0.2-8 2013-02-29
+     + Compatible with R 3.0.0
+     + Fixed some documentation problems and tuned up github site.
+     + NULL value for edge.inst in dot2HPD was not being caught (thanks to Gordon Robertson for pointing this out).
 
-###### Version: 0.2-7
-Date: 5 Oct 2012
-News:
->> Cleaned up a few non-code issues to pass CRAN checks. 
+Changes in version 0.2-7 2012-10-05
+     + Cleaned up a few non-code issues to pass CRAN checks. 
 
-###### Version: 0.2-6
-Date: 3 Oct 2012
-News:
->> Fixed a problem with edge sizes and weights not being handled correctly for some cases with plotHive (so 2D hives only). 
+Changes in version 0.2-6 2012-10-02
+     + Fixed a problem with edge sizes and weights not being handled correctly for some cases with plotHive (so 2D hives only). 
 
-###### Version: 0.2-5
-Date: 16 Sept 2012
-News:
->> Fixed a problem in which 2D hive node sizes and colors were not being drawn correctly.  Reported by Augustin Arce along with a suggested fix.  Thanks Augustin!  The same problem was in the 3D version and was also corrected.  The edge colors and weights do not appear to have the problem; they are assembled from scratch.
+Changes in version 0.2-5 2012-09-16
+     + Fixed a problem in which 2D hive node sizes and colors were not being drawn correctly.  Reported by Augustin Arce along with a suggested fix.  Thanks Augustin!  The same problem was in the 3D version and was also corrected.  The edge colors and weights do not appear to have the problem; they are assembled from scratch.
 
-###### Version: 0.2-4
-Date: 25 June 2012
-News:
->> Improved vignette, now built using knitr outside of the build/check process
->> Added additional files for the E coli data set.  See inst/extdata/E_coli/README for details.
->> Revised animateHive to permit different hives to be animated using different sets of arguments.  Gives maximum flexibility.  See the help page for a silly example.
+Changes in version 0.2-4 2012-06-25
+     + Improved vignette, now built using knitr outside of the build/check process
+     + Added additional files for the E coli data set.  See inst/extdata/E_coli/README for details.
+     + Revised animateHive to permit different hives to be animated using different sets of arguments.  Gives maximum flexibility.  See the help page for a silly example.
 
-###### Version: 0.2-3
-Date: 11 June 2012
-News:
->> Improved the Dot parsing in dot2HPD.  Among others, node.inst or edge.inst may be NULL (if both are NULL, you aren't doing much, this is untested).
->> Added options to mineHPD.
->> Possible problem with prune being ignored (still out there!).
+Changes in version 0.2-3 2012-06-11
+     + Improved the Dot parsing in dot2HPD.  Among others, node.inst or edge.inst may be NULL (if both are NULL, you aren't doing much, this is untested).
+     + Added options to mineHPD.
+     + Possible problem with prune being ignored (still out there!).
 
-###### Version: 0.2-2
-Date: 7 June 2012
-News:
->> Possible problem with prune being ignored.
->> Added function animateHive to do rotation and scaling of type = "3D" hive plots (in sync if there is more than one hive given).
->> Added method = prune to manipAxis which allows one to prune (remove) an axis from an HPD.
->> Modified sumHPD to include a count of edges between each axis pair.
->> Fixed a warning about "incomplete final line" which NodeInst.csv and EdgeInst.csv were giving.
->> Fixed a few documentation errors.
+Changes in version 0.2-2 2012-06-07
+     + Possible problem with prune being ignored.
+     + Added function animateHive to do rotation and scaling of type = "3D" hive plots (in sync if there is more than one hive given).
+     + Added method = prune to manipAxis which allows one to prune (remove) an axis from an HPD.
+     + Modified sumHPD to include a count of edges between each axis pair.
+     + Fixed a warning about "incomplete final line" which NodeInst.csv and EdgeInst.csv were giving.
+     + Fixed a few documentation errors.
 
-###### Version: 0.2-1
-Date: 12 December 2011
-News:
->> This version is 0.1-6 renumbered to 0.2-1 to go to CRAN.
+Changes in version 0.2-1 2011-12-11
+     + This version is 0.1-6 renumbered to 0.2-1 to go to CRAN.
 
-###### Version: 0.1-6
-Date: 10 December 2011
-News:
->> This version currently on Github devel branch.
->> Turned on byte compiling.
->> Removed argument center.hole from dot2HPD.
->> Added a new function adj2HPD which will convert adjacency matrices to HPDs.
->> Modified plotHive so that it is able to draw edges beginning and ending on the same axis (see below too).
->> Moved a chunk of code in plotHive that was needlessly being repeated for each set of edge draws.  Greatly improved speed.
->> Fixed a detail in plotHive which may have resulted in edge colors and weights not being correctly matched with the edge.
->> Added axis labeling to plotHive and plot3dHive.
->> Added the ability to draw an arrow "legend" to plotHive.
->> Added the ability to label nodes in plotHive.  This probably needs some tweaking to work really well.
->> Added options "ranknorm" and "invert" to manipAxis.
->> Removed center.hole from the definition of an HPD as it is not intrinsically part of the hive. Instead, this information is now an argument to the plotting routines.  Updated all documentation and data structures.
->> Added argument "allow.same" to ranHiveData.  This allows edges to begin and end on the same axis.  In previous versions such edges were automatically cleaned out, and that is still the default.  This only applies to type = 2D.
->> Added argument "chk.same.pt" to sumHPD which checks to see if any of the edges start and end at the same point (which causes an error in plotHive).  This is necessary because with the addition of allowing edges to begin and end on the same axis, it was revealed that some data sets (like the E. coli regulatory network) may have edges that not only begin and end on the same axis but also have the same radius (if degree was used to set the radius), so one is attempting to draw an edge of length zero which is what gives the error.  This condition might arise because of errors in the data set or during processing the condition may arise.  Either way, one needs to be able to detect it for removal or alteration.
->> Added argument "chk.ax.jump" to sumHPD which looks for edges which jump over an axis (e.g. axis 1 --> axis 3).  This is undesirable in type = 2D plots.
->> Added argument "chk.orphan.node" to sumHPD which looks for orphaned nodes (nodes which don't have any edges).
->> Added argument "chk.sm.axis" to sumHPD which looks to see which edges start and end on the same axis.
->> Added argument "chk.all" to sumHPD which turns on all these checks at once.
->> Added argument "orphan.list" so that a data frame of the orphans can be returned.
->> Added option "remove orphans" to mineHPD which removes nodes which have not edges.
->> Made improvements to vignette.
+Changes in version 0.1-6 2011-12-10
+     + This version currently on Github devel branch.
+     + Turned on byte compiling.
+     + Removed argument center.hole from dot2HPD.
+     + Added a new function adj2HPD which will convert adjacency matrices to HPDs.
+     + Modified plotHive so that it is able to draw edges beginning and ending on the same axis (see below too).
+     + Moved a chunk of code in plotHive that was needlessly being repeated for each set of edge draws.  Greatly improved speed.
+     + Fixed a detail in plotHive which may have resulted in edge colors and weights not being correctly matched with the edge.
+     + Added axis labeling to plotHive and plot3dHive.
+     + Added the ability to draw an arrow "legend" to plotHive.
+     + Added the ability to label nodes in plotHive.  This probably needs some tweaking to work really well.
+     + Added options "ranknorm" and "invert" to manipAxis.
+     + Removed center.hole from the definition of an HPD as it is not intrinsically part of the hive. Instead, this information is now an argument to the plotting routines.  Updated all documentation and data structures.
+     + Added argument "allow.same" to ranHiveData.  This allows edges to begin and end on the same axis.  In previous versions such edges were automatically cleaned out, and that is still the default.  This only applies to type = 2D.
+     + Added argument "chk.same.pt" to sumHPD which checks to see if any of the edges start and end at the same point (which causes an error in plotHive).  This is necessary because with the addition of allowing edges to begin and end on the same axis, it was revealed that some data sets (like the E. coli regulatory network) may have edges that not only begin and end on the same axis but also have the same radius (if degree was used to set the radius), so one is attempting to draw an edge of length zero which is what gives the error.  This condition might arise because of errors in the data set or during processing the condition may arise.  Either way, one needs to be able to detect it for removal or alteration.
+     + Added argument "chk.ax.jump" to sumHPD which looks for edges which jump over an axis (e.g. axis 1 --> axis 3).  This is undesirable in type = 2D plots.
+     + Added argument "chk.orphan.node" to sumHPD which looks for orphaned nodes (nodes which don't have any edges).
+     + Added argument "chk.sm.axis" to sumHPD which looks to see which edges start and end on the same axis.
+     + Added argument "chk.all" to sumHPD which turns on all these checks at once.
+     + Added argument "orphan.list" so that a data frame of the orphans can be returned.
+     + Added option "remove orphans" to mineHPD which removes nodes which have not edges.
+     + Made improvements to vignette.
 
-###### Version: 0.1-5
-Date: 21 November 2011
-News:
->> This version currently on Github only (note: never went to CRAN).
->> Small change in rcsr which increased spline computation speed by over 20x by removing hidden redraws of the empty graphics window.  I should have seen that one a long time ago!
->> Small change in drawHiveSpline which eliminated the empty graphic window which is no longer necessary.
->> Discovered that using lines3d from rgl with line_antialias = TRUE was a huge bottleneck (duh!).  By turning this off, another 20x or more improvement was obtained in testing.  However, one can see the difference upon close inspection, at least for smaller hives.  Added an argument, LA = T/F to plot3dHive to control this feature.
->> Added method "scale" to manipAxis so that individual axes can be scaled separately.
->> Removed function centerHole() as it is easier to get consistent and predictable behavior by merely specifying a value for HPD$center.hole directly.  Changed the drawing functions appropriately.  Plan to move center.hole out of the HPD object definition in the next version.
->> Removed internal adjustments which scaled node size.  Now node size is taken directly from the HPD.
->> Enhanced sumHPD to include a listing of radii range for each axis.  Helpful in setting up and trouble-shooting plots.
+Changes in version 0.1-5 2011-11-21
+     + This version currently on Github only (note: never went to CRAN).
+     + Small change in rcsr which increased spline computation speed by over 20x by removing hidden redraws of the empty graphics window.  I should have seen that one a long time ago!
+     + Small change in drawHiveSpline which eliminated the empty graphic window which is no longer necessary.
+     + Discovered that using lines3d from rgl with line_antialias = TRUE was a huge bottleneck (duh!).  By turning this off, another 20x or more improvement was obtained in testing.  However, one can see the difference upon close inspection, at least for smaller hives.  Added an argument, LA = T/F to plot3dHive to control this feature.
+     + Added method "scale" to manipAxis so that individual axes can be scaled separately.
+     + Removed function centerHole() as it is easier to get consistent and predictable behavior by merely specifying a value for HPD$center.hole directly.  Changed the drawing functions appropriately.  Plan to move center.hole out of the HPD object definition in the next version.
+     + Removed internal adjustments which scaled node size.  Now node size is taken directly from the HPD.
+     + Enhanced sumHPD to include a listing of radii range for each axis.  Helpful in setting up and trouble-shooting plots.
 
-###### Version: 0.1-4
-Date: 17 November 2011
-News:
->> Some small changes to pass CRAN checks
+Changes in version 0.1-4 2011-11-17
+     + Some small changes to pass CRAN checks
 
-###### Version: 0.1-3
-Date: 14 November 2011
-News:
->> Added nx = 4-6 for plotHive (2D mode).  Also added checking for empty sets of edges to plot, which gives an error when grid.curve is called.
->> Updated and expanded vignette.
->> Added function dot2HPD which processes graphs in .dot format into HPD objects, using auxiliary files which contain processing information.  Only supports some aspects of the .dot standard, but additional features are relatively easy to add.
->> Added function mineHPD which will read an HPD and extract further information from it.  The result is an updated HPD.  This function is intended to be easily extensible.
->> Numerous small improvements to the underlying code and the plot appearance.
->> Added the E. coli data set to the extdata folder.
+Changes in version 0.1-3 2011-11-14
+     + Added nx = 4-6 for plotHive (2D mode).  Also added checking for empty sets of edges to plot, which gives an error when grid.curve is called.
+     + Updated and expanded vignette.
+     + Added function dot2HPD which processes graphs in .dot format into HPD objects, using auxiliary files which contain processing information.  Only supports some aspects of the .dot standard, but additional features are relatively easy to add.
+     + Added function mineHPD which will read an HPD and extract further information from it.  The result is an updated HPD.  This function is intended to be easily extensible.
+     + Numerous small improvements to the underlying code and the plot appearance.
+     + Added the E. coli data set to the extdata folder.
 
-###### Version: 0.1-2
-Date: 9 November 2011
-News:
->> This version is not going to CRAN.
->> Internal changes primarily.
->> Expanded vignette.
->> Added argument "type" to ranHiveData so that plots with 4-6 axes can be randomly generated in a 2D mode.  This seems to work but is not fully tested.  Next step is to make plotHive handle 4-6 axes.
->> In class HivePlotData, changed "dim" to axes, and added a descriptor "type" which indicates if the hive data is 2D or 3D.
+Changes in version 0.1-2 2011-11-09
+     + This version is not going to CRAN.
+     + Internal changes primarily.
+     + Expanded vignette.
+     + Added argument "type" to ranHiveData so that plots with 4-6 axes can be randomly generated in a 2D mode.  This seems to work but is not fully tested.  Next step is to make plotHive handle 4-6 axes.
+     + In class HivePlotData, changed "dim" to axes, and added a descriptor "type" which indicates if the hive data is 2D or 3D.
 
-#### Version: 0.1-1
-Date: 20 October 2011
-News: First Release of the main functions.  Finally!
+Changes in version 0.1-1 2011-10-20
+     + First Release of the main functions.  Finally!

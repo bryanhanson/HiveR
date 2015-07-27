@@ -32,11 +32,11 @@ ranHiveData <- function(type = "2D", nx = 4,
 
 	Labs <-rep(NA, nn)
 	for (n in 1:nn) {
-		Labs[n] <- rep(paste(letters[runif(1, 1, 26)],
-		letters[runif(1, 1, 26)],
-		letters[runif(1, 1, 26)],
-		letters[runif(1, 1, 26)],
-		letters[runif(1, 1, 26)], sep = ""))
+		Labs[n] <- rep(paste(letters[stats::runif(1, 1, 26)],
+		letters[stats::runif(1, 1, 26)],
+		letters[stats::runif(1, 1, 26)],
+		letters[stats::runif(1, 1, 26)],
+		letters[stats::runif(1, 1, 26)], sep = ""))
 		}
 		
 	# Create nodes df

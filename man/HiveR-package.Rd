@@ -9,17 +9,7 @@
 }
 
 \description{
-HiveR is an R package for creating and plotting 2D and 3D hive plots. Hive plots are a unique method of displaying networks of many types in which node properties are mapped to axes using meaningful properties rather than being arbitrarily positioned.  The hive plot concept was invented by Martin Kryzwinski at the Genome Science Center (www.hiveplot.com/).  Keywords: networks, food webs, linnet.
-}
-
-\details{
-\tabular{ll}{
-Package: \tab HiveR\cr
-Type: \tab Package\cr
-Version: \tab 0.2-28\cr
-Date: \tab 2015-01-20\cr
-License: \tab GPL-3\cr
-}
+Creates and plots 2D and 3D hive plots. Hive plots are a unique method of displaying networks of many types in which node properties are mapped to axes using meaningful properties rather than being arbitrarily positioned.  The hive plot concept was invented by Martin Krzywinski at the Genome Science Center (www.hiveplot.net/).  Keywords: networks, food webs, linnet, systems biology, bioinformatics.
 }
 
 \author{

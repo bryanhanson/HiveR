@@ -7,6 +7,10 @@ drawHiveSpline <- function(HPD, L_A = FALSE, ...) {
 	
 	# For use with plot3dHive
 	# Bryan Hanson, DePauw University, Feb 2011 and onward
+
+	if (!requireNamespace("rgl", quietly = TRUE)) {
+		stop("You need to install package rgl to use this function")
+		}
 	
 	# The point pairs to be connected given by df edges
 	
@@ -67,7 +71,7 @@ drawHiveSpline <- function(HPD, L_A = FALSE, ...) {
 
 		for (n in 1:nrow(pt1)) {
 			spl <- rcsr(p0 = pt1[n,], cp = cp[n,], p1 = pt2[n,])
-			lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
+			rgl::lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
 				line_antialias = L_A, col = edges$color[n], lwd = edges$weight[n])		
 			}
 	
@@ -106,7 +110,7 @@ drawHiveSpline <- function(HPD, L_A = FALSE, ...) {
 	pt2 <- as.matrix(pt2)
 		for (n in 1:nrow(pt1)) {
 			spl <- rcsr(p0 = pt1[n,], cp = cp[n,], p1 = pt2[n,])
-			lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
+			rgl::lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
 				line_antialias = L_A, col = edges$color[n], lwd = edges$weight[n])		
 			}
 	
@@ -147,7 +151,7 @@ drawHiveSpline <- function(HPD, L_A = FALSE, ...) {
 	pt2 <- as.matrix(pt2)
 		for (n in 1:nrow(pt1)) {
 			spl <- rcsr(p0 = pt1[n,], cp = cp[n,], p1 = pt2[n,])
-			lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
+			rgl::lines3d(x = spl[,1], y = spl[,2], z = spl[,3],
 				line_antialias = L_A, col = edges$color[n], lwd = edges$weight[n])		
 			}
 	

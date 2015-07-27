@@ -4,13 +4,11 @@ exportPattern(".")
 # Import most packages listed as Imports or Depends
 import(
   grid,
-  RColorBrewer,
-  tcltk,
-  rgl,
-  xtable
+  RColorBrewer
 )
 
-importFrom(tkrgl, spinControl)
 importFrom(plyr, empty, count)
 importFrom(jpeg, readJPEG)
 importFrom(png, readPNG)
+importFrom(utils, read.csv)
+importFrom(stats, runif, spline)
