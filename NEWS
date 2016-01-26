@@ -12,6 +12,9 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+Changes in version 0.2.46 2016-01-25
+     + chkHPD now checks for negative values for edge weights (width) and node sizes.  A warning is issued if these are found (They will certainly throw an error if one tries to plot).
+
 Changes in version 0.2.44 2015-07-26
      + NEWS file reformatted.
      + Updated to work with R 3.3 devel (changes in namespace policies).  In the process several packages were moved from Imports to Suggests, giving a leaner install.

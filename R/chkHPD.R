@@ -31,6 +31,8 @@ chkHPD <- function(HPD, confirm = FALSE) {
 	if (!((HPD$type == "2D") | (HPD$type == "3D"))) { warning("Type must be 2D or 3D"); w <- TRUE }
 
 	if (any(HPD$nodes$radius < 0)) warning("Some node radii < 0; the behavior of these is unknown")
+	if (any(HPD$nodes$size < 0)) warning("Some node sizes < 0; the behavior of these is unknown")
+	if (any(HPD$edges$weight < 0)) warning("Some edge widths (weights) < 0; the behavior of these is unknown")
 	
 	if ((!w) && (confirm)) cat("You must be awesome: This hive plot data looks dandy!")
 	if (w) {
