@@ -12,6 +12,9 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+Changes in version 0.2.48 2016-02-55
+     + annotateNodes, a helper function defined in plotHive, gains the ... argument.  This allows argument rot to apply to node annotation.  This will conflict with rotating the axes labels, but the latter are easily added manually in a separate step.
+
 Changes in version 0.2.46 2016-01-25
      + chkHPD now checks for negative values for edge weights (width) and node sizes.  A warning is issued if these are found (They will certainly throw an error if one tries to plot).
 

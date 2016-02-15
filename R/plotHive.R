@@ -94,7 +94,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		grid.segments(x0 = cds$x.st, x1 = cds$x.end, y0 = cds$y.st, y1 = cds$y.end,
 			default.units = "native", gp = anNode.gpar)
 		grid.text(ann$node.text, cds$x.lab, cds$y.lab, hjust = ann$hjust, vjust = ann$vjust,
-			default.units = "native", gp = anNode.gpar)
+			default.units = "native", gp = anNode.gpar, ...)
 		}
 
 	addGraphic <- function(grInfo, nodes, nx, anCoord) {
