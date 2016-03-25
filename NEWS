@@ -12,6 +12,9 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+Changes in version 0.2.55 2016-03-25
+     + Fixed a problem with a 1-pixel line around the entire plot in plotHive.  Not sure when this appeared.  Noted by 6C3C41 issue #12.  Thanks!
+
 Changes in version 0.2.48 2016-02-55
      + annotateNodes, a helper function defined in plotHive, gains the ... argument.  This allows argument rot to apply to node annotation.  This will conflict with rotating the axes labels, but the latter are easily added manually in a separate step.
 

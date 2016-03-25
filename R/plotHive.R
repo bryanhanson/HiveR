@@ -231,7 +231,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 		# 1.5 is used in case of labels
 		
 		if (np) grid.newpage()
-		grid.rect(gp = gpar(fill = bkgnd))
+		grid.rect(gp = gpar(col = NA, fill = bkgnd))
 		vp <- viewport(x = 0.5, y = 0.5, width = 1, height = 1,
 			xscale = c(-md, md), yscale = c(-md, md),
 			name = "3DHivePlot")
@@ -351,7 +351,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 		md <- max(abs(c(x0a, y0a, x1a, y1a)))*1.3 # max dimension
 		if (np) grid.newpage()
-		grid.rect(gp = gpar(fill = bkgnd))
+		grid.rect(gp = gpar(col = NA, fill = bkgnd))
 		vp <- viewport(x = 0.5, y = 0.5, width = 1, height = 1,
 			xscale = c(-md, md), yscale = c(-md, md), name = "3DHivePlot")
 		pushViewport(vp)
@@ -653,7 +653,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 		md <- max(abs(c(x0a, y0a, x1a, y1a)))*1.5 # max dimension
 		if (np) grid.newpage()
-		grid.rect(gp = gpar(fill = bkgnd))
+		grid.rect(gp = gpar(col = NA, fill = bkgnd))
 		vp <- viewport(x = 0.5, y = 0.5, width = 1, height = 1,
 			xscale = c(-md, md), yscale = c(-md, md), name = "3DHivePlot")
 		pushViewport(vp)
@@ -1016,7 +1016,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 		md <- max(abs(c(x0a, y0a, x1a, y1a)))*1.3 # max dimension
 		if (np) grid.newpage()
-		grid.rect(gp = gpar(fill = bkgnd))
+		grid.rect(gp = gpar(col = NA, fill = bkgnd))
 		vp <- viewport(x = 0.5, y = 0.5, width = 1, height = 1,
 			xscale = c(-md, md), yscale = c(-md, md), name = "3DHivePlot")
 		pushViewport(vp)
@@ -1448,7 +1448,7 @@ plotHive <- function(HPD, ch = 1, method = "abs",
 	
 		md <- max(abs(c(x0a, y0a, x1a, y1a)))*1.3 # max dimension
 		if (np) grid.newpage()
-		grid.rect(gp = gpar(fill = bkgnd))
+		grid.rect(gp = gpar(col = NA, fill = bkgnd))
 		vp <- viewport(x = 0.5, y = 0.5, width = 1, height = 1,
 			xscale = c(-md, md), yscale = c(-md, md), name = "3DHivePlot")
 		pushViewport(vp)
