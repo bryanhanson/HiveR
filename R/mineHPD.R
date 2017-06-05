@@ -128,6 +128,10 @@ if (!option %in% c("rad <- tot.edge.count",
 
 # This option removes edges which start and end on the same node
 # It re-uses code from sumHPD
+# June 2017: Chasing a bug reported by FinScience, there were 2 problems:
+# 1. Change in base R and factor level handling required addition of as.character
+# 2. "self edge" was defined as edge to/from nodes with the same label.  It's
+#    also possible that they have different labels but same axis + radii
 
 	# Create a list of edges to be drawn
 	
@@ -151,31 +155,58 @@ if (!option %in% c("rad <- tot.edge.count",
 	fd <- data.frame(
 		n1.id = HPD$edges$id1,
 		n1.ax,
-		n1.lab,
+		n1.lab = as.character(n1.lab), # June 2017
 		n1.rad,
 		n2.id = HPD$edges$id2,
 		n2.ax,
-		n2.lab,
+		n2.lab = as.character(n2.lab), # June 2017
 		n2.rad,
 		e.wt = HPD$edges$weight,
-		e.col = HPD$edges$color)		
+		e.col = HPD$edges$color,
+		stringsAsFactors = FALSE)		
 
-	prob <- which(fd$n1.lab == fd$n2.lab)
-	if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same node\n")
-	if (length(prob) > 0) {
+	bad.eS <- NA_integer_ # bad true edges to/from same node
+	bad.eV <- NA_integer_ # bad virtual edges
+	
+	# Identify & remove edges to/from the same node (i.e. same label)
+	probS <- which(fd$n1.lab == fd$n2.lab) # probS = problems with self edge
+	if (length(probS) == 0) cat("\n\t No edges were found that start and end on the same node\n")
+	if (length(probS) > 0) {
 
-		bad.e <- c()
 		for (n in 1:(length(HPD$edges$id1))) {
 			pat1 <- HPD$edges$id1[n]
 			pat2 <- HPD$edges$id2[n]
-			if (pat1 == pat2) bad.e <- c(bad.e, n)
+			if (pat1 == pat2) bad.eS <- c(bad.eS, n)
 			}
 			
-		edges <- edges[-bad.e,]
-		cat("\n\t", length(bad.e), "edges that start and end on the same node were removed\n")
+		cat("\n\t", length(na.omit(bad.eS)), "edge(s) that start and end on the same node were removed\n")
 		}
+
+	# Identify & remove edges to/from the same virtual node (NOT the same label, but
+	# the same axis and radius which cause a grid error as if the label were the same)
+	# Added June 2017
+	probV <- which((fd$n1.ax == fd$n2.ax) & (fd$n1.rad == fd$n2.rad)) # also catches probS cases
+	probV <- setdiff(probV, probS)
+	
+	if (length(probV) == 0) cat("\n\t No virtual self-edges were found\n")
+	if (length(probV) > 0) {
+
+		virtProb <- data.frame(id1 = fd$n1.id[probV], id2 = fd$n2.id[probV])
+		#print(virtProb) # correct!
+		for (i in 1:nrow(virtProb)) {
+			for (j in 1:(length(HPD$edges$id1))) {
+				if ((HPD$edges$id1[j] == virtProb[i,1]) & (HPD$edges$id2[j] == virtProb[i,2])) bad.eV <- c(bad.eV, j)
+				if ((HPD$edges$id1[j] == virtProb[i,2]) & (HPD$edges$id2[j] == virtProb[i,1])) bad.eV <- c(bad.eV, j)
+			}
+		}
+		cat("\n\t", length(na.omit(bad.eV)), "virtual self-edge(s) were removed\n")
+		}
+	
+	# Now actually remove the edges
 		
-		}  ##### end of option == "remove self edge"
+	bad.e <- unique(na.omit(c(bad.eS, bad.eV)))
+	edges <- edges[-bad.e,]
+	}  ##### end of option == "remove self edge"
 
 ### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###
 

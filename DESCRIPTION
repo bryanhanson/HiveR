@@ -1,8 +1,8 @@
 Package: HiveR
 Type: Package
 Title: 2D and 3D Hive Plots for R
-Version: 0.2.55
-Date: 2016-03-25
+Version: 0.2.78
+Date: 2017-06-05
 Authors@R:	c(person(given = "Bryan A.", family = "Hanson",
 		role = c("aut", "cre"), email = "hanson@depauw.edu"),
 		person("Vesna", "Memisevic", role = "ctb"),
