@@ -49,6 +49,8 @@
 #'
 #' @keywords utilities
 #'
+#' @importFrom RColorBrewer brewer.pal
+#'
 #' @export dot2HPD
 #'
 dot2HPD <- function(file = NULL, node.inst = NULL, edge.inst = NULL,
@@ -223,7 +225,7 @@ dot2HPD <- function(file = NULL, node.inst = NULL, edge.inst = NULL,
 	if (is.null(desc)) desc <- "No description provided"
 	HPD$desc <- desc
 	
-	if (is.null(axis.cols)) axis.cols <- brewer.pal(length(unique(HPD$nodes$axis)), "Set1")
+	if (is.null(axis.cols)) axis.cols <- RColorBrewer::brewer.pal(length(unique(HPD$nodes$axis)), "Set1")
 	HPD$axis.cols <- axis.cols
 	
 	HPD$nodes$axis <- as.integer(HPD$nodes$axis)

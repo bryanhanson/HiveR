@@ -1,5 +1,5 @@
 %\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
-%\VignetteDepends{RColorBrewer, grid, rgl, bipartite, sna, xtable, mvbutils, FuncMap, lattice, reshape, ggplot2}
+%\VignetteDepends{RColorBrewer, grid, sna, xtable, FuncMap, bipartite}
 %\VignettePackage{HiveR}
 %\VignetteKeywords{multivariate, networks}
 %\VignetteEngine{knitr::knitr}
@@ -79,27 +79,19 @@ vers <- paste("version", desc$Version)
 
 << SetUp, echo = FALSE, results = "hide" >>=
 set.seed(123)
-suppressMessages(library(grid))
-suppressMessages(library(FuncMap))
-suppressMessages(library(HiveR))
-suppressMessages(library(sna))
-suppressMessages(library(xtable))
-suppressMessages(library(bipartite))
-suppressMessages(library(reshape))
-suppressMessages(library(lattice))
-suppressMessages(library(ggplot2))
-suppressMessages(library(mvbutils))
-suppressMessages(library(rgl))
-#suppressMessages(library(animation))
-suppressMessages(library(knitr))
+suppressMessages(library("HiveR"))
+suppressMessages(library("grid"))
+suppressMessages(library("FuncMap"))
+suppressMessages(library("sna"))
+suppressMessages(library("xtable"))
+suppressMessages(library("knitr"))
+suppressMessages(library("bipartite"))
 
 if (!file.exists("graphics")) dir.create("graphics")
 
 # Stuff specifically for knitr:
 
 opts_chunk$set(out.width = "0.9\\textwidth", fig.align = "center", fig.width = 7, fig.height = 7, cache = FALSE, echo = FALSE, crop = TRUE)
-knit_hooks$set(rgl.static = hook_rgl) # use to capture a single rgl graphic
-knit_hooks$set(rgl.mov = hook_plot_custom) # use to capture a movie
 if (Sys.which("pdfcrop") != "") knit_hooks$set(crop = hook_pdfcrop) # use pdfcrop if it exists
 
 
@@ -166,8 +158,6 @@ Width or weight of an edge\\
 
 Inspired by the examples given by Kryzwinski in his materials on the web, I created the \textit{R} package  \texttt{FuncMap} in December 2010.\cite{Hanson2011}  This single function package maps the function calls made by an \textit{R} package into 3 types: sources, which are functions that make only outgoing calls, sinks, which take only incoming calls, and managers, which do both.
 
-%Figure~\ref{fig:FuncMapEx} shows an example of a plot made by \texttt{FuncMap}; this is a true hive plot.  In this plot, functions in a package are assigned to an axis by their role, and the radius is determined by the number of calls made or received by a function (which is the degree of the node).  This is also the basis for the width of the edges.  In this plot, calls (edges) originating on the source axis are shown in green, while those originating on the manager axis are in blue.  By defintion, the sink axis only receives calls.
-
 \texttt{HiveR} takes things quite a bit further.  \texttt{HiveR} is a fresh implementation of hive plots in \textit{R}, not a port of the original \textit{Perl} version \emph{per se}.  As such, it does some things differently, and not all features are implemented (and they may or may not be in the future).  \texttt{HiveR} will draw 2D hive plots with 2-6 axes in a style close to the original.  However, \texttt{HiveR} adds value by making 3D, interactive plots possible when there are 4-6 axes.  These 3D plots were inspired by the ideas of VSEPR theory in chemistry:  the axes of these 3D plots are  arranged with tetrahedral, trigonal bipyramidal or octahedral geometries for 4-6 axes respectively (see Figure~\ref{VSEPR} and \href{https://secure.wikimedia.org/wikipedia/en/wiki/Vsepr}{wikipedia/VSEPR}).  The specifics of 3D hive plots will be discussed in a later section.
 
 \begin{figure}
@@ -176,12 +166,6 @@ Inspired by the examples given by Kryzwinski in his materials on the web, I crea
 \end{center}
 \caption{Idealized geometries according to VSEPR theory\label{VSEPR}}
 \end{figure}
-
-
-%<< FuncMapEx, fig.cap = "FuncMap for package lattice", out.width = "0.5\\textwidth" >>=
-%fw <- foodweb(where = "package:lattice", plotting = FALSE)
-%ans <- FuncMap(fwb = fw, pkg = "lattice", method = "abs", sm.title = TRUE)
-%@
 
 \section{\texttt{HiveR} Features} %%%%%
 
@@ -356,8 +340,6 @@ With 2D hive plots, which are drawn using \texttt{grid} graphics, the nodes "on 
 
 \section{The \emph{E. coli} Gene Regulatory Network}
 
-%\texttt{HiveR} includes an example of the \emph{E. coli} gene regulatory network based upon the RegulonDB\cite{Gama2010}.  It is contained in a file called \texttt{ecoli.dot} in the \texttt{extdata/E\_coli} directory.  It can be read in with \texttt{dot2HPD} and further processed with \texttt{mineHPD}.  \texttt{dot2HPD} relies on two external .csv files which tell the function how to map node and edge information in the .dot file to the \texttt{HivePlotData} object.  Tables~\ref{NI} and \ref{EI} show the contents of the files used in this case.  If you choose to draw the nodes, persistent nodes will be red and non-persistent nodes grey.  The type of edge (1\dots4) is also encoded by color. Gene pairs (edges) that are closer physically and genetically are colored gray $\rightarrow$ yellow $\rightarrow$ orange $\rightarrow$ red with red being the most related pairs.
-
 The \emph{E. coli} gene regulatory network, based upon the RegulonDB,\cite{Gama2010} is an excellent example for showing how one can import and process a .dot file to create a hive plot.  In this case we will read in a .dot file describing nodes and edges.  A portion of this file is shown in Table~\ref{DOT}.  The .dot file will be processed using an external file to map the edge annotations to hive plot features.  Node annotations in the .dot file can be similarly processed, but this particular example contains no node annotations so there's nothing to process.  Table~\ref{EI} shows the contents of the edge instruction file.
 
 << E_coli_1aa, results = "asis" >>=
@@ -460,138 +442,6 @@ axLab.pos = c(0.1, 0.2, 0.2), axLab.gpar = gpar(fontsize = 6, col = "white"), np
 grid.text("normed units", x = 0.5, y = 0.05, default.units = "npc", gp = gpar(fontsize = 8, col = "white"))
 @
 
-
-%%%%%% Hold this material which does the 5 axis plots
-%
-%
-%\section{Further Explorations of the \emph{E. coli} Network}
-%
-%In this section we'll demonstrate some slightly more advanced manipulations of the \emph{E. coli} network data, including how one can make \emph{hive panels} which are useful in comparing multiple hive plots.  In some of the manipulations below, data types are coerced away from the definition found in a \texttt{HivePlotData} object and must be restored.  It might be helpful to study the description of the required structure at \texttt{?HPD}.
-%
-%First, we are going to re-code some of the information in the network.  In the original publication, nodes were classified as either persistent or non-persistent.  This classification was based upon comparison of the \emph{E. coli} genome to roughly 200 other bacterial genomes.  A gene was considered persistent if it was present in these other genomes, otherwise it is non-persistent and unique to \emph{E. coli}.  In our processing above, genes (nodes) that are persistent are red, while non-persistent nodes are black.  We can use the existing axis assignments, based upon role as source, manager or sink, along with the persistence information, to display the network taking this information into account.  In principle, there are six possible combinations: (persistent, non-persistent) x (source, manager, sink).  However, it turns out that one of these combinations doesn't exist (persistent sources), so we'll re-code this information into a five axis hive plot.\footnote{Not only am I not an ecologist, I am not a molecular biologist.  I have no idea if this analysis is actually worthwhile, I just thought it would be interesting to see these relationships.  Plus, it also permits further manipulations to be demonstrated.}  Here's the first step, starting from where we left off above:
-%
-%<< E_coli_5zz >>=
-%EC5 <- EC4
-%nodes2 <- nodes <- EC5$nodes
-%nn <- length(nodes$axis)
-%#
-%for (n in 1:nn) { 
-%	if ((nodes$axis[n] == 1) & (nodes$color[n] == "black")) nodes2$axis[n] <- 1
-%	if ((nodes$axis[n] == 2) & (nodes$color[n] == "black")) nodes2$axis[n] <- 2
-%	if ((nodes$axis[n] == 3) & (nodes$color[n] == "black")) nodes2$axis[n] <- 3
-%	if ((nodes$axis[n] == 2) & (nodes$color[n] == "red")) nodes2$axis[n] <- 4
-%	if ((nodes$axis[n] == 3) & (nodes$color[n] == "red")) nodes2$axis[n] <- 5
-%	}
-%#		
-%# Final assembly & checking...
-%#
-%nodes2$axis <- as.integer(nodes2$axis)
-%EC5$nodes <- nodes2
-%EC5$axis.cols <- rep("gray", 5) # we added 2 more axes!
-%#
-%sumHPD(EC5)
-%# sumHPD(EC5, chk.all = TRUE) # not run, the output is long
-%@
-%
-%With \texttt{sumHPD}, one can use \texttt{chk.all = TRUE} which runs some additional checks on the data (see \texttt{?sumHPD} for full details).  Had we done so in this case, we would find that some edges start and stop on the manager axis; perhaps you noticed this earlier.  These are managers that call other managers.  Also, somewhat miraculously, there are no edges crossing axes in this particular partitioning of nodes (\texttt{chk.all} also looks for this condition).  In the basic summary that we did run, axis five has only one node on it.  This will plot fine except for the case where one uses \texttt{method = "norm"} which will fail because to normalize the node radii, there has to be more than one radius value.  To fix this, we'll add in a phantom, invisible node to anchor axis five as follows:
-%
-%<< E_coli_6>>=
-%EC6 <- EC5
-%tmp <- data.frame(id = 1379, lab = "axis_5_anchor",
-%	axis = 5, radius = 1, size = 1, color = "grey")
-%EC6$nodes <- rbind(EC6$nodes, tmp)
-%#
-%# Clean up, re-size nodes, sort nodes so
-%# persistent (red) ones are drawn last & check:
-%#
-%EC6$nodes$axis <- as.integer(EC6$nodes$axis)
-%EC6$nodes$id <- as.integer(EC6$nodes$id)
-%EC6$nodes$size <- EC6$nodes$size * 0.1
-%#
-%nodes <- EC6$nodes
-%nodes <- sort_df(nodes, vars = "color")
-%EC6$nodes <- nodes
-%#
-%sumHPD(EC6)
-%@
-%
-%Next, we are going to copy the current version of the network (EC6) and plot the axes of the copy, because the summary above shows that the axis lengths are quite different and the shorter axes will be nearly invisible if we don't plot them up at least a bit.
-%
-%<< E_coli_7 >>=
-%EC7 <- manipAxis(EC6, method = "plot", action = c(1, 10, 1, 10, 10))
-%sumHPD(EC6)
-%@
-%
-%Now we'll make a hive panel showing this same network displayed using different methods.  The code follows; it uses the \texttt{grid} graphics systems and associated viewport concepts to create a 2 x 2 hive panel.  The resulting hive panel is Figure~\ref{'}.
-%
-%<< E_coli_8, echo = TRUE, fig.cap = "\\label{E_coli_8}Hive panel showing \\emph{E. coli} regulatory network with different display options" >>=
-%vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
-%#
-%grid.newpage()
-%pushViewport(viewport(layout = grid.layout(2, 2)))
-%#
-%pushViewport(vplayout(1, 1)) # upper left plot
-%plotHive(EC6, ch = 20, np = FALSE)
-%popViewport(2)
-%#
-%pushViewport(vplayout(1, 2)) # upper right plot
-%plotHive(EC7, ch = 0.1, method = "norm", np = FALSE,
-%	axLabs = c("non-persistent\nsource", "non-persistent\nsink",
-%	"non-persistent\nmanager", "persistent\nmanager", "persistent \nsink"),
-%	axLab.pos = rep(0.2, 5), axLab.gpar = gpar(fontsize = 10, col = "white"),
-%	rot = c(0, 72, 0, 0, -72), anNode.gpar = gpar(fontsize = 10, col = "pink", lwd = 0.5),
-%	anNodes = system.file("extdata", "E_coli", "NodeLabels.csv", package = "HiveR"))
-%popViewport(2)
-%#
-%pushViewport(vplayout(2,1)) # lower left plot
-%plotHive(EC7, ch = 100, method = "rank", np = FALSE)
-%popViewport(2)
-%#
-%pushViewport(vplayout(2,2)) # lower right plot
-%plotHive(EC7, ch = 20, np = FALSE)
-%@
-%
-%
-%Finally, the lower right hive plot in Figure~\ref{E_coli_8} can serve as a starting point for teasing out even more information.  Instead of drawing all the edges in one hive plot, we'll make a hive panel showing each edge category in a different panel.  The steps are given below; the resulting panel is Figure~\ref{E_coli_9} (the steps to produce the panel are not shown here, but are the same as before).
-%
-%<< E_coli_9,fig.cap = "\\label{E_coli_9}Hive panel showing \\emph{E. coli} regulatory network with edges encoded by genetic distance (Red edges are the closest; each set of edges plotted separately)"  >>=
-%EC11 <- EC10 <- EC9 <- EC8 <- EC7
-%
-%edges <- EC7$edges
-%gray_edges <- subset(edges, color == "gray")
-%yel_edges <- subset(edges, color == "yellow")
-%or_edges <- subset(edges, color == "orange")
-%red_edges <- subset(edges, color == "red")
-%
-%EC8$edges <- gray_edges
-%EC9$edges <- yel_edges
-%EC10$edges <- or_edges
-%EC11$edges <- red_edges
-%@
-%
-%<< E_coli_10 >>=
-%grid.newpage()
-%pushViewport(viewport(layout = grid.layout(2, 2)))
-%#
-%pushViewport(vplayout(1, 1))
-%plotHive(EC8, ch = 20, np = FALSE)
-%popViewport(2)
-%#
-%pushViewport(vplayout(1, 2))
-%plotHive(EC9, ch = 20, np = FALSE)
-%popViewport(2)
-%#
-%pushViewport(vplayout(2,1))
-%plotHive(EC10, ch = 20, np = FALSE)
-%popViewport(2)
-%#
-%pushViewport(vplayout(2,2))
-%plotHive(EC11, ch = 20, np = FALSE)
-%@
-%
-%
-%%%%%% End of 5 axis demo
-
 \section{3D Hive Plots}
 
 \texttt{HiveR} extends the original hive plot concept to 3 dimensions using the interactive graphics package \texttt{rgl}.  One advantage to this is that 3D hive plots have more pairs of adjacent axes compared to the corresponding 2D hive plot, which cuts down on the possibility of edges crossing axes and makes assigning nodes to axes easier.  The interactivity doesn't hurt either!
@@ -640,27 +490,6 @@ Figure~\ref{static} shows the resulting hive plot, using the original data for H
 \end{center}
 \caption{HIV-human protein-protein interaction\label{static}}
 \end{figure}
-
-%<< HIV2_, rgl.mov = TRUE, fig.ext = 'png', out.width = '3 in', fig.show = 'animate', fig.num = 180, interval = 0.25, aniopts = 'controls, autoplay, loop', results = 'hide', fig.cap = "Animation of HIV-human protein-protein interactions", crop = FALSE >>=
-%
-%load("HIVhuH3.RData")
-%
-%open3d(windowRect = c(0, 0, 1000, 1000))
-%
-%plot3dHive(HIVhuH3, ch = 10, axLabs = c("Pol", "PR", "RT", "IN"), LA = TRUE)
-%
-%par3d(zoom = 1.1) # avoids clipping axis labels
-%M <- par3d("userMatrix")
-%inc <- pi/90 # 2 degree rotation between frames (in radians)
-%
-%for (i in 1:180) {
-%	M2 <- rotate3d(M, i*inc, 1, 1, 0)
-%	par3d(userMatrix = M2)
-%	Sys.sleep(0.5)
-%	rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
-%	}
-%	
-%@
 
 \section{Acknowledgements} %%%%%
 
