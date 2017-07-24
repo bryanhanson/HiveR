@@ -1,4 +1,25 @@
-
+#' Convert spherical to Cartesian coordinates
+#' 
+#' This function converts spherical to Cartesian coordinates.
+#' 
+#' 
+#' @param df A data frame with columns named r, theta and phi with the radius
+#' and angles (in spherical coordinates) to be converted to Cartesian
+#' coordinates.
+#'
+#' @return A data frame with named columns containing the converted
+#' coordinates.
+#'
+#' @note Cobbled together from similar functions in other packages.
+#'
+#' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
+#'
+#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
+#'
+#' @keywords utilities
+#'
+#' @export sph2cart
+#'
 sph2cart <- function(df) {
 	
 	# Bryan Hanson
