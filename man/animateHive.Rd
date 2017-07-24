@@ -2,7 +2,7 @@
 % Please edit documentation in R/animateHive.R
 \name{animateHive}
 \alias{animateHive}
-\title{Animate one or more 3D hive plots with an handy controller}
+\title{Animate One or More 3D Hive Plots with a Handy Controller}
 \usage{
 animateHive(hives = list(), cmds = list(), xy = 400, ...)
 }
@@ -53,9 +53,6 @@ animateHive(hives = myhives, cmds = mycmds)
 }
 
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

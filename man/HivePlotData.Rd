@@ -50,9 +50,6 @@ sumHPD(test4)
 plotHive(test4)
 
 }
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
-}
 \seealso{
 \code{\link{sumHPD}} to summarize a \code{HivePlotData} object.\cr
 \code{\link{chkHPD}} to verify the integrity of a \code{HivePlotData}

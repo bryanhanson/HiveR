@@ -2,7 +2,7 @@
 % Please edit documentation in R/chkHPD.R
 \name{chkHPD}
 \alias{chkHPD}
-\title{Verify the integrity of a hive plot data object}
+\title{Verify the Integrity of a Hive Plot Data Object}
 \usage{
 chkHPD(HPD, confirm = FALSE)
 }
@@ -32,9 +32,6 @@ test4$nodes$color <- as.factor(test4$nodes$color)
 bad <- chkHPD(test4)
 }
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \seealso{
 \code{\link{sumHPD}} which allows inspection (checking) of many

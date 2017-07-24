@@ -150,9 +150,6 @@ grid.text("butane", x = 0.5, y = 0.1, default.units = "npc",
 # dev.off()
 
 }
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
-}
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }

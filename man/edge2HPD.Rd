@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge2HPD.R
 \name{edge2HPD}
 \alias{edge2HPD}
-\title{Process an edge list into a HivePlotData object}
+\title{Process an Edge List into a Hive Plot Data Object}
 \usage{
 edge2HPD(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL,
   ...)
@@ -54,9 +54,6 @@ td.out <- sumHPD(td, plot.list = TRUE)
 edges
 td.out[,c(3,7,8)]
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \seealso{
 \code{\link{dot2HPD}} and \code{\link{adj2HPD}}

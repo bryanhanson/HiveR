@@ -1,4 +1,4 @@
-#' Process an adjacency graph into a HivePlotData object
+#' Process an Adjacency Graph into a HivePlotData Object
 #' 
 #' This function will take an adjacency graph and convert it into a basic
 #' \code{\link{HivePlotData}} object.  Further manipulation by
@@ -38,8 +38,6 @@
 #' (changed in v. 0.2-12).
 #'
 #' @seealso \code{\link{dot2HPD}} and \code{\link{adj2HPD}}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

@@ -23,7 +23,6 @@
 #' @aliases HidingAnAxis TwoPlotsOnePage
 #' @name HidingAnAxis
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #' @examples
 #' 
 #' require("grid")

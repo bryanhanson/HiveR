@@ -1,4 +1,4 @@
-#' Generate random hive plot data
+#' Generate Random Hive Plot Data
 #' 
 #' This function generates random data sets which can be used to make a hive
 #' plot.
@@ -58,8 +58,6 @@
 #' can use \code{sumHPD}).
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords datagen
 #'

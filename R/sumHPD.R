@@ -1,4 +1,4 @@
-#' Summarize a hive plot data object and optionally run some checks
+#' Summarize a Hive Plot Data Object and Optionally Run Some Checks
 #' 
 #' This function summarizes a \code{\link{HivePlotData}} object in a convenient
 #' form. Optionally, it can run some checks for certain conditions that may be
@@ -52,19 +52,20 @@
 #' \code{TRUE}.  The format of these results is identical to that of
 #' \code{plot.list} described just below, except for the orphan node check.
 #' This is formatted the same as \code{HPD$nodes}; see \code{?HPD} for details.
-#' \cr \cr If \code{plot.list = TRUE}, a data frame containing a list of the
+#'
+#' If \code{plot.list = TRUE}, a data frame containing a list of the
 #' edges to be drawn in a format suitable for troubleshooting a plot.  If
 #' \code{tex = TRUE} as well, the data frame will be in a format suitable for
 #' pasting into a LaTeX document.  The data frame will contain rows describing
 #' each edge to be drawn with the following columns: node 1 id, node 1 axis,
 #' node 1 label, node 1 radius, then the same info for node 2, then the edge
-#' weight and the edge color. \cr \cr If \code{orphan.list = TRUE} a data frame
+#' weight and the edge color.
+#' 
+#' If \code{orphan.list = TRUE} a data frame
 #' giving the orphan nodes is returned.  If you want both \code{plot.list} and
 #' \code{orphan.list} you have to call this function twice.
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

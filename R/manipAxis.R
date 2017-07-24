@@ -1,4 +1,4 @@
-#' Modify the display of axes and nodes in a hive plot
+#' Modify the Display of Axes and Nodes in a Hive Plot
 #' 
 #' This function modifies various aspects of a \code{HivePlotData} object.  A
 #' typical use is to convert the radii from the native/absolute values in the
@@ -35,8 +35,6 @@
 #' @return A modified \code{HivePlotData} object.
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

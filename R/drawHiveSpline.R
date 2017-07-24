@@ -1,4 +1,4 @@
-#' Draw a 3D spline as part of a 3D hive plot
+#' Draw a 3D Spline as Part of a 3D Hive Plot
 #' 
 #' This function analyzes the edges of a \code{HivePlotData} object in order to
 #' draw 3D splines representing those edges.  Each pair of nodes at the ends of
@@ -19,8 +19,6 @@
 #'
 #' @seealso \code{\link{plot3dHive}} which calls this function and is the user
 #' interface.
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords plot hplot
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rcsr.R
 \name{rcsr}
 \alias{rcsr}
-\title{Compute the details of a 3D spline for a hive plot edge}
+\title{Compute the Details of a 3D Spline for a Hive Plot Edge}
 \usage{
 rcsr(p0, cp, p1)
 }
@@ -156,9 +156,6 @@ lines3d(x = n2[,1], y = n2[,2], z = n2[,3],
 ### Ta-Da!!!!!
 }
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

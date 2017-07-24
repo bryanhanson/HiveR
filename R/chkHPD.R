@@ -1,4 +1,4 @@
-#' Verify the integrity of a hive plot data object
+#' Verify the Integrity of a Hive Plot Data Object
 #' 
 #' This function inspects the classes of each part of a \code{\link{HPD}} as a
 #' means of verifying its integrity.  A few other characteristics are checked
@@ -17,8 +17,6 @@
 #'
 #' @seealso \code{\link{sumHPD}} which allows inspection (checking) of many
 #' properties of your \code{\link{HPD}}.
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

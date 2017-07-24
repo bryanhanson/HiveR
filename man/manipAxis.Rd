@@ -2,7 +2,7 @@
 % Please edit documentation in R/manipAxis.R
 \name{manipAxis}
 \alias{manipAxis}
-\title{Modify the display of axes and nodes in a hive plot}
+\title{Modify the Display of Axes and Nodes in a Hive Plot}
 \usage{
 manipAxis(HPD, method, action = NULL, ...)
 }
@@ -67,9 +67,6 @@ plotHive(HEC3, bkgnd = "white")
 HEC4 <- manipAxis(HEC, method = "offset", action = c(0, 1.5))
 plotHive(HEC4, bkgnd = "white")
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

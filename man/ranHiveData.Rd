@@ -2,7 +2,7 @@
 % Please edit documentation in R/ranHiveData.R
 \name{ranHiveData}
 \alias{ranHiveData}
-\title{Generate random hive plot data}
+\title{Generate Random Hive Plot Data}
 \usage{
 ranHiveData(type = "2D", nx = 4, nn = nx * 15, ne = nx * 15,
   rad = 1:100, ns = c(0.5, 1, 1.5), ew = 1:3, nc = brewer.pal(5,
@@ -78,9 +78,6 @@ test4 <- ranHiveData(nx = 4)
 str(test4)
 sumHPD(test4)
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

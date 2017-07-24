@@ -1,4 +1,4 @@
-#' Animate one or more 3D hive plots with an handy controller
+#' Animate One or More 3D Hive Plots with a Handy Controller
 #' 
 #' This function takes a list of \code{HivePlotData} objects of \code{type =
 #' "3D"} and plots each in its own \code{rgl} window using its own arguments,
@@ -24,8 +24,6 @@
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
 #'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
-#"
 #' @keywords interactive
 #'
 #' @export animateHive

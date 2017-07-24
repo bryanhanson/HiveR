@@ -1,4 +1,4 @@
-#' Process a .dot graph file into a HivePlotData object
+#' Process a .dot Graph File into a Hive Plot Data Object
 #' 
 #' This function will read a .dot file containing a graph specification in the
 #' DOT language, and (optionally) using two other files, convert the
@@ -44,10 +44,8 @@
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
 #'
 #' @seealso See the vignette for an example of using this function.  Use
-#' \code{> browseVignettes("HiveR")} to produce the vignette. \cr \cr
+#' \code{browseVignettes("HiveR")} to produce the vignette. \cr \cr
 #' \code{\link{adj2HPD}} for a means of importing adjacency matrices.
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

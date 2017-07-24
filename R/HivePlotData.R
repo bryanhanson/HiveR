@@ -43,7 +43,6 @@
 #' object.\cr \code{\link{ranHiveData}} to generate random \code{HivePlotData}
 #' objects for testing and demonstration.
 #'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #' @keywords classes
 #' @name HivePlotData
 #' @aliases HPD HivePlotData

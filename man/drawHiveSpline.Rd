@@ -2,7 +2,7 @@
 % Please edit documentation in R/drawHiveSpline.R
 \name{drawHiveSpline}
 \alias{drawHiveSpline}
-\title{Draw a 3D spline as part of a 3D hive plot}
+\title{Draw a 3D Spline as Part of a 3D Hive Plot}
 \usage{
 drawHiveSpline(HPD, L_A = FALSE, ...)
 }
@@ -22,9 +22,6 @@ This function analyzes the edges of a \code{HivePlotData} object in order to
 draw 3D splines representing those edges.  Each pair of nodes at the ends of
 an edge is identified, and a control point is computed.  This information is
 passed to \code{\link{rcsr}} to work out the details.
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \seealso{
 \code{\link{plot3dHive}} which calls this function and is the user

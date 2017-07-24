@@ -2,7 +2,7 @@
 % Please edit documentation in R/sph2cart.R
 \name{sph2cart}
 \alias{sph2cart}
-\title{Convert spherical to Cartesian coordinates}
+\title{Convert Spherical to Cartesian Coordinates}
 \usage{
 sph2cart(df)
 }
@@ -20,9 +20,6 @@ This function converts spherical to Cartesian coordinates.
 }
 \note{
 Cobbled together from similar functions in other packages.
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

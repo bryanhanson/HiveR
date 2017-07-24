@@ -1,4 +1,4 @@
-#' Convert spherical to Cartesian coordinates
+#' Convert Spherical to Cartesian Coordinates
 #' 
 #' This function converts spherical to Cartesian coordinates.
 #' 
@@ -13,8 +13,6 @@
 #' @note Cobbled together from similar functions in other packages.
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

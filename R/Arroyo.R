@@ -1,6 +1,6 @@
 
 
-#' Plant-pollinator data sets in hive plot data format
+#' Plant-Pollinator Data Sets in Hive Plot Data Format
 #' 
 #' Plant-pollinator data sets which were derived ultimately from Vasquez and
 #' Simberloff, 2003.  These are two-trophic level systems that have almost
@@ -21,22 +21,13 @@
 #' The number of visits were divided manually into 4 groups and used to assign
 #' edge colors ranging from white to red.  The redder colors represent greater
 #' numbers of visits, and the color-coding is comparable for each data set.
-#' Thus both the edge color and
-#' 2D and 3D Hive Plots for R
-#' 
-#' Creates and plots 2D and 3D hive plots. Hive plots are a unique method of
-#' displaying networks of many types in which node properties are mapped to
-#' axes using meaningful properties rather than being arbitrarily positioned.
-#' The hive plot concept was invented by Martin Krzywinski at the Genome
-#' Science Center (www.hiveplot.net/).  Keywords: networks, food webs, linnet,
-#' systems biology, bioinformatics.
+#'
 #' 
 #' 
 #' @name Arroyo
 #' @docType data
 #' @aliases Arroyo Safari
 #' @author Bryan A. Hanson, DePauw University, Greencastle Indiana USA
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #' @keywords datasets
 NULL
 

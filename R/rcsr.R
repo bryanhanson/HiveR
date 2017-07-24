@@ -1,4 +1,4 @@
-#' Compute the details of a 3D spline for a hive plot edge
+#' Compute the Details of a 3D Spline for a Hive Plot Edge
 #' 
 #' This is a wild bit of trigonometry!  Three points in 3D space, two ends and
 #' an control point, are rotated into 2D space.  Then a spline curve is
@@ -25,8 +25,6 @@
 #' create a hive plot edge.
 #'
 #' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities 3D spline
 #'

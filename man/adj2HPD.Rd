@@ -2,7 +2,7 @@
 % Please edit documentation in R/adj2HPD.R
 \name{adj2HPD}
 \alias{adj2HPD}
-\title{Process an adjacency graph into a HivePlotData object}
+\title{Process an Adjacency Graph into a HivePlotData Object}
 \usage{
 adj2HPD(M = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...)
 }
@@ -104,9 +104,6 @@ rownames(M) <- sample(c(letters, LETTERS), nr, replace = FALSE)
 hive4 <- adj2HPD(M)
 sumHPD(hive4)
 
-}
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 }
 \seealso{
 \code{\link{dot2HPD}} and \code{\link{adj2HPD}}

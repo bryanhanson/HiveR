@@ -1,4 +1,4 @@
-#' Process an edge list into a HivePlotData object
+#' Process an Edge List into a Hive Plot Data Object
 #' 
 #' This function will take an edge list and convert it into a basic
 #' \code{\link{HivePlotData}} object.  Further manipulation by
@@ -34,8 +34,6 @@
 #' Hanson.
 #'
 #' @seealso \code{\link{dot2HPD}} and \code{\link{adj2HPD}}
-#'
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #'
 #' @keywords utilities
 #'

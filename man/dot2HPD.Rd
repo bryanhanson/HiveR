@@ -2,7 +2,7 @@
 % Please edit documentation in R/dot2HPD.R
 \name{dot2HPD}
 \alias{dot2HPD}
-\title{Process a .dot graph file into a HivePlotData object}
+\title{Process a .dot Graph File into a Hive Plot Data Object}
 \usage{
 dot2HPD(file = NULL, node.inst = NULL, edge.inst = NULL,
   axis.cols = NULL, type = "2D", desc = NULL, ...)
@@ -52,12 +52,9 @@ file should be formatted like this: node_name [tag1 = value1, tag2 =
 value2];).  If you have trouble, please file a issue at Github so I can
 track it down.
 }
-\references{
-\url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
-}
 \seealso{
 See the vignette for an example of using this function.  Use
-\code{> browseVignettes("HiveR")} to produce the vignette. \cr \cr
+\code{browseVignettes("HiveR")} to produce the vignette. \cr \cr
 \code{\link{adj2HPD}} for a means of importing adjacency matrices.
 }
 \author{

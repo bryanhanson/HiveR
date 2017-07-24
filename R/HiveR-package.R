@@ -13,7 +13,6 @@
 #' @aliases HiveR-package HiveR
 #' @docType package
 #' @author Bryan A. Hanson, DePauw University, Greencastle Indiana USA
-#' @references \url{http://academic.depauw.edu/~hanson/HiveR/HiveR.html}
 #' @keywords package
 NULL
 
