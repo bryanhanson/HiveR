@@ -3,6 +3,7 @@
 #'
 #' @importFrom rgl bg3d spheres3d text3d
 #'
+#' @export
 
 plot3dHive <- function(HPD, ch = 1, dr.nodes = TRUE,
 	method = "abs", axLabs = NULL, axLab.pos = NULL,

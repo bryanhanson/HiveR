@@ -5,8 +5,8 @@
 \title{Summarize a Hive Plot Data Object and Optionally Run Some Checks}
 \usage{
 sumHPD(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
-  chk.sm.ax = FALSE, chk.orphan.node = FALSE, plot.list = FALSE,
-  tex = FALSE, orphan.list = FALSE)
+  chk.sm.ax = FALSE, chk.orphan.node = FALSE, chk.virtual.edge = FALSE,
+  plot.list = FALSE, tex = FALSE, orphan.list = FALSE)
 }
 \arguments{
 \item{HPD}{An object of S3 class \code{HivePlotData}.}
@@ -25,6 +25,10 @@ start and end on the same axis?}
 
 \item{chk.orphan.node}{Logical; should orphan nodes be identifed?  Orphan
 nodes have degree 0 (no incoming or outgoing edges).}
+
+\item{chk.virtual.edge}{Logical; should the edges be checked to see if any of them
+start and end on different nodes which happen to be at the same radius on the
+same axis? See Details.}
 
 \item{plot.list}{Logical; should a data frame of edges to be drawn be
 returned?}
@@ -60,16 +64,26 @@ of interest.  It can also output a summary of edges to be drawn, either as a
 data frame or in a LaTeX ready form, or a data frame of orphaned nodes.
 }
 \details{
-Argument \code{chk.sm.pt} applies only to hive plots of \code{type = 2D} and
-only when edges exist that start and end on the same axis.  It checks to see
-if any of the edges start and end at the same radius on the same axis, which
+Argument \code{chk.sm.pt} applies only to hive plots of \code{type = 2D}.
+It checks to see if any of the edges start and end at the same node id.
+These by definition exist at the same radius on the same axis, which
 causes an error in \code{plotHive} since you are trying to draw an edge of
 length zero (the actual error message is \code{Error in calcCurveGrob(x,
 x$debug) : End points must not be identical}.  Some data sets may have such
 cases intrinsically or due to data entry error, or the condition may arise
 during processing.  Either way, one needs to be able to detect such cases
 for removal or modification. This argument will tell you which nodes cause
-the problem. \cr \cr Argument \code{chk.ax.jump} applies only to hive plots
+the problem.
+
+Argument \code{chk.virtual.edge} applies only to hive plots of \code{type = 2D}
+and is similiar to \code{chk.sm.pt} above except
+that it checks for virtual edges.  These are edges start and end on the
+same axis at the same radius but at different node id's (in other words,
+two nodes have the same radius on the same axis).  This condition
+gives the same error as above.  It is checked for separately as it arises
+via a different problem in the construction of the data.
+
+Argument \code{chk.ax.jump} applies only to hive plots
 of \code{type = 2D}.  It checks to see if any of the edges jump an axis,
 e.g. axis 1 --> axis 3. This argument will tell you which nodes are at
 either end of the jumping edge.  Jumping should should be avoided in hive

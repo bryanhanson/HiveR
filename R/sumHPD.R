@@ -5,16 +5,26 @@
 #' of interest.  It can also output a summary of edges to be drawn, either as a
 #' data frame or in a LaTeX ready form, or a data frame of orphaned nodes.
 #' 
-#' Argument \code{chk.sm.pt} applies only to hive plots of \code{type = 2D} and
-#' only when edges exist that start and end on the same axis.  It checks to see
-#' if any of the edges start and end at the same radius on the same axis, which
+#' Argument \code{chk.sm.pt} applies only to hive plots of \code{type = 2D}.
+#' It checks to see if any of the edges start and end at the same node id.
+#' These by definition exist at the same radius on the same axis, which
 #' causes an error in \code{plotHive} since you are trying to draw an edge of
 #' length zero (the actual error message is \code{Error in calcCurveGrob(x,
 #' x$debug) : End points must not be identical}.  Some data sets may have such
 #' cases intrinsically or due to data entry error, or the condition may arise
 #' during processing.  Either way, one needs to be able to detect such cases
 #' for removal or modification. This argument will tell you which nodes cause
-#' the problem. \cr \cr Argument \code{chk.ax.jump} applies only to hive plots
+#' the problem.
+#'
+#' Argument \code{chk.virtual.edge} applies only to hive plots of \code{type = 2D}
+#' and is similiar to \code{chk.sm.pt} above except
+#' that it checks for virtual edges.  These are edges start and end on the
+#' same axis at the same radius but at different node id's (in other words,
+#' two nodes have the same radius on the same axis).  This condition
+#' gives the same error as above.  It is checked for separately as it arises
+#' via a different problem in the construction of the data.
+#'
+#' Argument \code{chk.ax.jump} applies only to hive plots
 #' of \code{type = 2D}.  It checks to see if any of the edges jump an axis,
 #' e.g. axis 1 --> axis 3. This argument will tell you which nodes are at
 #' either end of the jumping edge.  Jumping should should be avoided in hive
@@ -35,6 +45,10 @@
 #"
 #' @param chk.sm.ax Logical; should the edges be checked to see if any of them
 #' start and end on the same axis?
+#'
+#' @param chk.virtual.edge Logical; should the edges be checked to see if any of them
+#' start and end on different nodes which happen to be at the same radius on the
+#' same axis? See Details.
 #'
 #' @param chk.orphan.node Logical; should orphan nodes be identifed?  Orphan
 #' nodes have degree 0 (no incoming or outgoing edges).
@@ -81,7 +95,7 @@
 #' print(out)
 #' 
 sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
-	chk.sm.ax = FALSE, chk.orphan.node = FALSE,
+	chk.sm.ax = FALSE, chk.orphan.node = FALSE, chk.virtual.edge = FALSE,
 	plot.list = FALSE, tex = FALSE, orphan.list = FALSE){
 	
 # Function to summarize objects of S3 class 'HivePlotData'
@@ -157,20 +171,40 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 	
 	# Perform the additional requested checks
 	
-	if (chk.all) chk.sm.pt <- chk.ax.jump <- chk.sm.ax <- chk.orphan.node <- TRUE
-
+	if (chk.all) {
+		chk.sm.pt <- TRUE
+		chk.virtual.edge <- TRUE
+		chk.ax.jump <- TRUE
+		chk.sm.ax <- TRUE
+		chk.orphan.node <- TRUE
+	}
+	
+	# Note: both chk.sm.pt and chk.virtual.edge identify conditions
+	# corresponding to zero length edges, they just have different origins.
+	
 	if (chk.sm.pt) {
-		prob <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
-		if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same point\n")
+		prob <- which(fd$n1.id == fd$n2.id)
+		if (length(prob) == 0) cat("\n\tNo edges starting and ending on the same node were found\n")
 		if (length(prob) > 0) {
-			cat("\n\n\tThe following edges start and end at the same point and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
+			cat("\n\n\tThe following edges start and end at the same node and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
+			print(fd[prob,], row.names = FALSE)
+			}
+		}
+
+	if (chk.virtual.edge) {
+		prob1 <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
+		prob2 <- which(fd$n1.id == fd$n2.id) # drop those caught by chk.sm.pt
+		prob <- setdiff(prob1, prob2)
+		if (length(prob) == 0) cat("\n\tNo virtual edges were found\n")
+		if (length(prob) > 0) {
+			cat("\n\n\tThe following (virtual) edges start and end at the \n\tsame radius on the same axis and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
 			print(fd[prob,], row.names = FALSE)
 			}
 		}
 
 	if (chk.sm.ax) {
 		prob <- which(fd$n1.ax == fd$n2.ax)
-		if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same axis\n")
+		if (length(prob) == 0) cat("\n\tNo edges were found that start and end on the same axis\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following edges start and end on the same axis:\n\n")
 			print(fd[prob,], row.names = FALSE)
@@ -182,7 +216,7 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 		n.ids <- HPD$nodes$id
 		prob <- setdiff(n.ids, e.ids)
 		prob <- match(prob, HPD$nodes$id)
-		if (length(prob) == 0) cat("\n\t No orphaned nodes were found\n")
+		if (length(prob) == 0) cat("\n\tNo orphaned nodes were found\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following", length(prob), "nodes are orphaned (degree = 0):\n\n")
 			print(HPD$nodes[prob,], row.names = FALSE)
@@ -206,7 +240,7 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 			((fd$n1.ax == 2) & (fd$n2.ax == 6)) &
 			((fd$n1.ax == 1) & (fd$n2.ax == 5)))
 			
-		if (length(prob) == 0) cat("\n\t No edges that jump axes were found\n")
+		if (length(prob) == 0) cat("\n\tNo edges that jump axes were found\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following edges jump over an axis (and won't be drawn):\n\n")
 			print(fd[prob,], row.names = FALSE)

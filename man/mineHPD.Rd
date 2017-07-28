@@ -48,17 +48,15 @@ details about processing .dot files in an agnostic fashion.
 incoming or outgoing edges).
 
 \code{option = "remove zero edge"}
-removes edges with length zero, which includes edges that start and end at
-the same node (as in \code{option = "remove self edge"}) as well as edges
-that are zero length because the axis and radius of the start and end nodes
-just happen to be the same.  The node coordinates are the criteria: if an
-edge starts on a given axis at a given radius and ends at the same point, it
-is removed.
+removes edges with length zero.  Such edges cause an error because
+the spline cannot be drawn.  This option combines the next two options.
 
 \code{option = "remove self edge"} removes edges that
-start and end on the same node.  This differs from \code{option = "remove
-zero edge"} in that it is the node labels that are compared rather than the
-node coordinates.
+start and end on the same node.
+
+\code{option = "remove virtual edge"} removes virtual edges which are
+edges which involve different nodes but the nodes happen to be on the
+the same axis at the same radius.
 }
 \seealso{
 See the vignette for an example of using this function.  Use
