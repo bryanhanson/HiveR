@@ -1,4 +1,38 @@
-
+#' Verify the Integrity of a Hive Plot Data Object
+#' 
+#' This function inspects the classes of each part of a \code{\link{HPD}} as a
+#' means of verifying its integrity.  A few other characteristics are checked
+#' as well.
+#' 
+#' 
+#' @param HPD An object of S3 class \code{HivePlotData}.
+#'
+#' @param confirm Logical; if \code{TRUE} then a favorable result is affirmed
+#' in the console (problems are always reported).
+#'
+#' @return A logical value; \code{TRUE} is there is a problem, otherwise
+#' \code{FALSE}.
+#'
+#' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
+#'
+#' @seealso \code{\link{sumHPD}} which allows inspection (checking) of many
+#' properties of your \code{\link{HPD}}.
+#'
+#' @keywords utilities
+#'
+#' @export chkHPD
+#'
+#' @examples
+#' 
+#' test4 <- ranHiveData(nx = 4)
+#' good <- chkHPD(test4, confirm = TRUE)
+#' # mess it up and do again
+#' # next test is not run as it halts execution
+#' \dontrun{
+#' test4$nodes$color <- as.factor(test4$nodes$color)
+#' bad <- chkHPD(test4)
+#' }
+#' 
 chkHPD <- function(HPD, confirm = FALSE) {
 
 # Function to Check the Integrity of HPD Objects

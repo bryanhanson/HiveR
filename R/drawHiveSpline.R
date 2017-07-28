@@ -1,5 +1,31 @@
-
-
+#' Draw a 3D Spline as Part of a 3D Hive Plot
+#' 
+#' This function analyzes the edges of a \code{HivePlotData} object in order to
+#' draw 3D splines representing those edges.  Each pair of nodes at the ends of
+#' an edge is identified, and a control point is computed.  This information is
+#' passed to \code{\link{rcsr}} to work out the details.
+#' 
+#' 
+#' @param HPD An object of S3 class \code{HivePlotData}.
+#'
+#' @param L_A Logical: should splines be drawn with \code{line_antialias =
+#' TRUE}?
+#'
+#' @param \dots Parameters to be passed downstream.
+#'
+#' @return None.  A spline is added to the 3D hive plot in progress.
+#'
+#' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
+#'
+#' @seealso \code{\link{plot3dHive}} which calls this function and is the user
+#' interface.
+#'
+#' @keywords plot hplot
+#'
+#' @export drawHiveSpline
+#'
+#' @importFrom rgl lines3d
+#'
 drawHiveSpline <- function(HPD, L_A = FALSE, ...) {
 	
 	# Function to locate a 3d spline curve in a particular n dimensional

@@ -1,5 +1,62 @@
-
-
+#' Examine (mine) a Hive Plot Data Object and Extract Information Contained
+#' Within It
+#' 
+#' A \code{HivePlotData object}, especially one created fresh using
+#' \code{\link{dot2HPD}}, generally contains a lot of hidden information about
+#' the network described. This function can extract this hidden information.
+#' This function has \code{option}s which are quite specific as to what they
+#' do.  The user can easily write new options and incorporate them.
+#' This function can be called multiple times
+#' using different options to gradually modify the \code{HivePlotData} object.
+#' 
+#' \code{option = "rad <- tot.edge.count"} This option looks through the
+#' \code{HivePlotData} object and determines how many edges start or end on
+#' each node (the "degree").  This value is then assigned to the radius for
+#' that node.
+#'
+#' \code{option = "axis <- source.man.sink"} This option
+#' examines the nodes and corresponding edges in a \code{HivePlotData} object
+#' to determine if the node is a source, manager or sink.  A source node only
+#' has outgoing edges.  A sink node only has incoming edges.  A manager has
+#' both.  Hence, this option treats the \code{HivePlotData} object as if it
+#' were directed in that the first node of an edge in will be in
+#' \code{HPD$nodes$id1} and the second node of an edge will be in
+#' \code{HPD$nodes$id2}.  As a result, this option produces a hive plot with 3
+#' axes (note: sources are on axis 1, sinks on axis 2, and managers on axis 3).
+#' This concept is similar to the idea of \code{\link[FuncMap]{FuncMap}} but
+#' the internals are quite different.  See also \code{\link{dot2HPD}} for some
+#' details about processing .dot files in an agnostic fashion.
+#'
+#' \code{option = "remove orphans"} removes nodes that have degree zero (no
+#' incoming or outgoing edges).
+#'
+#' \code{option = "remove zero edge"}
+#' removes edges with length zero.  Such edges cause an error because
+#' the spline cannot be drawn.  This option combines the next two options.
+#'
+#' \code{option = "remove self edge"} removes edges that
+#' start and end on the same node.
+#' 
+#' \code{option = "remove virtual edge"} removes virtual edges which are
+#' edges which involve different nodes but the nodes happen to be on the
+#' the same axis at the same radius.
+#' 
+#' @param HPD A \code{\link{HivePlotData}} object.
+#'
+#' @param option A character string giving the option desired.  See Details for
+#' current options.
+#'
+#' @return A modified \code{HivePlotData} object.
+#'
+#' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
+#'
+#' @seealso See the vignette for an example of using this function.  Use
+#' \code{browseVignettes("HiveR")} to produce the vignette.
+#'
+#' @keywords utilities
+#'
+#' @export mineHPD
+#'
 mineHPD <- function(HPD, option = "rad <- tot.edge.count") {
 	
 # Function to process HPD objects in various ways
@@ -14,12 +71,19 @@ mineHPD <- function(HPD, option = "rad <- tot.edge.count") {
 
 # Check for valid option
 
-if (!option %in% c("rad <- tot.edge.count",
-	"axis <- source.man.sink",
-	"remove orphans",
-	"remove self edge",
-	"remove zero edge")) stop("Unrecognized option")
-
+	curopts <- c("rad <- tot.edge.count",
+		"axis <- source.man.sink",
+		"remove orphans",
+		"remove virtual edge",
+		"remove self edge",
+		"remove zero edge")
+		
+	if (!option %in% curopts) {
+		message("Unrecognized option, select from:")
+		print(curopts)
+		# msg <- paste("Unrecognized option, select from", paste(curopts, collapse = ", "), sep = " ")
+		stop("invalid option")
+	}
 	edges <- HPD$edges
 	nodes <- HPD$nodes
 	nn <- length(nodes$id)
@@ -116,7 +180,7 @@ if (!option %in% c("rad <- tot.edge.count",
 		prob <- match(prob, HPD$nodes$id)
 		if (length(prob) == 0) cat("\n\t No orphaned nodes were found\n")
 		if (length(prob) > 0) {
-			cat("\n\tThe following", length(prob), "nodes are orphaned (degree = 0):\n\n")
+			cat("\n\t", length(prob), "orphaned nodes (degree = 0) were removed\n\n")
 			nodes <- nodes[-prob,]
 			}
 		
@@ -151,40 +215,43 @@ if (!option %in% c("rad <- tot.edge.count",
 	fd <- data.frame(
 		n1.id = HPD$edges$id1,
 		n1.ax,
-		n1.lab,
+		n1.lab = as.character(n1.lab), # June 2017
 		n1.rad,
 		n2.id = HPD$edges$id2,
 		n2.ax,
-		n2.lab,
+		n2.lab = as.character(n2.lab), # June 2017
 		n2.rad,
 		e.wt = HPD$edges$weight,
-		e.col = HPD$edges$color)		
+		e.col = HPD$edges$color,
+		stringsAsFactors = FALSE)		
 
+	bad <- NA_integer_
+	
 	prob <- which(fd$n1.lab == fd$n2.lab)
 	if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same node\n")
 	if (length(prob) > 0) {
 
-		bad.e <- c()
 		for (n in 1:(length(HPD$edges$id1))) {
 			pat1 <- HPD$edges$id1[n]
 			pat2 <- HPD$edges$id2[n]
-			if (pat1 == pat2) bad.e <- c(bad.e, n)
+			if (pat1 == pat2) bad <- c(bad, n)
 			}
 			
-		edges <- edges[-bad.e,]
-		cat("\n\t", length(bad.e), "edges that start and end on the same node were removed\n")
+		cat("\n\t", length(na.omit(bad)), "edge(s) that start and end on the same node were removed\n")
 		}
+	
+	# Now actually remove the edges
 		
-		}  ##### end of option == "remove self edge"
+	bad <- unique(na.omit(bad))
+	edges <- edges[-bad,]
+	}  ##### end of option == "remove self edge"
 
 ### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###
 
-	if (option == "remove zero edge") {
+	if (option == "remove virtual edge") {
 
-# This option removes edges with length zero
-# This includes edges that start and end at the same node (self edges, above)
-# as well as edges that are zero because the axis and radius of the start
-# and end nodes just happen to be the same.
+# This option removes edges which start and end on the same
+# axis at the same radius.  It reuses code from sumHPD
 
 	# Create a list of edges to be drawn
 	
@@ -208,22 +275,48 @@ if (!option %in% c("rad <- tot.edge.count",
 	fd <- data.frame(
 		n1.id = HPD$edges$id1,
 		n1.ax,
-		n1.lab,
+		n1.lab = as.character(n1.lab), # June 2017
 		n1.rad,
 		n2.id = HPD$edges$id2,
 		n2.ax,
-		n2.lab,
+		n2.lab = as.character(n2.lab), # June 2017
 		n2.rad,
 		e.wt = HPD$edges$weight,
-		e.col = HPD$edges$color)		
+		e.col = HPD$edges$color,
+		stringsAsFactors = FALSE)		
 
-	prob <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
-	if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same node\n")
+	bad <- NA_integer_ 
+	prob1 <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
+	prob2 <- which(fd$n1.id == fd$n2.id) # omit true self edges
+	prob <- setdiff(prob1, prob2)
+	
+	if (length(prob) == 0) cat("\n\t No virtual self-edges were found\n")
 	if (length(prob) > 0) {
-		edges <- edges[-prob,]
-		cat("\n\t", length(prob), "edges that start and end on the same point were removed\n")
+
+		virtProb <- data.frame(id1 = fd$n1.id[prob], id2 = fd$n2.id[prob])
+		for (i in 1:nrow(virtProb)) {
+			for (j in 1:(length(HPD$edges$id1))) {
+				if ((HPD$edges$id1[j] == virtProb[i,1]) & (HPD$edges$id2[j] == virtProb[i,2])) bad <- c(bad, j)
+				if ((HPD$edges$id1[j] == virtProb[i,2]) & (HPD$edges$id2[j] == virtProb[i,1])) bad <- c(bad, j)
+			}
 		}
+		cat("\n\t", length(na.omit(bad)), "virtual self-edge(s) were removed\n")
+		}
+	
+	# Now actually remove the edges
 		
+	bad <- unique(na.omit(bad))
+	edges <- edges[-bad,]
+	}  ##### end of option == "remove virtual edge"
+
+### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###
+
+	if (option == "remove zero edge") {
+
+# This option runs the two above
+		HPD <- mineHPD(HPD, option = "remove self edge")
+		HPD <- mineHPD(HPD, option = "remove virtual edge")
+		return(HPD)
 		}  ##### end of option == "remove zero edge"
 
 ### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###

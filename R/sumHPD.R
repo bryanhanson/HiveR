@@ -1,5 +1,101 @@
+#' Summarize a Hive Plot Data Object and Optionally Run Some Checks
+#' 
+#' This function summarizes a \code{\link{HivePlotData}} object in a convenient
+#' form. Optionally, it can run some checks for certain conditions that may be
+#' of interest.  It can also output a summary of edges to be drawn, either as a
+#' data frame or in a LaTeX ready form, or a data frame of orphaned nodes.
+#' 
+#' Argument \code{chk.sm.pt} applies only to hive plots of \code{type = 2D}.
+#' It checks to see if any of the edges start and end at the same node id.
+#' These by definition exist at the same radius on the same axis, which
+#' causes an error in \code{plotHive} since you are trying to draw an edge of
+#' length zero (the actual error message is \code{Error in calcCurveGrob(x,
+#' x$debug) : End points must not be identical}.  Some data sets may have such
+#' cases intrinsically or due to data entry error, or the condition may arise
+#' during processing.  Either way, one needs to be able to detect such cases
+#' for removal or modification. This argument will tell you which nodes cause
+#' the problem.
+#'
+#' Argument \code{chk.virtual.edge} applies only to hive plots of \code{type = 2D}
+#' and is similiar to \code{chk.sm.pt} above except
+#' that it checks for virtual edges.  These are edges start and end on the
+#' same axis at the same radius but at different node id's (in other words,
+#' two nodes have the same radius on the same axis).  This condition
+#' gives the same error as above.  It is checked for separately as it arises
+#' via a different problem in the construction of the data.
+#'
+#' Argument \code{chk.ax.jump} applies only to hive plots
+#' of \code{type = 2D}.  It checks to see if any of the edges jump an axis,
+#' e.g. axis 1 --> axis 3. This argument will tell you which nodes are at
+#' either end of the jumping edge.  Jumping should should be avoided in hive
+#' plots as it makes the plot aesthetically unpleasing.  However, depending
+#' upon how you process the data, this condition may arise and hence it is
+#' useful to be able to locate jumps.
+#' 
+#' @param HPD An object of S3 class \code{HivePlotData}.
+#'
+#' @param chk.all Logical; should all the checks below be run?  See Details.
+#'
+#' @param chk.sm.pt Logical; should the edges be checked to see if any of them
+#' start and end on the same axis with the same radius?  See Details.
+#'
+#' @param chk.ax.jump Logical; should the edges be checked to see if any of
+#' them start and end on non-adjacent axes, e.g. axis 1 --> axis 3?  See
+#' Details.
+#"
+#' @param chk.sm.ax Logical; should the edges be checked to see if any of them
+#' start and end on the same axis?
+#'
+#' @param chk.virtual.edge Logical; should the edges be checked to see if any of them
+#' start and end on different nodes which happen to be at the same radius on the
+#' same axis? See Details.
+#'
+#' @param chk.orphan.node Logical; should orphan nodes be identifed?  Orphan
+#' nodes have degree 0 (no incoming or outgoing edges).
+#'
+#' @param plot.list Logical; should a data frame of edges to be drawn be
+#' returned?
+#'
+#' @param tex Logical; should the \code{plot.list} be formatted for LaTeX?
+#'
+#' @param orphan.list Logical; should a data frame of orphaned nodes be
+#' returned?
+#'
+#' @return A summary of the \code{HivePlotData} object's key characteristics is
+#' printed at the console, followed by the results of any checks set to
+#' \code{TRUE}.  The format of these results is identical to that of
+#' \code{plot.list} described just below, except for the orphan node check.
+#' This is formatted the same as \code{HPD$nodes}; see \code{?HPD} for details.
+#'
+#' If \code{plot.list = TRUE}, a data frame containing a list of the
+#' edges to be drawn in a format suitable for troubleshooting a plot.  If
+#' \code{tex = TRUE} as well, the data frame will be in a format suitable for
+#' pasting into a LaTeX document.  The data frame will contain rows describing
+#' each edge to be drawn with the following columns: node 1 id, node 1 axis,
+#' node 1 label, node 1 radius, then the same info for node 2, then the edge
+#' weight and the edge color.
+#' 
+#' If \code{orphan.list = TRUE} a data frame
+#' giving the orphan nodes is returned.  If you want both \code{plot.list} and
+#' \code{orphan.list} you have to call this function twice.
+#'
+#' @author Bryan A. Hanson, DePauw University. \email{hanson@@depauw.edu}
+#'
+#' @keywords utilities
+#'
+#' @export sumHPD
+#'
+#' @importFrom plyr count
+#'
+#' @examples
+#' 
+#' set.seed(55)
+#' test <- ranHiveData(nx = 4, ne = 5, desc = "Tiny 4D data set")
+#' out <- sumHPD(test, chk.all = TRUE, plot.list = TRUE)
+#' print(out)
+#' 
 sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
-	chk.sm.ax = FALSE, chk.orphan.node = FALSE,
+	chk.sm.ax = FALSE, chk.orphan.node = FALSE, chk.virtual.edge = FALSE,
 	plot.list = FALSE, tex = FALSE, orphan.list = FALSE){
 	
 # Function to summarize objects of S3 class 'HivePlotData'
@@ -64,7 +160,7 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 	# Now summarize edges by axis pair
 
 	fd2 <- fd[,c(2,6)]
-	fd2 <- count(fd2, vars = c("n1.ax", "n2.ax"))
+	fd2 <- plyr::count(fd2, vars = c("n1.ax", "n2.ax"))
 	cat("\n")
 	for (n in 1:nrow(fd2)) {
 	cat("\t\tAxes", fd2$n1.ax[n], "and", fd2$n2.ax[n], "share", fd2$freq[n], "edges\n", sep = " ")		
@@ -75,20 +171,40 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 	
 	# Perform the additional requested checks
 	
-	if (chk.all) chk.sm.pt <- chk.ax.jump <- chk.sm.ax <- chk.orphan.node <- TRUE
-
+	if (chk.all) {
+		chk.sm.pt <- TRUE
+		chk.virtual.edge <- TRUE
+		chk.ax.jump <- TRUE
+		chk.sm.ax <- TRUE
+		chk.orphan.node <- TRUE
+	}
+	
+	# Note: both chk.sm.pt and chk.virtual.edge identify conditions
+	# corresponding to zero length edges, they just have different origins.
+	
 	if (chk.sm.pt) {
-		prob <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
-		if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same point\n")
+		prob <- which(fd$n1.id == fd$n2.id)
+		if (length(prob) == 0) cat("\n\tNo edges starting and ending on the same node were found\n")
 		if (length(prob) > 0) {
-			cat("\n\n\tThe following edges start and end at the same point and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
+			cat("\n\n\tThe following edges start and end at the same node and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
+			print(fd[prob,], row.names = FALSE)
+			}
+		}
+
+	if (chk.virtual.edge) {
+		prob1 <- which((fd$n1.rad == fd$n2.rad) & (fd$n1.ax == fd$n2.ax))
+		prob2 <- which(fd$n1.id == fd$n2.id) # drop those caught by chk.sm.pt
+		prob <- setdiff(prob1, prob2)
+		if (length(prob) == 0) cat("\n\tNo virtual edges were found\n")
+		if (length(prob) > 0) {
+			cat("\n\n\tThe following (virtual) edges start and end at the \n\tsame radius on the same axis and the\n\tcorresponding nodes should be deleted, offset or\n\tjittered (or the edge deleted) before plotting:\n\n")
 			print(fd[prob,], row.names = FALSE)
 			}
 		}
 
 	if (chk.sm.ax) {
 		prob <- which(fd$n1.ax == fd$n2.ax)
-		if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same axis\n")
+		if (length(prob) == 0) cat("\n\tNo edges were found that start and end on the same axis\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following edges start and end on the same axis:\n\n")
 			print(fd[prob,], row.names = FALSE)
@@ -100,7 +216,7 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 		n.ids <- HPD$nodes$id
 		prob <- setdiff(n.ids, e.ids)
 		prob <- match(prob, HPD$nodes$id)
-		if (length(prob) == 0) cat("\n\t No orphaned nodes were found\n")
+		if (length(prob) == 0) cat("\n\tNo orphaned nodes were found\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following", length(prob), "nodes are orphaned (degree = 0):\n\n")
 			print(HPD$nodes[prob,], row.names = FALSE)
@@ -124,7 +240,7 @@ sumHPD <- function(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
 			((fd$n1.ax == 2) & (fd$n2.ax == 6)) &
 			((fd$n1.ax == 1) & (fd$n2.ax == 5)))
 			
-		if (length(prob) == 0) cat("\n\t No edges that jump axes were found\n")
+		if (length(prob) == 0) cat("\n\tNo edges that jump axes were found\n")
 		if (length(prob) > 0) {
 			cat("\n\n\tThe following edges jump over an axis (and won't be drawn):\n\n")
 			print(fd[prob,], row.names = FALSE)

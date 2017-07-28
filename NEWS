@@ -12,6 +12,15 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 See below for various contributors and those that reported bugs.  Much appreciated!
 
+Changes in version 0.3.42 2017-07-27
+     + Moved documentation to roxygen.
+     + Fixed suggests vs imports per B.D. Ripley.
+     + Implemented check for virtual edges as described below (sumHPD).  For consistency, this required changes to the check for edges starting and ending on the same node, and corresponding changes in mineHPD which can remove these types of edges.
+     + Vignette updated.
+
+Changes in version 0.2.78 2016-06-05
+     + Fixed a bug in mineHPD(HPD, option = "remove self edge").  Original report of a related problem by FinScience in issue #15.  There were two problems: 1.  A change in base R's handling of factors, and 2. HiveR was failing to check for what I am now calling virtual self edges: edges that originate and end from nodes on the same axis at the same radius but are actually different nodes (as opposed to true self edges which are an edge that begins and ends on the same node).  THIS CODE STILL NEEDS TO BE IMPLEMENTED in sumHPD with a new option chk.virt.edge or something similar.
+
 Changes in version 0.2.55 2016-03-25
      + Fixed a problem with a 1-pixel line around the entire plot in plotHive.  Not sure when this appeared.  Noted by 6C3C41 issue #12.  Thanks!
 
