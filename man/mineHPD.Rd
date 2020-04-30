@@ -57,6 +57,9 @@ start and end on the same node.
 \code{option = "remove virtual edge"} removes virtual edges which are
 edges which involve different nodes but the nodes happen to be on the
 the same axis at the same radius.
+
+\code{option = "remove edges same axis"} removes edges which start and
+end on the same axis.
 }
 \seealso{
 See the vignette for an example of using this function.  Use

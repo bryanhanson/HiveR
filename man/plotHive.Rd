@@ -3,16 +3,15 @@
 \name{plot3dHive}
 \alias{plot3dHive}
 \alias{plotHive}
-\alias{plot3dHive}
 \title{Create (Plot) a 2D or 3D Hive Plot}
 \usage{
-plot3dHive(HPD, ch = 1, dr.nodes = TRUE, method = "abs", axLabs = NULL,
-  axLab.pos = NULL, LA = FALSE, ...)
+plot3dHive(HPD, ch = 1, dr.nodes = TRUE, method = "abs",
+  axLabs = NULL, axLab.pos = NULL, LA = FALSE, ...)
 
-plotHive(HPD, ch = 1, method = "abs", dr.nodes = TRUE, bkgnd = "black",
-  axLabs = NULL, axLab.pos = NULL, axLab.gpar = NULL, anNodes = NULL,
-  anNode.gpar = NULL, grInfo = NULL, arrow = NULL, np = TRUE,
-  anCoord = "local", ...)
+plotHive(HPD, ch = 1, method = "abs", dr.nodes = TRUE,
+  bkgnd = "black", axLabs = NULL, axLab.pos = NULL,
+  axLab.gpar = NULL, anNodes = NULL, anNode.gpar = NULL,
+  grInfo = NULL, arrow = NULL, np = TRUE, anCoord = "local", ...)
 }
 \arguments{
 \item{HPD}{An object of S3 class \code{\link{HivePlotData}}.}

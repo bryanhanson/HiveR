@@ -41,6 +41,9 @@
 #' edges which involve different nodes but the nodes happen to be on the
 #' the same axis at the same radius.
 #' 
+#' \code{option = "remove edges same axis"} removes edges which start and
+#' end on the same axis.
+#' 
 #' @param HPD A \code{\link{HivePlotData}} object.
 #'
 #' @param option A character string giving the option desired.  See Details for
@@ -76,7 +79,8 @@ mineHPD <- function(HPD, option = "rad <- tot.edge.count") {
 		"remove orphans",
 		"remove virtual edge",
 		"remove self edge",
-		"remove zero edge")
+		"remove zero edge",
+		"remove edges same axis")
 		
 	if (!option %in% curopts) {
 		message("Unrecognized option, select from:")
@@ -245,6 +249,55 @@ mineHPD <- function(HPD, option = "rad <- tot.edge.count") {
 	bad <- unique(na.omit(bad))
 	edges <- edges[-bad,]
 	}  ##### end of option == "remove self edge"
+
+### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###
+
+	if (option == "remove edges same axis") {
+
+# This option removes edges which start and end on the same axis
+
+	# Create a list of edges to be drawn
+	
+	n1.lab <- n1.rad <- n2.lab <- n2.rad <- n1.ax <- n2.ax <- edge.no <- c()
+
+	for (n in 1:(length(HPD$edges$id1))) {
+		pat1 <- HPD$edges$id1[n]
+		pat2 <- HPD$edges$id2[n]
+		pat1 <- paste("\\b", pat1, "\\b", sep = "") # ensures exact match
+		pat2 <- paste("\\b", pat2, "\\b", sep = "")
+		i1 <- grep(pat1, HPD$nodes$id)
+		i2 <- grep(pat2, HPD$nodes$id)
+		n1.lab <- c(n1.lab, HPD$nodes$lab[i1])
+		n2.lab <- c(n2.lab, HPD$nodes$lab[i2])
+		n1.rad <- c(n1.rad, HPD$nodes$radius[i1])
+		n2.rad <- c(n2.rad, HPD$nodes$radius[i2])
+		n1.ax <- c(n1.ax, HPD$nodes$axis[i1])
+		n2.ax <- c(n2.ax, HPD$nodes$axis[i2])
+		edge.no <- c(edge.no, n) # Jan 2019 for this method in particular
+		}
+
+	fd <- data.frame(
+		n1.id = HPD$edges$id1,
+		n1.ax,
+		n1.lab = as.character(n1.lab), # June 2017
+		n1.rad,
+		n2.id = HPD$edges$id2,
+		n2.ax,
+		n2.lab = as.character(n2.lab), # June 2017
+		n2.rad,
+		edge.no = edge.no,
+		e.wt = HPD$edges$weight,
+		e.col = HPD$edges$color,
+		stringsAsFactors = FALSE)		
+	
+	prob <- which(fd$n1.ax == fd$n2.ax)
+	if (length(prob) == 0) cat("\n\t No edges were found that start and end on the same axis\n")
+	if (length(prob) > 0) {
+		bad <- fd$edge.no[prob]
+		edges <- edges[-bad,]	
+		cat("\n\t", length(na.omit(bad)), "edge(s) that start and end on the same axis were removed\n")
+		}
+	}  ##### end of option == "remove edges same axis"
 
 ### ++++++++++++++++++++++++++++++++++++++++++++++++++++ ###
 

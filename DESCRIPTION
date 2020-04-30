@@ -1,8 +1,8 @@
 Package: HiveR
 Type: Package
 Title: 2D and 3D Hive Plots for R
-Version: 0.3.42
-Date: 2017-07-27
+Version: 0.3.45
+Date: 2019-01-15
 Authors@R: c(person(given = "Bryan A.", family = "Hanson",
 		role = c("aut", "cre"), email = "hanson@depauw.edu"),
 		person("Vesna", "Memisevic", role = "ctb"),
@@ -16,4 +16,4 @@ ByteCompile: TRUE
 BugReports: https://github.com/bryanhanson/HiveR/issues
 VignetteBuilder: knitr
 Depends: R (>= 3.0)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
