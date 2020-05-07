@@ -36,7 +36,6 @@ and it seems you can't get their attention to close the windows.
 
 \dontrun{
 require("rgl")
-require("tkrgl")
 # Sillyness: let's draw different hives with different settings
 # List of hives
 t4 <- ranHiveData(type = "3D", nx = 4)

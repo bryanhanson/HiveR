@@ -1,4 +1,4 @@
-# HiveR 0.3.xx 2020-05-07
+# HiveR 0.3.55 2020-05-07
 ## Miscellaneous
 * Built and checked against R 4.0, with necessary adjustments.
 * Package `tkrgl` has been merged into `rgl` and will be deprecated eventually.  Relevant functions/usage in `HiveR` updated.  Thanks to Duncan Murdoch for the heads up and detailed suggestions!
