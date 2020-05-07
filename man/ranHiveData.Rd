@@ -4,10 +4,21 @@
 \alias{ranHiveData}
 \title{Generate Random Hive Plot Data}
 \usage{
-ranHiveData(type = "2D", nx = 4, nn = nx * 15, ne = nx * 15,
-  rad = 1:100, ns = c(0.5, 1, 1.5), ew = 1:3, nc = brewer.pal(5,
-  "Set1"), ec = brewer.pal(5, "Set1"), axis.cols = brewer.pal(nx,
-  "Set1"), desc = NULL, allow.same = FALSE, verbose = FALSE)
+ranHiveData(
+  type = "2D",
+  nx = 4,
+  nn = nx * 15,
+  ne = nx * 15,
+  rad = 1:100,
+  ns = c(0.5, 1, 1.5),
+  ew = 1:3,
+  nc = brewer.pal(5, "Set1"),
+  ec = brewer.pal(5, "Set1"),
+  axis.cols = brewer.pal(nx, "Set1"),
+  desc = NULL,
+  allow.same = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{type}{The type of hive plot to be generated.  One of \code{c("2D",

@@ -4,10 +4,18 @@
 \alias{sumHPD}
 \title{Summarize a Hive Plot Data Object and Optionally Run Some Checks}
 \usage{
-sumHPD(HPD, chk.all = FALSE, chk.sm.pt = FALSE, chk.ax.jump = FALSE,
-  chk.sm.ax = FALSE, chk.orphan.node = FALSE,
-  chk.virtual.edge = FALSE, plot.list = FALSE, tex = FALSE,
-  orphan.list = FALSE)
+sumHPD(
+  HPD,
+  chk.all = FALSE,
+  chk.sm.pt = FALSE,
+  chk.ax.jump = FALSE,
+  chk.sm.ax = FALSE,
+  chk.orphan.node = FALSE,
+  chk.virtual.edge = FALSE,
+  plot.list = FALSE,
+  tex = FALSE,
+  orphan.list = FALSE
+)
 }
 \arguments{
 \item{HPD}{An object of S3 class \code{HivePlotData}.}

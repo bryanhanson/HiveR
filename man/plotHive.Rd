@@ -5,13 +5,34 @@
 \alias{plotHive}
 \title{Create (Plot) a 2D or 3D Hive Plot}
 \usage{
-plot3dHive(HPD, ch = 1, dr.nodes = TRUE, method = "abs",
-  axLabs = NULL, axLab.pos = NULL, LA = FALSE, ...)
+plot3dHive(
+  HPD,
+  ch = 1,
+  dr.nodes = TRUE,
+  method = "abs",
+  axLabs = NULL,
+  axLab.pos = NULL,
+  LA = FALSE,
+  ...
+)
 
-plotHive(HPD, ch = 1, method = "abs", dr.nodes = TRUE,
-  bkgnd = "black", axLabs = NULL, axLab.pos = NULL,
-  axLab.gpar = NULL, anNodes = NULL, anNode.gpar = NULL,
-  grInfo = NULL, arrow = NULL, np = TRUE, anCoord = "local", ...)
+plotHive(
+  HPD,
+  ch = 1,
+  method = "abs",
+  dr.nodes = TRUE,
+  bkgnd = "black",
+  axLabs = NULL,
+  axLab.pos = NULL,
+  axLab.gpar = NULL,
+  anNodes = NULL,
+  anNode.gpar = NULL,
+  grInfo = NULL,
+  arrow = NULL,
+  np = TRUE,
+  anCoord = "local",
+  ...
+)
 }
 \arguments{
 \item{HPD}{An object of S3 class \code{\link{HivePlotData}}.}
@@ -186,7 +207,7 @@ data(HEC)
 require("grid") # for text additions outside of HiveR (grid.text)
 
 plotHive(HEC, ch = 0.1, bkgnd = "white",
-	axLabs = c("hair\\ncolor", "eye\\ncolor"),
+	axLabs = c("hair\ncolor", "eye\ncolor"),
 	axLab.pos = c(1, 1),
 	axLab.gpar = gpar(fontsize = 14))
 grid.text("males", x = 0, y = 2.3, default.units = "native")
@@ -202,13 +223,13 @@ grid.text("Pairing of Eye Color with Hair Color", x = 0, y = 4,
 currDir <- getwd()
 setwd(system.file("extdata", "Misc", package = "HiveR"))
 plotHive(HEC, ch = 0.1, bkgnd = "white",
-	axLabs = c("hair\\ncolor", "eye\\ncolor"),
+	axLabs = c("hair\ncolor", "eye\ncolor"),
 	axLab.pos = c(1, 1),
 	axLab.gpar = gpar(fontsize = 14),
 	anNodes = "HECnodes.txt",
 	anNode.gpar = gpar(col = "black"),
 	grInfo = "HECgraphics.txt",
-	arrow = c("more\\ncommon", 0.0, 2, 4, 1, -2))
+	arrow = c("more\ncommon", 0.0, 2, 4, 1, -2))
 
 grid.text("males", x = 0, y = 2.3, default.units = "native")
 grid.text("females", x = 0, y = -2.3, default.units = "native")
@@ -225,12 +246,12 @@ setwd(currDir)
 currDir <- getwd()
 setwd(system.file("extdata", "Misc", package = "HiveR"))
 plotHive(HEC, ch = 0.1, bkgnd = "white",
-	axLabs = c("hair\\ncolor", "eye\\ncolor"),
+	axLabs = c("hair\ncolor", "eye\ncolor"),
 	axLab.pos = c(1, 1),
 	axLab.gpar = gpar(fontsize = 14),
 	anNodes = "HECticks.txt",
 	anNode.gpar = gpar(col = "black"),
-	arrow = c("more\\ncommon", 0.0, 2, 4, 1, -2),
+	arrow = c("more\ncommon", 0.0, 2, 4, 1, -2),
 	dr.nodes = FALSE)
 
 grid.text("males", x = 0, y = 2.3, default.units = "native")

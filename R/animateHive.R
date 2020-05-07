@@ -28,8 +28,7 @@
 #'
 #' @export animateHive
 #'
-#' @importFrom rgl open3d rgl.bringtotop rgl.cur
-#' @importFrom tkrgl spinControl
+#' @importFrom rgl open3d rgl.bringtotop rgl.cur tkspinControl
 #' @importFrom tcltk tktoplevel tkwm.title
 #'
 #' @examples
@@ -61,9 +60,6 @@ animateHive <- function(hives = list(), cmds = list(), xy = 400, ...) {
 	if (!requireNamespace("rgl", quietly = TRUE)) {
 		stop("You need to install package rgl to use this function")
 		}
-	if (!requireNamespace("tkrgl", quietly = TRUE)) {
-		stop("You need to install package tkrgl to use this function")
-		}
 	
 	nh <- length(hives)
 	if (nh == 0) stop("No hives specified")
@@ -91,5 +87,5 @@ animateHive <- function(hives = list(), cmds = list(), xy = 400, ...) {
 	base <- tcltk::tktoplevel()
 	tcltk::tkwm.title(base, "Master Controls")
 	devL <- as.integer(gsub("window", "", win.list))
-	con <- tkrgl::spinControl(base, dev = devL)
+	con <- rgl::tkspinControl(base, dev = devL)
 	}

@@ -4,7 +4,9 @@
 \name{HEC}
 \alias{HEC}
 \title{A HivePlotData Object of the Hair Eye Color Data Set}
-\format{The format is described in detail at \code{\link{HPD}}.}
+\format{
+The format is described in detail at \code{\link{HPD}}.
+}
 \description{
 This is an \code{\link{HPD}} (\code{HivePlotData} object) derived from the
 built-in hair eye color data set (see \code{?HairEyeColor}).  It serves as a

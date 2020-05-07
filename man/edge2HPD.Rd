@@ -4,8 +4,7 @@
 \alias{edge2HPD}
 \title{Process an Edge List into a Hive Plot Data Object}
 \usage{
-edge2HPD(edge_df = NULL, axis.cols = NULL, type = "2D",
-  desc = NULL, ...)
+edge2HPD(edge_df = NULL, axis.cols = NULL, type = "2D", desc = NULL, ...)
 }
 \arguments{
 \item{edge_df}{A data frame containing edge list information. Columns should
