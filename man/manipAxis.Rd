@@ -62,11 +62,10 @@ plotHive(HEC, method = "norm", bkgnd = "white")
 
 HEC2 <- manipAxis(HEC, method = "invert", action = c(-1, 1))
 plotHive(HEC2, bkgnd = "white")
-HEC3 <- manipAxis(HEC, method = "stretch", action = c(2,3))
+HEC3 <- manipAxis(HEC, method = "stretch", action = c(2, 3))
 plotHive(HEC3, bkgnd = "white")
 HEC4 <- manipAxis(HEC, method = "offset", action = c(0, 1.5))
 plotHive(HEC4, bkgnd = "white")
-
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

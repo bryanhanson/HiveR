@@ -1,10 +1,10 @@
 
 #' Hive Plot Data Objects
-#' 
+#'
 #' In package \code{HiveR}, hive plot data sets are stored as an S3 class
 #' called \code{HivePlotData}, detailed below.
-#' 
-#' 
+#'
+#'
 #' @note While \code{$edges$id1} and \code{$edges$id2} are defined as the
 #' starting and ending nodes of a particular edge, hive plots as currently
 #' implemented are not directed graphs (agnostic might be a better word). \cr
@@ -16,7 +16,7 @@
 #'
 #' @section Structure: The structure of a \code{HivePlotData} object is a list
 #' of 6 elements, some of which are data frames, and an attribute, as follows:
-#' 
+#'
 #' \tabular{llll}{
 #'   \emph{element} \tab \emph{(element)} \tab \emph{type} \tab \emph{description}\cr
 #'   $nodes \tab \tab data frame \tab Data frame of node properties \cr
@@ -48,10 +48,9 @@
 #' @aliases HPD HivePlotData
 
 #' @examples
-#' 
+#'
 #' test4 <- ranHiveData(nx = 4)
 #' str(test4)
 #' sumHPD(test4)
 #' plotHive(test4)
-#' 
 NULL

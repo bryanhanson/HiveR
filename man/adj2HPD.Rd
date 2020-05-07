@@ -77,7 +77,7 @@ sumHPD(hive3, chk.all = TRUE)
 
 # Pretty up a few things, then plot:
 
-hive3$edges$weight <- sqrt(hive3$edges$weight)*0.5
+hive3$edges$weight <- sqrt(hive3$edges$weight) * 0.5
 hive3$nodes$size <- 0.5
 plotHive(hive3)
 
@@ -86,11 +86,11 @@ plotHive(hive3)
 # this by reversing the ends of edges as follows:
 
 for (n in seq(1, length(hive3$edges$id1), by = 2)) {
-	a <- hive3$edges$id1[n]
-	b <- hive3$edges$id2[n]
-	hive3$edges$id1[n] <- b
-	hive3$edges$id2[n] <- a
-	}
+  a <- hive3$edges$id1[n]
+  b <- hive3$edges$id2[n]
+  hive3$edges$id1[n] <- b
+  hive3$edges$id2[n] <- a
+}
 
 plotHive(hive3)
 
@@ -98,12 +98,11 @@ plotHive(hive3)
 set.seed(31)
 nr <- 20
 nc <- 15
-M <- matrix(floor(runif(nc*nr, 0, 10)), ncol = nc)
+M <- matrix(floor(runif(nc * nr, 0, 10)), ncol = nc)
 colnames(M) <- sample(c(letters, LETTERS), nc, replace = FALSE)
 rownames(M) <- sample(c(letters, LETTERS), nr, replace = FALSE)
 hive4 <- adj2HPD(M)
 sumHPD(hive4)
-
 }
 \seealso{
 \code{\link{dot2HPD}} and \code{\link{adj2HPD}}

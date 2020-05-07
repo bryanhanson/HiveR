@@ -4,8 +4,15 @@
 \alias{dot2HPD}
 \title{Process a .dot Graph File into a Hive Plot Data Object}
 \usage{
-dot2HPD(file = NULL, node.inst = NULL, edge.inst = NULL,
-  axis.cols = NULL, type = "2D", desc = NULL, ...)
+dot2HPD(
+  file = NULL,
+  node.inst = NULL,
+  edge.inst = NULL,
+  axis.cols = NULL,
+  type = "2D",
+  desc = NULL,
+  ...
+)
 }
 \arguments{
 \item{file}{The path to the .dot file to be processed.}

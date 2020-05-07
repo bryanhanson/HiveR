@@ -1,15 +1,5 @@
 ## How to install HiveR
 
-### To install from Github using R:
-
-````r
-install.packages("devtools")
-library("devtools")
-install_github(repo = "bryanhanson/HiveR@master")
-library("HiveR")
-````
-If you use `@some_other_branch` you can get other branches that might be available.  They may or may not pass CRAN checks and thus may not install automatically using the method above.  Check the NEWS file to see what's up.
-
 ### From CRAN using R:
 
 ````r
@@ -17,6 +7,17 @@ chooseCRANmirror() # choose a CRAN mirror
 install.packages("HiveR")
 library("HiveR")
 ````
+
+### To install from Github using R:
+
+````r
+install.packages("remotes")
+library("remotes")
+install_github(repo = "bryanhanson/HiveR@master")
+library("HiveR")
+````
+
+If you use `@some_other_branch` you can get other branches that might be available.  They may or may not pass CRAN checks and thus may not install automatically using the method above.  Check the NEWS file to see what's up.
 
 ### To see the Vignette:
 
