@@ -88,7 +88,6 @@ can use \code{sumHPD}).
 test4 <- ranHiveData(nx = 4)
 str(test4)
 sumHPD(test4)
-
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

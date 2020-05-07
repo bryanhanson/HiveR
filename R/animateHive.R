@@ -1,10 +1,10 @@
 #' Animate One or More 3D Hive Plots with a Handy Controller
-#' 
+#'
 #' This function takes a list of \code{HivePlotData} objects of \code{type =
 #' "3D"} and plots each in its own \code{rgl} window using its own arguments,
 #' then adds a controller which handles rotation and scaling.
-#' 
-#' 
+#'
+#'
 #' @param hives A list of \code{HivePlotData} objects.
 #'
 #' @param cmds A list of arguments corresponding to how you want each hive
@@ -32,12 +32,11 @@
 #' @importFrom tcltk tktoplevel tkwm.title
 #'
 #' @examples
-#' 
+#'
 #' \dontrun{
 #' require("rgl")
-#' require("tkrgl")
 #' # Sillyness: let's draw different hives with different settings
-#' # List of hives 
+#' # List of hives
 #' t4 <- ranHiveData(type = "3D", nx = 4)
 #' t5 <- ranHiveData(type = "3D", nx = 5)
 #' t6 <- ranHiveData(type = "3D", nx = 6)
@@ -50,42 +49,41 @@
 #' #
 #' animateHive(hives = myhives, cmds = mycmds)
 #' }
-#' 
 #'
 animateHive <- function(hives = list(), cmds = list(), xy = 400, ...) {
-	
-	# Function to create coordinated rgl animations
-	# using different plotting arguments for each hive plot
 
-	if (!requireNamespace("rgl", quietly = TRUE)) {
-		stop("You need to install package rgl to use this function")
-		}
-	
-	nh <- length(hives)
-	if (nh == 0) stop("No hives specified")
-	
-	# Draw each hive in its own window w/its own parameters
+  # Function to create coordinated rgl animations
+  # using different plotting arguments for each hive plot
 
-	win.list <- c()
-	
-	for (n in 1:nh) {
-		type <- hives[[n]]$type
-		if (!type == "3D") {
-			msg <- paste("Hive no.", n, "is not 3D", sep = " ")
-			warning(msg)
-			next
-			}
-		rgl::open3d(windowRect = c(0, 0, xy, xy))
-		win.name <- paste("window", rgl::rgl.cur(), sep = "")
-		win.list <- c(win.list, win.name)
-		rgl::rgl.bringtotop(TRUE)
-		do.call(plot3dHive, args = c(hives[n], cmds[[n]]))
-		# Since hives is a list of lists, you must unlist it one level
-		}
+  if (!requireNamespace("rgl", quietly = TRUE)) {
+    stop("You need to install package rgl to use this function")
+  }
 
-	# Set up a controller
-	base <- tcltk::tktoplevel()
-	tcltk::tkwm.title(base, "Master Controls")
-	devL <- as.integer(gsub("window", "", win.list))
-	con <- rgl::tkspinControl(base, dev = devL)
-	}
+  nh <- length(hives)
+  if (nh == 0) stop("No hives specified")
+
+  # Draw each hive in its own window w/its own parameters
+
+  win.list <- c()
+
+  for (n in 1:nh) {
+    type <- hives[[n]]$type
+    if (!type == "3D") {
+      msg <- paste("Hive no.", n, "is not 3D", sep = " ")
+      warning(msg)
+      next
+    }
+    rgl::open3d(windowRect = c(0, 0, xy, xy))
+    win.name <- paste("window", rgl::rgl.cur(), sep = "")
+    win.list <- c(win.list, win.name)
+    rgl::rgl.bringtotop(TRUE)
+    do.call(plot3dHive, args = c(hives[n], cmds[[n]]))
+    # Since hives is a list of lists, you must unlist it one level
+  }
+
+  # Set up a controller
+  base <- tcltk::tktoplevel()
+  tcltk::tkwm.title(base, "Master Controls")
+  devL <- as.integer(gsub("window", "", win.list))
+  con <- rgl::tkspinControl(base, dev = devL)
+}

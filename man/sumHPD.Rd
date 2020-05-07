@@ -106,7 +106,6 @@ set.seed(55)
 test <- ranHiveData(nx = 4, ne = 5, desc = "Tiny 4D data set")
 out <- sumHPD(test, chk.all = TRUE, plot.list = TRUE)
 print(out)
-
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

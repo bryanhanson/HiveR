@@ -38,7 +38,7 @@ and it seems you can't get their attention to close the windows.
 require("rgl")
 require("tkrgl")
 # Sillyness: let's draw different hives with different settings
-# List of hives 
+# List of hives
 t4 <- ranHiveData(type = "3D", nx = 4)
 t5 <- ranHiveData(type = "3D", nx = 5)
 t6 <- ranHiveData(type = "3D", nx = 6)
@@ -51,7 +51,6 @@ mycmds <- list(cmd1, cmd2, cmd3)
 #
 animateHive(hives = myhives, cmds = mycmds)
 }
-
 
 }
 \author{

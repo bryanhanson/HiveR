@@ -48,7 +48,6 @@ test4 <- ranHiveData(nx = 4)
 str(test4)
 sumHPD(test4)
 plotHive(test4)
-
 }
 \seealso{
 \code{\link{sumHPD}} to summarize a \code{HivePlotData} object.\cr
