@@ -1,8 +1,8 @@
 Package: HiveR
 Type: Package
 Title: 2D and 3D Hive Plots for R
-Version: 0.3.56
-Date: 2020-05-07
+Version: 0.3.63
+Date: 2020-06-08
 Authors@R: c(
     person("Bryan A.", "Hanson",
       role = c("aut", "cre"), email =
@@ -27,10 +27,13 @@ Suggests:
   knitr,
   sna,
   xtable,
-  bipartite
+  bipartite,
+  rmarkdown,
+  tint
 URL: https://github.com/bryanhanson/HiveR
 ByteCompile: TRUE
 BugReports: https://github.com/bryanhanson/HiveR/issues
 VignetteBuilder: knitr
 Depends: R (>= 3.0)
+Encoding: UTF-8
 RoxygenNote: 7.1.0

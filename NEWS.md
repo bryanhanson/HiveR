@@ -1,3 +1,7 @@
+# HiveR 0.3.63 2020-06-08
+## Miscellaneous
+* Adjustments to `DESCRIPTION`: added `tint` and `rmarkdown` to `Suggests`.  Reported by BD Ripley.  Also added `Encoding: UTF-8` field.
+
 # HiveR 0.3.55 2020-05-07
 ## Miscellaneous
 * Built and checked against R 4.0, with necessary adjustments.
