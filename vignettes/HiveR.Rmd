@@ -15,7 +15,7 @@ vignette: >
   %\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
   %\VignettePackage{HiveR}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{RColorBrewer, grid, sna, xtable, FuncMap, bipartite}
+  %\VignetteDepends{RColorBrewer, grid, sna, xtable, FuncMap, bipartite, tint}
   %\VignetteKeywords{multivariate, networks}
 ---
 
