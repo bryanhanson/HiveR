@@ -13,6 +13,14 @@ The hive plot concept was invented by Martin Krzywinski at the Genome
 Science Center (www.hiveplot.net/).  Keywords: networks, food webs, linnet,
 systems biology, bioinformatics.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/bryanhanson/HiveR}
+  \item Report bugs at \url{https://github.com/bryanhanson/HiveR/issues}
+}
+
+}
 \author{
 Bryan A. Hanson, DePauw University, Greencastle Indiana USA
 }

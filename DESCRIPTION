@@ -36,4 +36,4 @@ BugReports: https://github.com/bryanhanson/HiveR/issues
 VignetteBuilder: knitr
 Depends: R (>= 3.0)
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.2

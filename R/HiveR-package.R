@@ -14,4 +14,4 @@
 #' @docType package
 #' @author Bryan A. Hanson, DePauw University, Greencastle Indiana USA
 #' @keywords package
-NULL
+"_PACKAGE"

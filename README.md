@@ -13,7 +13,7 @@ library("HiveR")
 ````r
 install.packages("remotes")
 library("remotes")
-install_github(repo = "bryanhanson/HiveR@master")
+install_github(repo = "bryanhanson/HiveR@main")
 library("HiveR")
 ````
 

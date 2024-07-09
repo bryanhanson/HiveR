@@ -174,11 +174,11 @@ better made with \code{R CMD BATCH script.R} rather than interactive use.
 }
 \section{Functions}{
 \itemize{
-\item \code{plot3dHive}: Create a 3D Hive Plot
+\item \code{plot3dHive()}: Create a 3D Hive Plot
 
-\item \code{plotHive}: Create a 2D Hive Plot
+\item \code{plotHive()}: Create a 2D Hive Plot
+
 }}
-
 \examples{
 
 ### 2D Hive Plots

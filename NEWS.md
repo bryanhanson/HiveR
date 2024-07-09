@@ -1,3 +1,7 @@
+# HiveR 0.3.64 2024-07-09
+## Miscellaneous
+* Rename `master` branch to `main`.
+
 # HiveR 0.3.63 2020-06-08
 ## Miscellaneous
 * Adjustments to `DESCRIPTION`: added `tint` and `rmarkdown` to `Suggests`.  Reported by BD Ripley.  Also added `Encoding: UTF-8` field.
