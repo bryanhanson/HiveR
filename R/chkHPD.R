@@ -42,67 +42,67 @@ chkHPD <- function(HPD, confirm = FALSE) {
   if (missing(HPD)) stop("Nothing to check")
   w <- FALSE
 
-  if (!class(HPD) == "HivePlotData") {
+  if (!inherits(HPD, "HivePlotData")) {
     warning("The object provided was not of class HivePlotData")
     w <- TRUE
   }
 
-  if (!class(HPD$nodes) == "data.frame") {
+  if (!inherits(HPD$nodes, "data.frame")) {
     warning("The nodes data appear to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$id) == "integer") {
+  if (!inherits(HPD$nodes$id, "integer")) {
     warning("nodes$id appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$radius) == "numeric") {
+  if (!inherits(HPD$nodes$radius, "numeric")) {
     warning("nodes$radius appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$lab) == "character") {
+  if (!inherits(HPD$nodes$lab, "character")) {
     warning("nodes$lab appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$axis) == "integer") {
+  if (!inherits(HPD$nodes$axis, "integer")) {
     warning("nodes$axis appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$color) == "character") {
+  if (!inherits(HPD$nodes$color, "character")) {
     warning("nodes$color appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$nodes$size) == "numeric") {
+  if (!inherits(HPD$nodes$size, "numeric")) {
     warning("nodes$size appears to be corrupt")
     w <- TRUE
   }
 
-  if (!class(HPD$edges) == "data.frame") {
+  if (!inherits(HPD$edges, "data.frame")) {
     warning("The edges data appear to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$edges$id1) == "integer") {
+  if (!inherits(HPD$edges$id1, "integer")) {
     warning("edges$id1 appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$edges$id2) == "integer") {
+  if (!inherits(HPD$edges$id2, "integer")) {
     warning("edges$id2 appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$edges$weight) == "numeric") {
+  if (!inherits(HPD$edges$weight, "numeric")) {
     warning("edges$weight appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$edges$color) == "character") {
+  if (!inherits(HPD$edges$color, "character")) {
     warning("edges$color appears to be corrupt")
     w <- TRUE
   }
 
 
-  if (!class(HPD$desc) == "character") {
+  if (!inherits(HPD$desc, "character")) {
     warning("The description appears to be corrupt")
     w <- TRUE
   }
-  if (!class(HPD$axis.cols) == "character") {
+  if (!inherits(HPD$axis.cols, "character")) {
     warning("axis.cols appears to be corrupt")
     w <- TRUE
   }

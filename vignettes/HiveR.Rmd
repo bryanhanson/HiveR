@@ -10,6 +10,7 @@ bibliography: HiveR.bib
 link-citations: yes
 header-includes:
   - \usepackage{xtab}
+  - \providecommand{\pandocbounded}[1]{#1}
 
 vignette: >
   %\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
