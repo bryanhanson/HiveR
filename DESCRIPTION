@@ -29,7 +29,9 @@ Suggests:
   xtable,
   bipartite,
   rmarkdown,
-  tint
+  tint,
+  lattice,
+  vegan
 URL: https://github.com/bryanhanson/HiveR
 ByteCompile: TRUE
 BugReports: https://github.com/bryanhanson/HiveR/issues

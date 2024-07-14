@@ -16,7 +16,7 @@ vignette: >
   %\VignetteIndexEntry{HiveR: 2D and 3D Hive Plots for R}
   %\VignettePackage{HiveR}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{RColorBrewer, grid, sna, xtable, FuncMap, bipartite, tint}
+  %\VignetteDepends{RColorBrewer, grid, sna, xtable, FuncMap, bipartite, tint, lattice}
   %\VignetteKeywords{multivariate, networks}
 ---
 
@@ -31,6 +31,8 @@ suppressPackageStartupMessages(library("sna"))
 suppressPackageStartupMessages(library("xtable"))
 suppressPackageStartupMessages(library("knitr"))
 suppressPackageStartupMessages(library("bipartite"))
+suppressPackageStartupMessages(library("lattice"))
+suppressPackageStartupMessages(library("vegan"))
 
 desc <- packageDescription("HiveR")
 vers <- paste("version", desc$Version)
