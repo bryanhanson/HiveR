@@ -1,3 +1,7 @@
+# HiveR 0.4.0 2024-07-17
+## Miscellaneous
+* Removed vignette due to several problems; will hopefully be returned soon.
+
 # HiveR 0.3.63 2020-06-08
 ## Miscellaneous
 * Adjustments to `DESCRIPTION`: added `tint` and `rmarkdown` to `Suggests`.  Reported by BD Ripley.  Also added `Encoding: UTF-8` field.
