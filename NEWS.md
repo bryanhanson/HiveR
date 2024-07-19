@@ -1,5 +1,6 @@
-# HiveR 0.3.64 2024-07-09
+# HiveR 0.4.0 2024-07-17
 ## Miscellaneous
+* Removed vignette due to several problems; will hopefully be returned soon.
 * Rename `master` branch to `main`.
 
 # HiveR 0.3.63 2020-06-08
